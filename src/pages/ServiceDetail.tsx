@@ -114,15 +114,18 @@ export default function ServiceDetail() {
 
           {relatedGuides.length > 0 && (
             <div className={related.length > 0 ? 'mt-8' : ''}>
-              {relatedGuides.map((guide) => (
-                <Link
-                  key={guide.slug}
-                  to={`/guides/${guide.slug}`}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-brick-500 hover:underline"
-                >
-                  Combien coûte ce type de projet ? Voir le guide « {guide.title} » <ArrowRight size={15} />
-                </Link>
-              ))}
+              <p className="mb-3 text-sm font-semibold text-ink-900">Pour préparer votre projet</p>
+              <div className="flex flex-wrap gap-3">
+                {relatedGuides.map((guide) => (
+                  <Link
+                    key={guide.slug}
+                    to={`/guides/${guide.slug}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brick-500 hover:underline"
+                  >
+                    {guide.title} <ArrowRight size={15} />
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
         </section>

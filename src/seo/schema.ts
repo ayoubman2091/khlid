@@ -35,7 +35,9 @@ export function localBusinessSchema() {
     image: `${SITE}/logo/logo-512.png`,
     telephone: BUSINESS.phoneE164,
     email: BUSINESS.email,
-    priceRange: '€€',
+    // No priceRange: an unconfirmed "€€" placeholder was here before — removed per the
+    // client's no-pricing-anywhere decision (2026-08-20). priceRange can surface directly in
+    // Google's business panel/rich results, which counts as customer-facing.
     address: {
       '@type': 'PostalAddress',
       streetAddress: BUSINESS.addressLine,

@@ -163,8 +163,8 @@ export function quoteMeta(): PageMeta {
 export function guidesIndexMeta(): PageMeta {
   const crumbs = [HOME_CRUMB, crumb('Guides', '/guides')]
   return {
-    title: `Guides prix construction et rénovation à ${BUSINESS.city} | RK Pyrénées Construction`,
-    description: 'Repères de prix et conseils pour vos projets de construction, rénovation, maçonnerie et terrassement à Toulouse.',
+    title: `Guides pratiques construction et rénovation à ${BUSINESS.city} | RK Pyrénées Construction`,
+    description: 'Étapes de chantier et conseils pour préparer vos projets de construction, rénovation, maçonnerie, terrassement et dallage à Toulouse.',
     path: '/guides',
     schemas: [breadcrumbSchema(crumbs)],
     crumbs,

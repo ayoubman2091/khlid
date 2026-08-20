@@ -134,7 +134,22 @@ interface Overlay {
   dataType: DataType
   used: UsedStatus
   usedNote?: string
+  /** Overrides target_page from the CSV. Set to '' to explicitly clear a target (e.g. a
+   *  pricing keyword whose page no longer exists — see the NO_PRICING_NOTE overrides below). */
+  targetPage?: string
 }
+
+/**
+ * Client decision (2026-08-20): NO pricing content anywhere on the customer-facing site — no
+ * price tables, no €/m² figures, no "prix X" guide pages. The 4 price guides that used to exist
+ * (prix-renovation-maison, prix-construction-maison, prix-maconnerie, prix-terrassement) were
+ * removed and replaced with non-pricing process/choice guides — see src/data/guides.ts. Every
+ * "prix"/"combien coûte"/"budget" keyword below is downgraded to Research/Opportunity Only:
+ * kept in the database (nothing deleted), but with no target page and Used On Website = NO.
+ */
+const NO_PRICING_NOTE =
+  'Mot-clé "prix" — NE PAS créer de contenu tarifaire client (décision client, 2026-08-20). Conservé comme mot-clé de recherche/opportunité uniquement, sans page cible sur le site actuel.'
+const NO_PRICING_STATUS = 'Research/Opportunity Only — no customer-facing pricing (client decision, 2026-08-20)'
 
 const CLUSTER_DEFAULTS: Record<string, Omit<Overlay, 'used' | 'usedNote'>> = {
   CONSTRUCTION_TOULOUSE: { intent: 'LOCAL', status: 'Active', source: 'Internal semantic expansion', dataType: 'SEMANTIC INFERENCE' },
@@ -182,16 +197,13 @@ const OVERRIDES: Record<string, Partial<Overlay>> = {
   },
   'rénovation complète maison Toulouse': {
     used: 'NO',
-    usedNote: 'Le mot "complète" n\'apparaît pas sur /services/renovation (il apparaît sur /guides/prix-renovation-maison). La page service couvre le même périmètre ("rénovation intérieure et extérieure") sans utiliser ce mot exact.',
+    usedNote: 'Le mot "complète" n\'apparaît pas sur /services/renovation. La page service couvre le même périmètre ("rénovation intérieure et extérieure") sans utiliser ce mot exact.',
   },
   'entreprise maçonnerie Toulouse': {
     used: 'NO',
     usedNote: 'Le mot "entreprise" n\'apparaît pas sur /services/maconnerie (la page utilise "Maçon à Toulouse"). Gap identifié — voir feuille CONTENT_GAPS.',
   },
-  'prix maçonnerie Toulouse': {
-    used: 'NO',
-    usedNote: 'Aucune mention de prix sur /services/maconnerie (le prix est traité uniquement sur /guides/prix-maconnerie, page nationale sans ancrage Toulouse). Gap identifié — voir CONTENT_GAPS.',
-  },
+  'prix maçonnerie Toulouse': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
   'artisan maçon Toulouse': {
     used: 'NO',
     usedNote: 'Le mot "artisan" n\'apparaît pas sur /services/maconnerie (il apparaît sur /services/renovation).',
@@ -200,22 +212,10 @@ const OVERRIDES: Record<string, Partial<Overlay>> = {
     used: 'NO',
     usedNote: 'Le mot "maison" n\'apparaît pas dans le texte de /services/terrassement (le service y est décrit de façon générale, avant tout type de construction).',
   },
-  'prix terrassement Toulouse': {
-    used: 'NO',
-    usedNote: 'Aucune mention de prix sur /services/terrassement (traité uniquement sur /guides/prix-terrassement, page nationale sans ancrage Toulouse). Gap identifié — voir CONTENT_GAPS.',
-  },
-  'prix dalle béton m2': {
-    used: 'NO',
-    usedNote: "Aucune mention de prix sur /services/dallage, et aucun guide de prix dédié au dallage n'existe (contrairement à rénovation/construction/maçonnerie/terrassement). Gap identifié — voir CONTENT_GAPS.",
-  },
-  'prix extension maison Toulouse': {
-    used: 'NO',
-    usedNote: "Aucune mention de prix sur /services/extension, et aucun guide de prix dédié à l'extension n'existe. Une fourchette de prix sourcée (La Maison Des Travaux) existe dans les notes de recherche mais n'a pas été confirmée par le client pour publication — voir KEYWORD_CLUSTERING.md.",
-  },
-  'extension maison prix m2': {
-    used: 'NO',
-    usedNote: 'Même gap que "prix extension maison Toulouse" — voir CONTENT_GAPS.',
-  },
+  'prix terrassement Toulouse': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
+  'prix dalle béton m2': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
+  'prix extension maison Toulouse': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
+  'extension maison prix m2': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
   'entreprise extension maison Toulouse': {
     used: 'NO',
     usedNote: 'Le mot "entreprise" n\'apparaît pas sur /services/extension. Gap identifié — voir CONTENT_GAPS.',
@@ -229,16 +229,32 @@ const OVERRIDES: Record<string, Partial<Overlay>> = {
     usedNote: "/services/amenagement-exterieur précise explicitement travailler le béton et la pierre naturelle, pas le bois — décalage potentiel entre ce mot-clé et le périmètre réel du service. À confirmer avec le client avant toute action (le service inclut-il vraiment la terrasse bois ?) plutôt que de publier un contenu non représentatif. Voir CONTENT_GAPS.",
   },
   'prix rénovation maison au m2': {
-    used: 'YES',
-    usedNote: 'Confirmé : "m²" apparaît 14 fois sur /guides/prix-renovation-maison avec de vraies fourchettes sourcées.',
+    used: 'NO',
+    usedNote: `${NO_PRICING_NOTE} L'ancien guide /guides/prix-renovation-maison (qui citait de vraies fourchettes sourcées) a été retiré et remplacé par /guides/etapes-renovation-maison (sans aucun chiffre).`,
+    status: NO_PRICING_STATUS,
+    targetPage: '',
   },
-  'quel budget pour rénover une maison': {
-    used: 'YES',
-    usedNote: 'Correspondance sémantique (racine "rénov-" + "budget" présents sur /guides/prix-renovation-maison) ; la forme verbale exacte "rénover" et le mot "quel" n\'apparaissent pas littéralement.',
+  'combien coûte une rénovation maison': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
+  'quel budget pour rénover une maison': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
+  'prix construction maison au m2': {
+    used: 'NO',
+    usedNote: `${NO_PRICING_NOTE} Ancien guide /guides/prix-construction-maison retiré, remplacé par /guides/etapes-projet-construction.`,
+    status: NO_PRICING_STATUS,
+    targetPage: '',
   },
-  'prix construction maison au m2': { used: 'YES', usedNote: 'Confirmé : "m²" présent sur /guides/prix-construction-maison.' },
-  'prix maçonnerie au m2': { used: 'YES', usedNote: 'Confirmé : "m²" présent sur /guides/prix-maconnerie.' },
-  'prix terrassement au m2': { used: 'YES', usedNote: 'Confirmé : "m²" présent sur /guides/prix-terrassement.' },
+  'prix maçonnerie au m2': {
+    used: 'NO',
+    usedNote: `${NO_PRICING_NOTE} Ancien guide /guides/prix-maconnerie retiré, remplacé par /guides/comment-choisir-entreprise-maconnerie-toulouse.`,
+    status: NO_PRICING_STATUS,
+    targetPage: '',
+  },
+  'combien coûte un maçon': { used: 'NO', usedNote: NO_PRICING_NOTE, status: NO_PRICING_STATUS, targetPage: '' },
+  'prix terrassement au m2': {
+    used: 'NO',
+    usedNote: `${NO_PRICING_NOTE} Ancien guide /guides/prix-terrassement retiré, remplacé par /guides/comment-preparer-chantier-terrassement.`,
+    status: NO_PRICING_STATUS,
+    targetPage: '',
+  },
 }
 
 const SUBURB_TARGET_NOTE =
@@ -320,7 +336,7 @@ const masterRows: MasterRow[] = csvKeywords.map((row, i) => {
     cpc: row.CPC,
     businessValue: row.business_value,
     priority: row.priority,
-    targetPage: row.target_page,
+    targetPage: ov.targetPage ?? row.target_page,
     contentType: row.content_type,
     serpType: row.SERP_type,
     competitors: extractCompetitorNames(row.competition),
@@ -332,6 +348,56 @@ const masterRows: MasterRow[] = csvKeywords.map((row, i) => {
     opportunityOnly: isIntl ? 'Opportunity / Research Only' : '',
   }
 })
+
+/**
+ * New non-pricing keywords added for the 6 new guide pages created in this pass (replacing the
+ * 4 removed price guides — see src/data/guides.ts). Source = Client-provided: these topics were
+ * given directly in the content-strategy instruction (2026-08-20), not derived from a search
+ * tool — marked accordingly, not as SEMANTIC INFERENCE, since the topic itself is the client's
+ * own direction rather than a researcher's guess. No volume/trend/CPC/difficulty is invented —
+ * all N/A, same discipline as the rest of the database.
+ */
+const NEW_KEYWORD_DEFS: { keyword: string; cluster: string; targetPage: string; priority: string; businessValue: string }[] = [
+  { keyword: 'étapes rénovation maison Toulouse', cluster: 'INFORMATIONAL_ETAPES_RENOVATION', targetPage: '/guides/etapes-renovation-maison', priority: 'P2', businessValue: 'N/A (nouveau)' },
+  { keyword: 'comment préparer un projet de rénovation', cluster: 'INFORMATIONAL_ETAPES_RENOVATION', targetPage: '/guides/etapes-renovation-maison', priority: 'P2', businessValue: 'N/A (nouveau)' },
+  { keyword: 'rénovation maison ancienne étapes', cluster: 'INFORMATIONAL_RENOVATION_ANCIENNE', targetPage: '/guides/renovation-maison-ancienne-etapes', priority: 'P2', businessValue: 'N/A (nouveau)' },
+  { keyword: 'étapes projet construction Toulouse', cluster: 'INFORMATIONAL_ETAPES_CONSTRUCTION', targetPage: '/guides/etapes-projet-construction', priority: 'P2', businessValue: 'N/A (nouveau)' },
+  { keyword: 'comment choisir une entreprise de maçonnerie Toulouse', cluster: 'INFORMATIONAL_CHOIX_MACONNERIE', targetPage: '/guides/comment-choisir-entreprise-maconnerie-toulouse', priority: 'P2', businessValue: 'N/A (nouveau)' },
+  { keyword: 'comment préparer un chantier de terrassement', cluster: 'INFORMATIONAL_PREPARER_TERRASSEMENT', targetPage: '/guides/comment-preparer-chantier-terrassement', priority: 'P3', businessValue: 'N/A (nouveau)' },
+  { keyword: 'comment choisir un professionnel pour un dallage extérieur', cluster: 'INFORMATIONAL_CHOIX_DALLAGE', targetPage: '/guides/comment-choisir-professionnel-dallage-exterieur', priority: 'P3', businessValue: 'N/A (nouveau)' },
+]
+
+const newKeywordRows: MasterRow[] = NEW_KEYWORD_DEFS.map((d, i) => ({
+  id: `K${String(masterRows.length + i + 1).padStart(3, '0')}`,
+  keyword: d.keyword,
+  language: 'fr',
+  country: 'France',
+  city: 'Toulouse',
+  cluster: d.cluster,
+  searchIntent: 'INFORMATIONAL',
+  commercialIntent: 'N/A',
+  localIntent: 'N/A',
+  trend: 'N/A',
+  trendDirection: 'N/A',
+  searchVolume: 'N/A',
+  competition: 'N/A — non recherché (nouveau sujet, remplace un guide de prix retiré)',
+  keywordDifficulty: 'N/A',
+  cpc: 'N/A',
+  businessValue: d.businessValue,
+  priority: d.priority,
+  targetPage: d.targetPage,
+  contentType: 'guide pratique (sans prix)',
+  serpType: 'PAA (probable, non vérifié)',
+  competitors: 'N/A — non recherché',
+  usedOnWebsite: 'YES',
+  status: 'Active — nouveau (remplace un guide de prix retiré, décision client 2026-08-20)',
+  source: 'Client-provided (directive de stratégie de contenu, 2026-08-20)',
+  dataType: 'CLIENT DATA',
+  notes: `Sujet fourni directement par le client pour remplacer le contenu tarifaire retiré. Représenté sur ${d.targetPage} (vérifié).`,
+  opportunityOnly: '',
+}))
+
+masterRows.push(...newKeywordRows)
 
 // ---------------------------------------------------------------------------
 // 4. CORE_8_KEYWORDS — highest real business_value, one per major cluster/page (no
@@ -355,7 +421,7 @@ const CORE_8_REASONS: Record<string, string> = {
   'rénovation maison Toulouse': "Cluster n°1 : service le plus recherché et le mieux documenté chez les concurrents directs (Bâti HALLI, Avenir Rénovations). business_value 95/100.",
   'construction maison Toulouse': "Deuxième pilier de service, business_value 90/100, cible /services/construction.",
   'maçon Toulouse': "Terme de tête du cluster maçonnerie (business_value 90/100) — marché dominé par les annuaires, la fiche GBP compte autant que la page.",
-  'extension maison Toulouse': "business_value 85/100, cluster avec estimation de prix sourcée (La Maison Des Travaux) disponible pour enrichir le contenu.",
+  'extension maison Toulouse': "business_value 85/100, cible /services/extension — pas de contenu tarifaire (décision client 2026-08-20), le contenu reste centré sur le savoir-faire et les réalisations.",
   'devis rénovation maison gratuit': "Variante transactionnelle du cluster rénovation (business_value 80/100) — capte l'intention de conversion directe, distincte du terme informationnel.",
   'terrassement Toulouse': "business_value 75/100 — service réellement proposé, maillage fort recommandé avec dallage.",
   'dallage Toulouse': "business_value 70/100 — marché de spécialistes purs (dallage-toulouse.com) où les vraies réalisations RK sont un avantage différenciant.",
@@ -375,11 +441,14 @@ const pageMapRows = masterRows
     if (r.cluster === 'DALLAGE_TOULOUSE') secondary = '/services/terrassement'
     if (r.cluster === 'TERRASSEMENT_TOULOUSE') secondary = '/services/dallage'
     if (r.cluster === 'EXTENSION_MAISON_TOULOUSE') secondary = '/services/construction'
-    if (r.cluster.startsWith('INFORMATIONAL_PRIX_RENOVATION')) secondary = '/services/renovation'
-    if (r.cluster === 'INFORMATIONAL_PRIX_CONSTRUCTION') secondary = '/services/construction'
-    if (r.cluster === 'INFORMATIONAL_PRIX_MACONNERIE') secondary = '/services/maconnerie'
-    if (r.cluster === 'INFORMATIONAL_PRIX_TERRASSEMENT') secondary = '/services/terrassement'
     if (r.cluster === 'INFORMATIONAL_GUIDE_CHOIX') secondary = '/services/renovation'
+    // New non-pricing guide clusters (replace the removed INFORMATIONAL_PRIX_* ones):
+    if (r.cluster === 'INFORMATIONAL_ETAPES_RENOVATION') secondary = '/services/renovation'
+    if (r.cluster === 'INFORMATIONAL_RENOVATION_ANCIENNE') secondary = '/services/maconnerie'
+    if (r.cluster === 'INFORMATIONAL_ETAPES_CONSTRUCTION') secondary = '/services/construction'
+    if (r.cluster === 'INFORMATIONAL_CHOIX_MACONNERIE') secondary = '/services/maconnerie'
+    if (r.cluster === 'INFORMATIONAL_PREPARER_TERRASSEMENT') secondary = '/services/terrassement'
+    if (r.cluster === 'INFORMATIONAL_CHOIX_DALLAGE') secondary = '/services/dallage'
 
     return {
       keyword: r.keyword,
@@ -410,13 +479,13 @@ const contentGaps = [
     reason: "Faible effort (ajout d'une phrase), gain SEO ciblé sur une variante de requête déjà identifiée dans la recherche.",
   },
   {
-    keyword: 'prix maçonnerie Toulouse / prix terrassement Toulouse / prix dalle béton m2 / prix extension maison Toulouse / extension maison prix m2',
-    existingPage: '/services/maconnerie, /services/terrassement, /services/dallage, /services/extension',
-    missingContent: "Aucune de ces 4 pages service ne mentionne le mot \"prix\" — l'information tarifaire n'existe que pour rénovation/construction/maçonnerie/terrassement, sous forme de guide national sans ancrage Toulouse (et aucun guide n'existe pour dallage/extension).",
-    recommendedPage: 'Ajouter un court paragraphe "facteurs de prix + devis gratuit" sur chaque page service concernée ; envisager /guides/prix-dallage et /guides/prix-extension si une source de prix fiable est trouvée.',
+    keyword: 'prix maçonnerie Toulouse / prix terrassement Toulouse / prix dalle béton m2 / prix extension maison Toulouse / extension maison prix m2 / prix rénovation maison au m2 / prix construction maison au m2 / prix maçonnerie au m2 / prix terrassement au m2 / combien coûte une rénovation maison / combien coûte un maçon / quel budget pour rénover une maison',
+    existingPage: 'Aucune (les 4 anciens guides de prix ont été retirés du site)',
+    missingContent: 'DÉCISION CLIENT (2026-08-20) : aucun contenu tarifaire client, quel qu\'il soit. Ce n\'est plus un gap à combler — c\'est un choix de stratégie assumé, à ne pas "corriger" sans nouvelle instruction du client.',
+    recommendedPage: 'Aucune — remplacé par des guides pratiques sans prix (voir /guides/etapes-renovation-maison, /guides/etapes-projet-construction, /guides/comment-choisir-entreprise-maconnerie-toulouse, /guides/comment-preparer-chantier-terrassement).',
     intent: 'COMMERCIAL',
-    priority: 'P2',
-    reason: 'Intention commerciale forte (mot-clé "prix") non servie sur 4 pages service — écart structurel identifié pendant la vérification, pas une hypothèse.',
+    priority: 'N/A — WILL NOT FIX',
+    reason: 'Conservé comme mot-clé de recherche/opportunité dans ALL_KEYWORDS (Status = Research/Opportunity Only), jamais comme cible de contenu publié.',
   },
   {
     keyword: 'surélévation maison Toulouse',
@@ -491,11 +560,13 @@ const sources = [
     limitations: "Complètement indisponible dans cet environnement. Toutes les colonnes Trend/Trend Direction sont N/A pour cette raison, pas par omission.",
   },
   {
-    source: 'Recherche de prix tiers (Effy, Hellowatt, Architecteo, La Maison Des Travaux)',
-    url: 'Voir citations dans src/data/guides.ts (sourceNote par guide)',
+    source: 'Recherche de prix tiers (Effy, Hellowatt, Architecteo, La Maison Des Travaux) — HISTORIQUE, PLUS UTILISÉ',
+    url: 'N/A — retiré du site',
     dateChecked: '2026-08-19',
-    whatWasObtained: 'Fourchettes de prix nationales indicatives (rénovation €/m², extension €/m²), toujours citées avec attribution',
-    limitations: 'Données nationales, non spécifiques à Toulouse, non vérifiées indépendamment, jamais présentées comme des tarifs RK Pyrénées',
+    whatWasObtained:
+      "Fourchettes de prix nationales indicatives (rénovation €/m², extension €/m²), utilisées dans les guides de prix d'origine.",
+    limitations:
+      "Ces guides ont été retirés le 2026-08-20 (décision client : aucun contenu tarifaire client). Cette recherche reste documentée ici pour l'historique mais n'alimente plus aucune page du site actuel — voir src/data/guides.ts.",
   },
   {
     source: 'Brief et échanges avec le client',

@@ -1,111 +1,16 @@
 import type { Guide } from '@/types'
 
 /**
- * Contenu informationnel basé sur le keyword research (KEYWORD_CLUSTERING.md, cluster
- * INFORMATIONAL_PRIX_*). Les fourchettes de prix citées sont des ESTIMATES publiées par des
- * tiers, trouvées par recherche web en août 2026 — jamais présentées comme des tarifs RK
- * Pyrénées Construction. Un devis reste nécessaire pour un chiffrage réel.
+ * Contenu informationnel SANS aucune indication de prix (décision client, 2026-08-20 : aucun
+ * contenu tarifaire visible côté client, quel qu'il soit — plus de fourchettes, plus de prix au
+ * m², plus de guides "prix X"). Les anciens guides de prix (prix-renovation-maison,
+ * prix-construction-maison, prix-maconnerie, prix-terrassement) ont été retirés et remplacés par
+ * des guides pratiques (étapes de chantier, comment choisir une entreprise) qui reprennent
+ * honnêtement le déroulement réel des chantiers RK Pyrénées Construction déjà documenté dans
+ * src/data/services.ts — rien n'est inventé, aucun chiffre n'est cité. Voir
+ * CONTENT_STRATEGY_NO_PRICING.md pour le détail de ce changement de stratégie.
  */
 export const GUIDES: Guide[] = [
-  {
-    slug: 'prix-renovation-maison',
-    title: 'Prix d\'une rénovation de maison au m² en 2026',
-    metaTitle: 'Prix rénovation maison au m² à Toulouse (2026) | RK Pyrénées Construction',
-    metaDescription:
-      'Combien coûte la rénovation d\'une maison au m² en 2026 ? Fourchettes de prix par type de travaux et facteurs qui font varier le budget.',
-    h1: 'Combien coûte une rénovation de maison au m² ?',
-    dek: "Le prix d'une rénovation varie fortement selon l'ampleur des travaux. Voici des repères pour cadrer votre budget avant de demander un devis précis.",
-    sections: [
-      {
-        heading: 'Fourchettes de prix par type de rénovation',
-        body:
-          "D'après plusieurs sources spécialisées consultées en août 2026 (Effy, Hellowatt, Architecteo), le prix moyen d'une rénovation se situe autour de 700 €/m². Un simple rafraîchissement démarre autour de 160-350 €/m², une rénovation complète se situe plutôt entre 950 et 1 250 €/m², et une rénovation lourde (structure, réseaux, isolation complète) peut atteindre 4 000 €/m². Pour une maison de 100 m², le budget total varie ainsi entre 25 000 € et 150 000 € selon le niveau de rénovation visé.",
-      },
-      {
-        heading: 'Ce qui fait varier le prix',
-        body:
-          "La surface, l'état initial du bâti (une maison ancienne toulousaine en pierre ou brique demande souvent plus de reprises structurelles), les matériaux choisis, et les normes énergétiques actuelles (isolation, chauffage) influencent fortement le budget final — les nouvelles exigences énergétiques peuvent ajouter 10 à 20 % au budget initial.",
-      },
-      {
-        heading: 'Obtenir un chiffrage réel',
-        body:
-          "Ces fourchettes restent indicatives et nationales. Le seul moyen d'obtenir un prix fiable pour votre projet est une visite sur site suivie d'un devis détaillé — c'est ce que propose RK Pyrénées Construction, gratuitement et sans engagement, pour les projets de rénovation à Toulouse.",
-      },
-    ],
-    sourceNote:
-      "Fourchettes de prix : estimations publiées par des sites tiers spécialisés (Effy, Hellowatt, Architecteo — consultés en août 2026), non vérifiées indépendamment et non spécifiques à RK Pyrénées Construction.",
-    relatedServiceSlugs: ['renovation'],
-  },
-  {
-    slug: 'prix-construction-maison',
-    title: 'Prix de construction d\'une maison au m² en 2026',
-    metaTitle: 'Prix construction maison au m² à Toulouse (2026) | RK Pyrénées Construction',
-    metaDescription:
-      "Combien coûte la construction d'une maison au m² ? Repères de budget et facteurs de variation avant de demander un devis à Toulouse.",
-    h1: 'Combien coûte la construction d\'une maison au m² ?',
-    dek: 'Le budget d\'une construction neuve dépend fortement du type de structure, des matériaux et de la complexité du terrain.',
-    sections: [
-      {
-        heading: 'Repères de prix',
-        body:
-          "Le prix du gros œuvre (fondations, murs, structure) varie selon la complexité du projet, la nature du terrain et le type de construction (traditionnelle ou ossature bois). Contrairement aux prix de rénovation, les tarifs de construction neuve sont très dépendants du terrain (accès, nature du sol, raccordements) — un chiffrage générique national est peu fiable pour estimer un projet précis.",
-      },
-      {
-        heading: 'Pourquoi une visite de terrain est indispensable',
-        body:
-          'La nature du sol, l\'accès au chantier et les raccordements disponibles changent fortement le coût du gros œuvre. RK Pyrénées Construction établit un devis après avoir étudié votre terrain et vos plans, pour un chiffrage qui correspond réellement à votre projet.',
-      },
-    ],
-    sourceNote:
-      "Aucune donnée de prix national fiable et suffisamment sourcée n'a été trouvée pour ce guide au moment de la rédaction — contrairement au guide rénovation, ce contenu reste volontairement général en attendant une source publique fiable à citer.",
-    relatedServiceSlugs: ['construction', 'extension'],
-  },
-  {
-    slug: 'prix-maconnerie',
-    title: 'Prix de la maçonnerie au m² — combien coûte un maçon ?',
-    metaTitle: 'Prix maçonnerie au m² à Toulouse | RK Pyrénées Construction',
-    metaDescription: 'Combien coûte un maçon et quel est le prix de la maçonnerie au m² ? Facteurs qui influencent le tarif d\'un chantier de maçonnerie à Toulouse.',
-    h1: 'Combien coûte un maçon ? Prix de la maçonnerie',
-    dek: 'Le tarif d\'un chantier de maçonnerie dépend du type de travaux (murs neufs, reprise, ouverture) et des matériaux utilisés.',
-    sections: [
-      {
-        heading: 'Ce qui détermine le prix',
-        body:
-          "Le prix de la maçonnerie varie selon le type d'intervention : montage de murs neufs, reprise sur bâti existant, ouverture de mur porteur (qui nécessite souvent une étude structurelle complémentaire), ou structure béton armé. La nature du matériau (parpaing, brique, pierre) et l'accessibilité du chantier jouent aussi sur le tarif.",
-      },
-      {
-        heading: 'Demander un devis précis',
-        body:
-          "Faute de donnée de prix nationale suffisamment fiable pour ce type de travaux très variables, la meilleure approche reste une visite sur site suivie d'un devis détaillé. RK Pyrénées Construction propose ce devis gratuitement pour tout projet de maçonnerie à Toulouse.",
-      },
-    ],
-    sourceNote:
-      "Aucune fourchette de prix nationale suffisamment fiable n'a été trouvée pour la maçonnerie générale (contrairement à la rénovation globale) — ce guide reste volontairement général plutôt que de citer un chiffre non vérifié.",
-    relatedServiceSlugs: ['maconnerie'],
-  },
-  {
-    slug: 'prix-terrassement',
-    title: 'Prix du terrassement au m²',
-    metaTitle: 'Prix terrassement au m² à Toulouse | RK Pyrénées Construction',
-    metaDescription: 'Combien coûte un terrassement avant construction ou dallage ? Facteurs de prix et conseils avant de demander un devis à Toulouse.',
-    h1: 'Combien coûte un terrassement ?',
-    dek: 'Le prix du terrassement dépend de la nature du sol, de la surface à préparer et de l\'accès au chantier.',
-    sections: [
-      {
-        heading: 'Facteurs de prix',
-        body:
-          "Le terrassement (décaissement, nivellement, évacuation de terre, pose de ferraillage) varie selon la nature du sol, la surface concernée et la facilité d'accès pour les engins. Un terrain difficile d'accès ou avec un sol rocheux augmente le coût.",
-      },
-      {
-        heading: 'Un devis après visite de terrain',
-        body:
-          "Comme pour la construction, le terrassement dépend trop du terrain pour qu'un prix générique national soit fiable. RK Pyrénées Construction établit un devis après avoir vu le terrain concerné.",
-      },
-    ],
-    sourceNote:
-      "Aucune fourchette de prix nationale suffisamment fiable n'a été trouvée pour le terrassement — ce guide reste volontairement général plutôt que de citer un chiffre non vérifié.",
-    relatedServiceSlugs: ['terrassement', 'dallage'],
-  },
   {
     slug: 'comment-choisir-son-entreprise-de-renovation',
     title: 'Comment choisir son entreprise de rénovation à Toulouse ?',
@@ -133,14 +38,197 @@ export const GUIDES: Guide[] = [
     sourceNote: 'Conseils généraux, non sourcés à un organisme tiers spécifique.',
     relatedServiceSlugs: ['renovation'],
   },
+  {
+    slug: 'etapes-renovation-maison',
+    title: "Les étapes d'une rénovation de maison",
+    metaTitle: "Étapes d'une rénovation de maison à Toulouse | RK Pyrénées Construction",
+    metaDescription:
+      "Quelles sont les grandes étapes d'un projet de rénovation, de la première visite à la réception du chantier ? Le déroulement chez RK Pyrénées Construction à Toulouse.",
+    h1: "Quelles sont les étapes d'une rénovation de maison ?",
+    dek: 'De la première visite à la réception du chantier, voici comment se déroule concrètement un projet de rénovation.',
+    sections: [
+      {
+        heading: 'Visite et diagnostic du bâti',
+        body:
+          "Tout commence par une visite sur place pour évaluer l'état du bâti existant : structure, murs porteurs, sols, façade. À Toulouse, cette étape compte particulièrement pour les maisons anciennes en pierre ou brique, où l'état réel des murs conditionne l'ampleur des travaux.",
+      },
+      {
+        heading: 'Devis détaillé avant tout engagement',
+        body:
+          "Après le diagnostic, RK Pyrénées Construction établit un devis détaillé décrivant les travaux prévus, les matériaux et les délais estimés. Rien ne démarre avant que ce devis soit validé — c'est la base de tout le chantier.",
+      },
+      {
+        heading: 'Déroulement du chantier',
+        body:
+          "Les travaux suivent l'ordre logique du bâtiment : structure et gros œuvre d'abord, puis sols, cloisons et finitions. Un suivi régulier avec photos d'avancement permet de garder une visibilité sur l'état du chantier.",
+      },
+      {
+        heading: 'Réception des travaux',
+        body:
+          "Une visite de fin de chantier a lieu avec vous pour vérifier que le résultat correspond au devis validé, avant la remise des clés du chantier terminé.",
+      },
+    ],
+    sourceNote:
+      'Étapes générales basées sur le déroulement réel des chantiers de rénovation RK Pyrénées Construction (voir /services/renovation) — non sourcées à un organisme tiers.',
+    relatedServiceSlugs: ['renovation'],
+  },
+  {
+    slug: 'renovation-maison-ancienne-etapes',
+    title: 'Rénovation de maison ancienne : les étapes importantes',
+    metaTitle: 'Rénovation de maison ancienne à Toulouse : les étapes | RK Pyrénées Construction',
+    metaDescription:
+      "Rénover une maison ancienne à Toulouse demande une approche spécifique. Les points de vigilance sur le bâti en pierre et brique toulousaine.",
+    h1: 'Rénovation de maison ancienne : les étapes importantes',
+    dek: 'Le bâti ancien toulousain (pierre, brique) demande une approche différente d\'une rénovation classique — voici les points de vigilance.',
+    sections: [
+      {
+        heading: "Diagnostiquer l'état du bâti ancien",
+        body:
+          "Avant tout chiffrage, un examen des murs porteurs, des fondations et de la charpente est nécessaire. Les maisons anciennes toulousaines en pierre ou brique peuvent cacher des reprises structurelles non visibles au premier regard.",
+      },
+      {
+        heading: 'Anticiper les reprises structurelles',
+        body:
+          "Reprise de mur, coffrage de poteau, ouverture dans un mur existant : ces interventions demandent un savoir-faire spécifique au bâti ancien, différent d'une construction neuve. RK Pyrénées Construction intervient régulièrement sur ce type de chantier à Toulouse.",
+      },
+      {
+        heading: 'Concilier ancien et confort actuel',
+        body:
+          "Remplacement de menuiseries, réfection de sols, mise à niveau du bâti : l'enjeu est d'apporter le confort actuel sans dénaturer la structure d'origine. Chaque intervention est cadrée par un devis détaillé avant travaux.",
+      },
+    ],
+    sourceNote:
+      'Points de vigilance basés sur les chantiers réels de rénovation de bâti ancien menés par RK Pyrénées Construction (voir /realisations) — non sourcés à un organisme tiers.',
+    relatedServiceSlugs: ['renovation', 'maconnerie'],
+  },
+  {
+    slug: 'etapes-projet-construction',
+    title: "Les étapes d'un projet de construction",
+    metaTitle: "Étapes d'un projet de construction à Toulouse | RK Pyrénées Construction",
+    metaDescription:
+      "Quelles sont les grandes étapes d'un chantier de construction, de l'étude du terrain à la livraison du gros œuvre ? Le déroulement à Toulouse.",
+    h1: "Quelles sont les étapes d'un projet de construction ?",
+    dek: "De l'étude du terrain à la livraison du gros œuvre, voici comment se déroule un chantier de construction.",
+    sections: [
+      {
+        heading: 'Étude du projet et du terrain',
+        body:
+          "Avant tout chiffrage, les plans et la nature du terrain sont analysés : accès chantier, nature du sol, raccordements disponibles. Ces éléments conditionnent fortement la suite du projet.",
+      },
+      {
+        heading: 'Devis et planning',
+        body:
+          "Un devis détaillé et un calendrier de chantier sont transmis avant tout démarrage, pour que le déroulement du projet soit clair dès le départ.",
+      },
+      {
+        heading: 'Gros œuvre',
+        body:
+          "Fondations, élévation des murs, structures en béton armé : le gros œuvre suit un ordre précis, avec des points de contrôle à chaque étape clé.",
+      },
+      {
+        heading: 'Suivi de chantier jusqu\'à la livraison',
+        body:
+          "Des points d'étape réguliers permettent de suivre l'avancement jusqu'à la livraison du gros œuvre, avec une communication continue sur l'état du chantier.",
+      },
+    ],
+    sourceNote:
+      'Étapes générales basées sur le déroulement réel des chantiers de construction RK Pyrénées Construction (voir /services/construction) — non sourcées à un organisme tiers.',
+    relatedServiceSlugs: ['construction', 'extension'],
+  },
+  {
+    slug: 'comment-choisir-entreprise-maconnerie-toulouse',
+    title: 'Comment choisir une entreprise de maçonnerie à Toulouse ?',
+    metaTitle: 'Comment choisir une entreprise de maçonnerie à Toulouse ? | RK Pyrénées Construction',
+    metaDescription:
+      "Les points à vérifier avant de confier vos travaux de maçonnerie à Toulouse : expérience du bâti local, devis détaillé, suivi de chantier.",
+    h1: 'Comment choisir une entreprise de maçonnerie à Toulouse ?',
+    dek: 'Quelques critères concrets pour choisir un maçon à Toulouse, au-delà du premier contact.',
+    sections: [
+      {
+        heading: "L'expérience du bâti toulousain",
+        body:
+          "Toulouse compte de nombreuses constructions en brique ou en pierre, dont les techniques de reprise diffèrent d'une construction moderne en parpaing. Vérifier que l'entreprise a une pratique réelle de ce type de bâti est un critère utile.",
+      },
+      {
+        heading: 'Un devis qui détaille le type de structure',
+        body:
+          "Montage de murs neufs, reprise sur existant, structure béton armé : un devis sérieux précise le type d'intervention et les matériaux prévus, pas seulement un chiffrage global.",
+      },
+      {
+        heading: 'Le suivi et les finitions',
+        body:
+          "Un chantier de maçonnerie ne s'arrête pas au gros œuvre : le nettoyage de chantier et la remise en état des abords font partie d'une prestation complète.",
+      },
+    ],
+    sourceNote: 'Conseils généraux, non sourcés à un organisme tiers spécifique.',
+    relatedServiceSlugs: ['maconnerie'],
+  },
+  {
+    slug: 'comment-preparer-chantier-terrassement',
+    title: 'Comment préparer un chantier de terrassement ?',
+    metaTitle: 'Préparer un chantier de terrassement à Toulouse | RK Pyrénées Construction',
+    metaDescription:
+      "Ce qu'il faut anticiper avant un chantier de terrassement à Toulouse : accès, nature du sol, démarches préalables.",
+    h1: 'Comment préparer un chantier de terrassement ?',
+    dek: 'Quelques points à anticiper avant que les engins n\'arrivent sur le terrain.',
+    sections: [
+      {
+        heading: "Vérifier l'accès au chantier",
+        body:
+          "La largeur d'accès pour les engins de terrassement conditionne fortement l'organisation du chantier. Une visite préalable permet d'anticiper d'éventuelles contraintes (portail, végétation, voisinage).",
+      },
+      {
+        heading: 'Connaître la nature du sol',
+        body:
+          "Terrain argileux, rocheux ou meuble : la nature du sol influence la méthode de décaissement et de nivellement retenue. Ce point est évalué lors de la visite de terrain avant devis.",
+      },
+      {
+        heading: 'Anticiper les réseaux enterrés',
+        body:
+          "Avant tout terrassement, la présence de réseaux enterrés (eau, électricité, télécom) doit être vérifiée pour la sécurité du chantier — une démarche à effectuer avant le démarrage des travaux.",
+      },
+    ],
+    sourceNote:
+      'Conseils généraux basés sur le déroulement réel des chantiers de terrassement RK Pyrénées Construction (voir /services/terrassement) — non sourcés à un organisme tiers.',
+    relatedServiceSlugs: ['terrassement', 'dallage'],
+  },
+  {
+    slug: 'comment-choisir-professionnel-dallage-exterieur',
+    title: 'Comment choisir un professionnel pour un dallage extérieur ?',
+    metaTitle: 'Choisir un professionnel pour un dallage extérieur à Toulouse | RK Pyrénées Construction',
+    metaDescription:
+      "Terrasse béton ou pierre naturelle : les points à vérifier avant de confier votre dallage extérieur à un professionnel à Toulouse.",
+    h1: 'Comment choisir un professionnel pour un dallage extérieur ?',
+    dek: 'Terrasse béton, allée ou plage de piscine : quelques critères pour bien choisir votre prestataire.',
+    sections: [
+      {
+        heading: 'Le choix du matériau',
+        body:
+          "Dalle béton coulée ou pavage en pierre naturelle : chaque matériau a ses contraintes de pose et de finition. Un professionnel sérieux vous explique les options adaptées à votre projet (terrasse, allée, plage de piscine) plutôt que d'imposer une seule solution.",
+      },
+      {
+        heading: 'La préparation du support',
+        body:
+          "Un dallage durable commence par un terrassement et un nivellement soignés — une étape souvent sous-estimée mais déterminante pour la tenue dans le temps.",
+      },
+      {
+        heading: 'La qualité des finitions',
+        body:
+          "Talochage, joints, pente d'écoulement : ce sont ces finitions qui font la différence entre une dalle qui vieillit bien et une dalle qui se dégrade rapidement. Demandez à voir des réalisations réelles avant de vous engager.",
+      },
+    ],
+    sourceNote: 'Conseils généraux, non sourcés à un organisme tiers spécifique.',
+    relatedServiceSlugs: ['dallage', 'amenagement-exterieur'],
+  },
 ]
 
 export function getGuideBySlug(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug)
 }
 
-/** Guides relevant to a given service — used to link a service page to its matching price
- *  guide (natural, one contextual link, not a blanket "see all guides" everywhere — audit #17). */
+/** Guides relevant to a given service — used to link a service page to its matching practical
+ *  guide (natural, one contextual link, not a blanket "see all guides" everywhere — audit #17).
+ *  No guide here discusses pricing — see the file header note. */
 export function getGuidesForService(serviceSlug: string): Guide[] {
   return GUIDES.filter((g) => g.relatedServiceSlugs.includes(serviceSlug))
 }

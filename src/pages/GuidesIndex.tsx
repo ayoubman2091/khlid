@@ -13,10 +13,10 @@ export default function GuidesIndex() {
       <SEO {...meta} />
       <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 lg:px-8">
         <Breadcrumb items={meta.crumbs!} />
-        <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Guides &amp; repères de prix</h1>
+        <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Guides pratiques</h1>
         <p className="mt-4 text-lg text-ink-600">
-          Des repères pour cadrer votre budget avant de demander un devis précis. Chaque chiffre cité indique sa
-          source.
+          Étapes de chantier et conseils pour bien préparer votre projet de construction, rénovation ou maçonnerie
+          à Toulouse, avant de demander un devis.
         </p>
       </div>
       <div className="mx-auto max-w-3xl divide-y divide-stone-200 px-4 py-10 sm:px-6 lg:px-8">
