@@ -23,11 +23,14 @@ All optional. Copy `.env.example` to `.env.local` and fill in only what's actual
 — never invent a value to fill a gap. Set the same variables in the hosting platform's build
 environment (Netlify/Vercel project settings) for production builds.
 
-### 1. `VITE_SITE_URL` — final production domain
+### 1. `VITE_SITE_URL` — final production domain — ✅ CONFIRMED
+`https://xn--rkpyrnesconstruction-f2bb.com` (client-confirmed 2026-08-20 — punycode for the
+accented "rk-pyrénées-construction.com", the domain the current live site already uses). Set in
+`.env.production` (committed — this is a public domain, not a secret), which `vite build` and
+`scripts/{generate-seo-files,prerender}.ts` all resolve identically via `scripts/resolveSiteUrl.ts`.
 Drives canonical URLs, sitemap.xml, robots.txt, Open Graph URLs, and every JSON-LD `url`/`@id`
-field — all from this one place (`lib/env.ts` → `lib/constants.ts`'s `BUSINESS.siteUrl`). Until
-set, the site uses the placeholder `https://www.rk-pyrenees-construction.fr` — **do not treat
-that as final**.
+field from this one place (`lib/env.ts` → `lib/constants.ts`'s `BUSINESS.siteUrl`). If the
+domain ever changes, `.env.production` is the only file to edit.
 
 ### 2. Official registered legal name
 `lib/constants.ts`'s `BUSINESS.legalName` currently uses **"RK PYRENNEES CONSTRUCTION"**

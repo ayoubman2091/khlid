@@ -16,11 +16,12 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { resolveSiteUrl } from './resolveSiteUrl.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const DIST_DIR = join(ROOT, 'dist')
 const SSR_ENTRY = join(ROOT, 'dist-ssr/entry-server.js')
-const SITE_URL = (process.env.VITE_SITE_URL ?? 'https://www.rk-pyrenees-construction.fr').replace(/\/$/, '')
+const SITE_URL = resolveSiteUrl(ROOT)
 
 interface PageMeta {
   title: string

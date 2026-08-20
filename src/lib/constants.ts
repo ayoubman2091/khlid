@@ -50,13 +50,15 @@ export const BUSINESS = {
   latitude: 43.5636312,
   longitude: 1.4052552,
   /**
-   * NEEDS CLIENT CONFIRMATION — domaine de production final. `VITE_SITE_URL` est le SEUL
-   * endroit à modifier pour changer le domaine partout (canonical, sitemap.xml, robots.txt,
-   * Open Graph, JSON-LD, URLs d'images absolues) — voir DEPLOYMENT.md #1. Tant que cette
-   * variable n'est pas définie au build, la valeur ci-dessous (placeholder) est utilisée ;
-   * NE PAS considérer ce domaine comme définitif.
+   * Domaine de production CONFIRMÉ par le client (2026-08-20) : https://xn--rkpyrnesconstruction-f2bb.com
+   * (punycode du domaine réel actuellement en ligne — voir CURRENT_SITE_AUDIT.md §0). `VITE_SITE_URL`
+   * reste le SEUL endroit à modifier pour changer le domaine partout (canonical, sitemap.xml,
+   * robots.txt, Open Graph, JSON-LD, URLs d'images absolues) — voir DEPLOYMENT.md #1 ; sa valeur
+   * vit dans .env.production (committé, ce n'est pas un secret). La valeur ci-dessous n'est
+   * qu'un filet de sécurité pour `npm run dev` sans fichier .env — le build de production lit
+   * toujours .env.production en premier.
    */
-  siteUrl: (ENV.siteUrl ?? 'https://www.rk-pyrenees-construction.fr').replace(/\/$/, ''),
+  siteUrl: (ENV.siteUrl ?? 'https://xn--rkpyrnesconstruction-f2bb.com').replace(/\/$/, ''),
 } as const
 
 export const MAIN_CITY = 'Toulouse'

@@ -8,8 +8,8 @@
  * build and BEFORE the client `vite build`, so the generated files land in dist/ via Vite's
  * normal public/ passthrough — see the "build" script in package.json.
  *
- * The domain comes from VITE_SITE_URL (falls back to the placeholder documented in
- * lib/constants.ts) — see audit item #6 / DEPLOYMENT.md #1.
+ * The domain comes from VITE_SITE_URL, resolved via scripts/resolveSiteUrl.ts (same resolution
+ * `vite build` uses — reads .env.production) — see audit item #6 / DEPLOYMENT.md #1.
  *
  * lastmod is intentionally omitted (see audit item #15): this project doesn't track real
  * per-page modification dates, and a fabricated "today" date on every page is exactly the
@@ -19,10 +19,11 @@
 import { writeFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { resolveSiteUrl } from './resolveSiteUrl.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const SSR_ENTRY = join(ROOT, 'dist-ssr/entry-server.js')
-const SITE_URL = (process.env.VITE_SITE_URL ?? 'https://www.rk-pyrenees-construction.fr').replace(/\/$/, '')
+const SITE_URL = resolveSiteUrl(ROOT)
 
 async function main() {
   if (!existsSync(SSR_ENTRY)) {

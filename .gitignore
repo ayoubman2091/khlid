@@ -12,11 +12,14 @@ dist
 dist-ssr
 *.local
 
-# Local env files (VITE_SITE_URL, VITE_GA4_MEASUREMENT_ID, etc. — see DEPLOYMENT.md).
-# .env.example stays tracked as the documented template.
+# Local env files — see DEPLOYMENT.md. .env.local files carry per-developer/secret values and
+# stay untracked. .env.example (the documented template) and .env.production (the confirmed,
+# non-secret production domain — see DEPLOYMENT.md #1) are intentionally tracked.
 .env
-.env.*
+.env.local
+.env.*.local
 !.env.example
+!.env.production
 
 # Editor directories and files
 .vscode/*
