@@ -6,31 +6,22 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { Button } from '@/components/ui/Button'
 import { CTASection } from '@/components/sections/CTASection'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema, articleSchema } from '@/seo/schema'
+import { guideDetailMeta } from '@/seo/pageMeta'
 import NotFound from './NotFound'
 
 export default function Guide() {
   const { slug } = useParams<{ slug: string }>()
   const guide = getGuideBySlug(slug ?? '')
-  if (!guide) return <NotFound />
+  const meta = guide ? guideDetailMeta(guide.slug) : null
+  if (!guide || !meta) return <NotFound />
 
-  const crumbs = [
-    { name: 'Accueil', path: '/' },
-    { name: 'Guides', path: '/guides' },
-    { name: guide.title, path: `/guides/${guide.slug}` },
-  ]
   const relatedServices = guide.relatedServiceSlugs.map(getServiceBySlug).filter(Boolean)
 
   return (
     <>
-      <SEO
-        title={guide.metaTitle}
-        description={guide.metaDescription}
-        path={`/guides/${guide.slug}`}
-        schemas={[breadcrumbSchema(crumbs), articleSchema({ headline: guide.title, description: guide.metaDescription, path: `/guides/${guide.slug}` })]}
-      />
+      <SEO {...meta} />
       <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
+        <Breadcrumb items={meta.crumbs!} />
         <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">{guide.h1}</h1>
         <p className="mt-4 text-lg text-ink-600">{guide.dek}</p>
       </div>

@@ -29,7 +29,7 @@ export const GUIDES: Guide[] = [
       {
         heading: 'Obtenir un chiffrage réel',
         body:
-          "Ces fourchettes restent indicatives et nationales. Le seul moyen d'obtenir un prix fiable pour votre projet est une visite sur site suivie d'un devis détaillé — c'est ce que propose RK Pyrénées Construction, gratuitement et sans engagement, pour les projets de rénovation à Toulouse et sa proche périphérie.",
+          "Ces fourchettes restent indicatives et nationales. Le seul moyen d'obtenir un prix fiable pour votre projet est une visite sur site suivie d'un devis détaillé — c'est ce que propose RK Pyrénées Construction, gratuitement et sans engagement, pour les projets de rénovation à Toulouse.",
       },
     ],
     sourceNote:
@@ -137,4 +137,10 @@ export const GUIDES: Guide[] = [
 
 export function getGuideBySlug(slug: string): Guide | undefined {
   return GUIDES.find((g) => g.slug === slug)
+}
+
+/** Guides relevant to a given service — used to link a service page to its matching price
+ *  guide (natural, one contextual link, not a blanket "see all guides" everywhere — audit #17). */
+export function getGuidesForService(serviceSlug: string): Guide[] {
+  return GUIDES.filter((g) => g.relatedServiceSlugs.includes(serviceSlug))
 }

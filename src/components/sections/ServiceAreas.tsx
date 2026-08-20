@@ -4,10 +4,10 @@ import { ZONES } from '@/data/zones'
 export function ServiceAreas() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <h2 className="font-display text-3xl font-bold text-ink-900 sm:text-4xl">Zones d'intervention</h2>
+      <h2 className="font-display text-3xl font-bold text-ink-900 sm:text-4xl">Zone d'intervention</h2>
       <p className="mt-3 max-w-2xl text-ink-600">
-        RK Pyrénées Construction intervient à Toulouse et dans sa proche périphérie. Vous êtes en dehors de cette
-        liste ? Contactez-nous, nous vérifions la faisabilité au cas par cas.
+        RK Pyrénées Construction intervient à Toulouse. Votre projet est situé ailleurs ? Contactez-nous, nous
+        étudions chaque demande au cas par cas.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         {ZONES.map((zone) => (

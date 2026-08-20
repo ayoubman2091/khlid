@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, ArrowRight } from 'lucide-react'
 import { getServiceBySlug, SERVICES } from '@/data/services'
+import { getGuidesForService } from '@/data/guides'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { OptimizedImage } from '@/components/ui/OptimizedImage'
 import { Process } from '@/components/sections/Process'
@@ -8,34 +9,25 @@ import { ServiceAreas } from '@/components/sections/ServiceAreas'
 import { CTASection } from '@/components/sections/CTASection'
 import { Button } from '@/components/ui/Button'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema, serviceSchema } from '@/seo/schema'
+import { serviceDetailMeta } from '@/seo/pageMeta'
 import NotFound from './NotFound'
 
 export default function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>()
   const service = getServiceBySlug(slug ?? '')
+  const meta = service ? serviceDetailMeta(service.slug) : null
 
-  if (!service) return <NotFound />
-
-  const crumbs = [
-    { name: 'Accueil', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: service.shortName, path: `/services/${service.slug}` },
-  ]
+  if (!service || !meta) return <NotFound />
 
   const related = SERVICES.filter((s) => service.relatedServiceSlugs.includes(s.slug))
+  const relatedGuides = getGuidesForService(service.slug)
 
   return (
     <>
-      <SEO
-        title={service.metaTitle}
-        description={service.metaDescription}
-        path={`/services/${service.slug}`}
-        schemas={[breadcrumbSchema(crumbs), serviceSchema({ name: service.name, description: service.metaDescription, path: `/services/${service.slug}` })]}
-      />
+      <SEO {...meta} />
 
       <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
+        <Breadcrumb items={meta.crumbs!} />
       </div>
 
       <section className="mx-auto max-w-7xl px-4 pb-4 pt-8 sm:px-6 lg:px-8">
@@ -56,7 +48,7 @@ export default function ServiceDetail() {
             <OptimizedImage
               stem={service.heroImage.stem}
               alt={service.heroImage.alt}
-              variant="full"
+              sizes="(min-width: 1024px) 50vw, 100vw"
               loading="eager"
               fetchPriority="high"
               className="h-full w-full object-cover"
@@ -86,7 +78,12 @@ export default function ServiceDetail() {
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {service.gallery.map((img) => (
                 <div key={img.stem} className="aspect-square overflow-hidden rounded-xl bg-stone-200">
-                  <OptimizedImage stem={img.stem} alt={img.alt} variant="thumb" className="h-full w-full object-cover" />
+                  <OptimizedImage
+                    stem={img.stem}
+                    alt={img.alt}
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -96,20 +93,38 @@ export default function ServiceDetail() {
 
       <ServiceAreas />
 
-      {related.length > 0 && (
+      {(related.length > 0 || relatedGuides.length > 0) && (
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-bold text-ink-900">Services complémentaires</h2>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {related.map((r) => (
-              <Link
-                key={r.slug}
-                to={`/services/${r.slug}`}
-                className="rounded-full border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-ink-800 hover:border-brick-500 hover:text-brick-500"
-              >
-                {r.name}
-              </Link>
-            ))}
-          </div>
+          {related.length > 0 && (
+            <>
+              <h2 className="font-display text-2xl font-bold text-ink-900">Services complémentaires</h2>
+              <div className="mt-6 flex flex-wrap gap-3">
+                {related.map((r) => (
+                  <Link
+                    key={r.slug}
+                    to={`/services/${r.slug}`}
+                    className="rounded-full border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-ink-800 hover:border-brick-500 hover:text-brick-500"
+                  >
+                    {r.name}
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+
+          {relatedGuides.length > 0 && (
+            <div className={related.length > 0 ? 'mt-8' : ''}>
+              {relatedGuides.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  to={`/guides/${guide.slug}`}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-brick-500 hover:underline"
+                >
+                  Combien coûte ce type de projet ? Voir le guide « {guide.title} » <ArrowRight size={15} />
+                </Link>
+              ))}
+            </div>
+          )}
         </section>
       )}
 

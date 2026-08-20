@@ -6,33 +6,23 @@ import { OptimizedImage } from '@/components/ui/OptimizedImage'
 import { CTASection } from '@/components/sections/CTASection'
 import { Button } from '@/components/ui/Button'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema } from '@/seo/schema'
+import { realisationDetailMeta } from '@/seo/pageMeta'
 import NotFound from './NotFound'
 
 export default function RealisationDetail() {
   const { slug } = useParams<{ slug: string }>()
   const realisation = getRealisationBySlug(slug ?? '')
-  if (!realisation) return <NotFound />
+  const meta = realisation ? realisationDetailMeta(realisation.slug) : null
+  if (!realisation || !meta) return <NotFound />
 
   const service = getServiceBySlug(realisation.serviceSlug)
-  const crumbs = [
-    { name: 'Accueil', path: '/' },
-    { name: 'Réalisations', path: '/realisations' },
-    { name: realisation.title, path: `/realisations/${realisation.slug}` },
-  ]
 
   return (
     <>
-      <SEO
-        title={`${realisation.title} — Réalisation RK Pyrénées Construction`}
-        description={realisation.description}
-        path={`/realisations/${realisation.slug}`}
-        image={`/images/optimized/${realisation.images[0].stem}-full.webp`}
-        schemas={[breadcrumbSchema(crumbs)]}
-      />
+      <SEO {...meta} />
 
       <div className="mx-auto max-w-5xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
+        <Breadcrumb items={meta.crumbs!} />
         <span className="mt-6 inline-block text-xs font-semibold uppercase tracking-wide text-brick-500">
           {realisation.category}
         </span>
@@ -49,7 +39,10 @@ export default function RealisationDetail() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {realisation.images.map((img) => (
             <div key={img.stem} className="overflow-hidden rounded-2xl bg-stone-200">
-              <OptimizedImage stem={img.stem} alt={img.alt} variant="full" className="h-full w-full object-cover" />
+              {/* No forced h-full/object-cover here: width+height from OptimizedImage let the
+                  browser reserve the image's real aspect ratio (no CLS) without cropping
+                  portrait/landscape photos into a uniform box — see audit item #11. */}
+              <OptimizedImage stem={img.stem} alt={img.alt} sizes="(min-width: 640px) 50vw, 100vw" className="h-auto w-full" />
             </div>
           ))}
         </div>

@@ -9,7 +9,7 @@ import { BUSINESS } from '@/lib/constants'
 const SIGNALS = [
   { icon: FileCheck2, label: `Devis gratuit`, detail: 'Sans engagement, avant tout démarrage' },
   { icon: Hammer, label: 'SASU immatriculée', detail: `SIREN ${BUSINESS.siren}` },
-  { icon: MapPinned, label: `Ancrée à ${BUSINESS.city}`, detail: 'Intervention locale et proche périphérie' },
+  { icon: MapPinned, label: `Ancrée à ${BUSINESS.city}`, detail: 'Intervention locale' },
   { icon: ShieldCheck, label: 'Suivi de chantier', detail: 'Devis détaillé et réception avec vous' },
 ]
 

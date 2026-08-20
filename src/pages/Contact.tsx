@@ -3,22 +3,17 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { QuoteForm } from '@/components/sections/QuoteForm'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema } from '@/seo/schema'
+import { contactMeta } from '@/seo/pageMeta'
 import { BUSINESS } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
 
 export default function Contact() {
-  const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Contact', path: '/contact' }]
+  const meta = contactMeta()
   return (
     <>
-      <SEO
-        title={`Contact — RK Pyrénées Construction, ${BUSINESS.city}`}
-        description={`Contactez RK Pyrénées Construction à ${BUSINESS.city} : téléphone, email ou formulaire de devis gratuit.`}
-        path="/contact"
-        schemas={[breadcrumbSchema(crumbs)]}
-      />
+      <SEO {...meta} />
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
+        <Breadcrumb items={meta.crumbs!} />
         <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Contact</h1>
       </div>
 
@@ -35,13 +30,21 @@ export default function Contact() {
             </a>
           </InfoRow>
           <InfoRow icon={MapPin} label="Adresse">
-            <a href={BUSINESS.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-brick-500">
+            <a
+              href={BUSINESS.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('maps_click', { location: 'contact_page' })}
+              className="hover:text-brick-500"
+            >
               {BUSINESS.addressLine}, {BUSINESS.postalCode} {BUSINESS.city}
             </a>
           </InfoRow>
-          <InfoRow icon={Clock} label="Horaires">
-            {BUSINESS.hoursLabel}
-          </InfoRow>
+          {BUSINESS.hoursLabel && (
+            <InfoRow icon={Clock} label="Horaires">
+              {BUSINESS.hoursLabel}
+            </InfoRow>
+          )}
 
           <div className="overflow-hidden rounded-2xl border border-stone-200">
             <iframe

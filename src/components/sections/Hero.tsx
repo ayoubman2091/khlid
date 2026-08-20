@@ -11,7 +11,7 @@ export function Hero() {
         <OptimizedImage
           stem="1000048044-A0xl8WOkxaSr38r9"
           alt=""
-          variant="full"
+          sizes="100vw"
           loading="eager"
           fetchPriority="high"
           className="h-full w-full object-cover opacity-45"
@@ -21,7 +21,7 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8">
         <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-stone-100 backdrop-blur">
-          {BUSINESS.city} &amp; proche périphérie
+          {BUSINESS.city}
         </p>
         <h1 className="max-w-2xl font-display text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
           Entreprise de construction et rénovation à Toulouse

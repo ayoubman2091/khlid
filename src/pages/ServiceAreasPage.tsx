@@ -1,26 +1,22 @@
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { CTASection } from '@/components/sections/CTASection'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema } from '@/seo/schema'
+import { zonesMeta } from '@/seo/pageMeta'
 import { ZONES } from '@/data/zones'
 import { BUSINESS } from '@/lib/constants'
 import { MapPin } from 'lucide-react'
 
 export default function ServiceAreasPage() {
-  const crumbs = [{ name: 'Accueil', path: '/' }, { name: "Zones d'intervention", path: '/zones-intervention' }]
+  const meta = zonesMeta()
   return (
     <>
-      <SEO
-        title={`Zones d'intervention — RK Pyrénées Construction à ${BUSINESS.city}`}
-        description="RK Pyrénées Construction intervient à Toulouse et dans sa proche périphérie : Blagnac, Colomiers, Tournefeuille, Balma, Muret, Cugnaux, L'Union, Castanet-Tolosan."
-        path="/zones-intervention"
-        schemas={[breadcrumbSchema(crumbs)]}
-      />
+      <SEO {...meta} />
       <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
-        <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Zones d'intervention</h1>
+        <Breadcrumb items={meta.crumbs!} />
+        <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Zone d'intervention</h1>
         <p className="mt-4 text-lg text-ink-600">
-          RK Pyrénées Construction intervient à {BUSINESS.city} et dans les communes de sa proche périphérie.
+          RK Pyrénées Construction est basée à {BUSINESS.city} et y intervient pour tous vos projets de
+          construction, rénovation et maçonnerie.
         </p>
       </div>
 
@@ -37,8 +33,8 @@ export default function ServiceAreasPage() {
           ))}
         </ul>
         <p className="mt-8 text-sm text-ink-600">
-          Votre commune n'apparaît pas dans cette liste ? Contactez-nous : nous étudions chaque demande au cas par
-          cas selon la localisation de votre projet.
+          Votre projet est situé en dehors de {BUSINESS.city} ? Contactez-nous : nous étudions chaque demande au cas
+          par cas selon la localisation exacte.
         </p>
       </div>
 

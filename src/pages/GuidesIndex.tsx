@@ -4,21 +4,15 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { GUIDES } from '@/data/guides'
 import { CTASection } from '@/components/sections/CTASection'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema } from '@/seo/schema'
-import { BUSINESS } from '@/lib/constants'
+import { guidesIndexMeta } from '@/seo/pageMeta'
 
 export default function GuidesIndex() {
-  const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Guides', path: '/guides' }]
+  const meta = guidesIndexMeta()
   return (
     <>
-      <SEO
-        title={`Guides prix construction et rénovation à ${BUSINESS.city} | RK Pyrénées Construction`}
-        description="Repères de prix et conseils pour vos projets de construction, rénovation, maçonnerie et terrassement à Toulouse."
-        path="/guides"
-        schemas={[breadcrumbSchema(crumbs)]}
-      />
+      <SEO {...meta} />
       <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
+        <Breadcrumb items={meta.crumbs!} />
         <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Guides &amp; repères de prix</h1>
         <p className="mt-4 text-lg text-ink-600">
           Des repères pour cadrer votre budget avant de demander un devis précis. Chaque chiffre cité indique sa

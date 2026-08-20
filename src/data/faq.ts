@@ -14,7 +14,7 @@ export const GENERAL_FAQ: FAQItem[] = [
   {
     question: 'Dans quelles zones intervenez-vous ?',
     answer:
-      "RK Pyrénées Construction intervient à Toulouse et dans sa proche périphérie (Blagnac, Colomiers, Tournefeuille, Balma, Muret, Cugnaux, L'Union, Castanet-Tolosan). Contactez-nous pour vérifier la faisabilité pour votre commune si elle n'est pas listée.",
+      "RK Pyrénées Construction intervient à Toulouse. Pour un projet situé en dehors de Toulouse, contactez-nous : nous étudions chaque demande au cas par cas selon la localisation exacte.",
   },
   {
     question: 'Le devis est-il vraiment gratuit et sans engagement ?',

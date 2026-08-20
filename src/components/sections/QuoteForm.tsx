@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react'
+import { AlertCircle } from 'lucide-react'
 import { BUSINESS } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
+import { submitQuote } from '@/lib/formSubmit'
 import { Button } from '@/components/ui/Button'
 
 const PROJECT_TYPES = [
@@ -14,18 +16,11 @@ const PROJECT_TYPES = [
   'Autre',
 ]
 
-/**
- * IMPORTANT — limite connue de cette v1 : aucun backend d'envoi de formulaire n'est
- * configuré (aucun service de type Formspree/EmailJS/fonction serverless n'a été confirmé
- * par le client, et une clé d'API ne doit jamais être exposée côté frontend — brief §52).
- * En l'état, la soumission compose un e-mail pré-rempli via mailto: vers l'adresse
- * officielle — ce qui fonctionne sans backend mais dépend du client mail installé sur
- * l'appareil du visiteur. Recommandation prioritaire de suivi : brancher un vrai service
- * d'envoi (formulaire → email/CRM) pour fiabiliser la réception des demandes de devis.
- */
 export function QuoteForm() {
   const [started, setStarted] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted' | 'error'>('idle')
+  const [submittedVia, setSubmittedVia] = useState<'endpoint' | 'mailto'>('mailto')
+  const [error, setError] = useState<string | null>(null)
 
   function handleFocus() {
     if (!started) {
@@ -34,47 +29,44 @@ export function QuoteForm() {
     }
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    const name = data.get('name')
-    const phone = data.get('phone')
-    const email = data.get('email')
-    const city = data.get('city')
-    const projectType = data.get('projectType')
-    const budget = data.get('budget')
-    const description = data.get('description')
+    const projectType = String(data.get('projectType') ?? '')
 
-    const body = [
-      `Nom : ${name}`,
-      `Téléphone : ${phone}`,
-      `Email : ${email}`,
-      `Ville : ${city}`,
-      `Type de projet : ${projectType}`,
-      budget ? `Budget indicatif : ${budget}` : null,
-      '',
-      'Description du projet :',
-      description,
-    ]
-      .filter(Boolean)
-      .join('\n')
+    setStatus('submitting')
+    setError(null)
 
-    trackEvent('form_submit')
-    trackEvent('quote_request', { project_type: String(projectType ?? '') })
-    setSubmitted(true)
+    const result = await submitQuote({
+      name: String(data.get('name') ?? ''),
+      phone: String(data.get('phone') ?? ''),
+      email: String(data.get('email') ?? ''),
+      city: String(data.get('city') ?? ''),
+      projectType,
+      budget: data.get('budget') ? String(data.get('budget')) : undefined,
+      description: String(data.get('description') ?? ''),
+    })
 
-    window.location.href = `mailto:${BUSINESS.email}?subject=${encodeURIComponent(
-      `Demande de devis — ${projectType ?? 'Projet'}`,
-    )}&body=${encodeURIComponent(body)}`
+    if (result.ok) {
+      trackEvent('quote_submit', { project_type: projectType, mode: result.mode })
+      setSubmittedVia(result.mode)
+      setStatus('submitted')
+    } else {
+      setError(result.error)
+      setStatus('error')
+    }
   }
 
-  if (submitted) {
+  if (status === 'submitted') {
     return (
       <div className="rounded-2xl border border-forest-700/20 bg-forest-700/5 p-8 text-center">
-        <h3 className="font-display text-xl font-bold text-forest-800">Votre client mail va s'ouvrir</h3>
+        <h3 className="font-display text-xl font-bold text-forest-800">
+          {submittedVia === 'endpoint' ? 'Votre demande a bien été envoyée' : "Votre client mail va s'ouvrir"}
+        </h3>
         <p className="mt-2 text-sm text-ink-600">
-          Un e-mail pré-rempli avec votre demande vient de s'ouvrir vers {BUSINESS.email}. Il ne vous reste qu'à
-          l'envoyer. Vous pouvez aussi nous appeler directement au {BUSINESS.phone}.
+          {submittedVia === 'endpoint'
+            ? `Nous revenons vers vous dès que possible. Vous pouvez aussi nous appeler directement au ${BUSINESS.phone}.`
+            : `Un e-mail pré-rempli avec votre demande vient de s'ouvrir vers ${BUSINESS.email}. Il ne vous reste qu'à l'envoyer. Vous pouvez aussi nous appeler directement au ${BUSINESS.phone}.`}
         </p>
       </div>
     )
@@ -82,6 +74,19 @@ export function QuoteForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {status === 'error' && error && (
+        <div className="flex items-start gap-2.5 rounded-lg border border-brick-500/30 bg-brick-50 p-4 text-sm text-brick-700">
+          <AlertCircle size={18} className="mt-0.5 shrink-0" />
+          <p>
+            {error} Vous pouvez réessayer, ou nous appeler directement au{' '}
+            <a href={`tel:${BUSINESS.phoneE164}`} className="font-semibold underline">
+              {BUSINESS.phone}
+            </a>
+            .
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <Field label="Nom complet" name="name" required onFocus={handleFocus} />
         <Field label="Téléphone" name="phone" type="tel" required onFocus={handleFocus} />
@@ -127,8 +132,8 @@ export function QuoteForm() {
         />
       </div>
 
-      <Button type="submit" size="lg" className="w-full sm:w-auto">
-        Demander mon devis gratuit
+      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === 'submitting'}>
+        {status === 'submitting' ? 'Envoi en cours…' : 'Demander mon devis gratuit'}
       </Button>
     </form>
   )

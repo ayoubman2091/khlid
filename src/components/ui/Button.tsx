@@ -21,7 +21,7 @@ const sizes = {
 }
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-tight transition-colors duration-150'
+  'inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-tight transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60'
 
 export function Button({
   children,
@@ -33,11 +33,12 @@ export function Button({
   size = 'md',
   className = '',
   icon,
-}: BaseProps & { to?: string; href?: string; onClick?: () => void; type?: 'button' | 'submit' }) {
+  disabled = false,
+}: BaseProps & { to?: string; href?: string; onClick?: () => void; type?: 'button' | 'submit'; disabled?: boolean }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`
   if (to) {
     return (
-      <Link to={to} className={classes}>
+      <Link to={to} className={classes} aria-disabled={disabled}>
         {icon}
         {children}
       </Link>
@@ -45,14 +46,14 @@ export function Button({
   }
   if (href) {
     return (
-      <a href={href} className={classes} onClick={onClick}>
+      <a href={href} className={classes} onClick={onClick} aria-disabled={disabled}>
         {icon}
         {children}
       </a>
     )
   }
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes} disabled={disabled}>
       {icon}
       {children}
     </button>

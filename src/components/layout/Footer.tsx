@@ -16,7 +16,7 @@ export function Footer() {
             <span className="font-display text-sm font-bold text-white">RK Pyrénées Construction</span>
           </div>
           <p className="text-sm leading-relaxed text-stone-300">
-            Construction, rénovation, maçonnerie et aménagement extérieur à Toulouse et sa proche périphérie.
+            Construction, rénovation, maçonnerie et aménagement extérieur à Toulouse.
           </p>
           {BUSINESS.facebookUrl && (
             <a
@@ -60,7 +60,13 @@ export function Footer() {
           <ul className="space-y-3 text-sm text-stone-300">
             <li className="flex items-start gap-2">
               <MapPin size={16} className="mt-0.5 shrink-0 text-brick-500" />
-              <a href={BUSINESS.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-brick-500">
+              <a
+                href={BUSINESS.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('maps_click', { location: 'footer' })}
+                className="hover:text-brick-500"
+              >
                 {BUSINESS.addressLine}, {BUSINESS.postalCode} {BUSINESS.city}
               </a>
             </li>
@@ -85,7 +91,7 @@ export function Footer() {
           <p>
             © {year} {BUSINESS.legalName} — {BUSINESS.legalForm}, SIREN {BUSINESS.siren}
           </p>
-          <p>{BUSINESS.hoursLabel}</p>
+          {BUSINESS.hoursLabel && <p>{BUSINESS.hoursLabel}</p>}
         </div>
       </div>
     </footer>

@@ -37,7 +37,7 @@ export function ProjectsGrid({ title = 'Nos réalisations', limit }: { title?: s
                 <OptimizedImage
                   stem={r.images[0].stem}
                   alt={r.images[0].alt}
-                  variant="thumb"
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>

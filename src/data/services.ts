@@ -87,7 +87,7 @@ export const SERVICES: Service[] = [
       'Maçon à Toulouse pour tous travaux de maçonnerie générale : murs, ouvertures, structures béton armé, reprises. Devis gratuit RK Pyrénées Construction.',
     h1: 'Maçon à Toulouse — maçonnerie générale',
     intro:
-      "Travaux de maçonnerie générale à Toulouse et alentours : montage de murs, structures en béton armé, reprises sur bâti existant. RK Pyrénées Construction intervient aussi bien en construction neuve qu'en rénovation.",
+      "Travaux de maçonnerie générale à Toulouse : montage de murs, structures en béton armé, reprises sur bâti existant. RK Pyrénées Construction intervient aussi bien en construction neuve qu'en rénovation.",
     includes: [
       'Montage et élévation de murs',
       'Structures béton armé (poteaux, poutres, escaliers)',

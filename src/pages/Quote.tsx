@@ -1,23 +1,18 @@
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { QuoteForm } from '@/components/sections/QuoteForm'
 import { SEO } from '@/seo/SEO'
-import { breadcrumbSchema } from '@/seo/schema'
+import { quoteMeta } from '@/seo/pageMeta'
 import { BUSINESS } from '@/lib/constants'
 import { Phone, MessageCircle } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics'
 
 export default function Quote() {
-  const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Devis gratuit', path: '/devis' }]
+  const meta = quoteMeta()
   return (
     <>
-      <SEO
-        title={`Devis gratuit — RK Pyrénées Construction, ${BUSINESS.city}`}
-        description="Demandez votre devis gratuit et sans engagement pour votre projet de construction, rénovation ou maçonnerie à Toulouse."
-        path="/devis"
-        schemas={[breadcrumbSchema(crumbs)]}
-      />
+      <SEO {...meta} />
       <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 lg:px-8">
-        <Breadcrumb items={crumbs} />
+        <Breadcrumb items={meta.crumbs!} />
         <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Demander un devis gratuit</h1>
         <p className="mt-4 text-lg text-ink-600">
           Décrivez votre projet : nous revenons vers vous avec un devis détaillé, sans engagement.

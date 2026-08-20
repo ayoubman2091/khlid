@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/Button'
 const NAV_LINKS = [
   { label: 'Services', to: '/services' },
   { label: 'Réalisations', to: '/realisations' },
-  { label: 'Zones d\'intervention', to: '/zones-intervention' },
+  { label: 'Guides', to: '/guides' },
+  { label: 'Zone d\'intervention', to: '/zones-intervention' },
   { label: 'À propos', to: '/a-propos' },
   { label: 'Contact', to: '/contact' },
 ]

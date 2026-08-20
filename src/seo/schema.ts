@@ -2,6 +2,14 @@ import { BUSINESS } from '@/lib/constants'
 
 const SITE = BUSINESS.siteUrl
 
+/** Prefixes a site-relative path with the canonical site URL. Use this instead of ever
+ *  hardcoding a domain in a component — the domain is centralized in BUSINESS.siteUrl
+ *  (itself driven by VITE_SITE_URL, see DEPLOYMENT.md #1). Already-absolute URLs pass through. */
+export function absoluteUrl(pathOrUrl: string): string {
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl
+  return `${SITE}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
+}
+
 export function organizationSchema() {
   return {
     '@context': 'https://schema.org',
@@ -13,6 +21,8 @@ export function organizationSchema() {
     logo: `${SITE}/logo/logo-512.png`,
     telephone: BUSINESS.phoneE164,
     email: BUSINESS.email,
+    // Only real, confirmed profiles belong here — never publish an unverified link.
+    ...(BUSINESS.facebookUrl ? { sameAs: [BUSINESS.facebookUrl] } : {}),
   }
 }
 
@@ -41,7 +51,12 @@ export function localBusinessSchema() {
     },
     url: SITE,
     hasMap: BUSINESS.mapsUrl,
-    areaServed: ['Toulouse', 'Blagnac', 'Colomiers', 'Tournefeuille', 'Balma', 'Muret', 'Cugnaux', "L'Union", 'Castanet-Tolosan'],
+    // Toulouse only at launch (confirmed 2026-08-20) — see SERVICE_AREAS in lib/constants.ts.
+    // Do not add other communes here without an explicit, traceable client confirmation.
+    areaServed: {
+      '@type': 'City',
+      name: 'Toulouse',
+    },
   }
 }
 
@@ -106,5 +121,53 @@ export function articleSchema(opts: { headline: string; description: string; pat
     url: `${SITE}${opts.path}`,
     author: { '@id': `${SITE}/#organization` },
     publisher: { '@id': `${SITE}/#organization` },
+  }
+}
+
+/**
+ * ImageObject for a genuinely-owned content image (RK's own project photos — verified real
+ * assets, see CURRENT_SITE_AUDIT.md §5.1). Used sparingly (one per realisation page, not one
+ * per thumbnail) to avoid structured-data spam — see audit §19.
+ */
+export function imageObjectSchema(opts: { url: string; alt: string; width?: number; height?: number }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ImageObject',
+    contentUrl: absoluteUrl(opts.url),
+    url: absoluteUrl(opts.url),
+    description: opts.alt,
+    ...(opts.width ? { width: opts.width } : {}),
+    ...(opts.height ? { height: opts.height } : {}),
+    representativeOfPage: true,
+  }
+}
+
+/**
+ * VideoObject builder — intentionally NOT wired into any page yet.
+ *
+ * The 15 YouTube videos on this site have unverified ownership (see CURRENT_SITE_AUDIT.md
+ * §5.2): we don't know which channel published them, so we cannot honestly assert `creator`,
+ * `publisher`, or `uploadDate` without inventing data. Publishing VideoObject with a
+ * `publisher`/`creator` pointing at RK Pyrénées when that isn't confirmed would be exactly the
+ * kind of misleading structured data the audit flagged (§18/§27) — so this helper exists ready
+ * to use, but stays disconnected from every page until a real channel/ownership confirmation
+ * is provided. At that point, wire it into RealisationDetail/VideoSection with the real name,
+ * description and uploadDate — do not fill placeholders in the meantime.
+ */
+export function videoObjectSchema(opts: {
+  name: string
+  description: string
+  thumbnailUrl: string
+  embedUrl: string
+  uploadDate?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: opts.name,
+    description: opts.description,
+    thumbnailUrl: [opts.thumbnailUrl],
+    embedUrl: opts.embedUrl,
+    ...(opts.uploadDate ? { uploadDate: opts.uploadDate } : {}),
   }
 }

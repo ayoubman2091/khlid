@@ -1,14 +1,6 @@
 import { useEffect } from 'react'
 import { BUSINESS } from '@/lib/constants'
-
-interface SEOProps {
-  title: string
-  description: string
-  path: string
-  image?: string
-  schemas?: object[]
-  noindex?: boolean
-}
+import type { PageMeta } from './pageMeta'
 
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
@@ -31,14 +23,17 @@ function setLink(rel: string, href: string) {
 }
 
 /**
- * Gère title / meta description / canonical / Open Graph / Twitter Card / JSON-LD
- * par page, côté client (pas de SSR/prerendering dans cette v1 — voir note dans le
- * rapport de livraison sur la recommandation de prerendering pour durcir le SEO/GEO).
+ * Updates title / meta description / canonical / Open Graph / Twitter Card / JSON-LD on
+ * client-side navigation. Every page passes a `PageMeta` object computed by a function in
+ * seo/pageMeta.ts — the SAME functions scripts/prerender.ts calls to bake this exact metadata
+ * into the static HTML for each route at build time (see scripts/prerender.ts), so what a
+ * crawler sees in the prerendered HTML and what this effect produces on client navigation are
+ * always identical, not two metadata sources that can drift apart.
  */
-export function SEO({ title, description, path, image, schemas = [], noindex = false }: SEOProps) {
+export function SEO({ title, description, path, image, schemas = [], noindex = false }: PageMeta) {
   // Schemas are passed as fresh array/object literals from each page on every render;
-  // stringify for a stable dependency so this effect doesn't re-run (and re-scroll) on
-  // unrelated re-renders (e.g. typing in a form on the same page).
+  // stringify for a stable dependency so this effect doesn't re-run on unrelated re-renders
+  // (e.g. typing in a form on the same page).
   const schemasKey = JSON.stringify(schemas)
 
   useEffect(() => {
@@ -78,8 +73,6 @@ export function SEO({ title, description, path, image, schemas = [], noindex = f
     document.head.querySelectorAll('script[id^="ld-json-"]').forEach((el) => {
       if (!scriptIds.includes(el.id)) el.remove()
     })
-
-    window.scrollTo({ top: 0 })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, description, path, image, noindex, schemasKey])
 
