@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { MobileBottomBar } from './MobileBottomBar'
+import { FloatingWhatsApp } from './FloatingWhatsApp'
 import { ScrollToTop } from './ScrollToTop'
 
 export function Layout() {
@@ -20,6 +21,7 @@ export function Layout() {
       </main>
       <Footer />
       <MobileBottomBar />
+      <FloatingWhatsApp />
     </div>
   )
 }

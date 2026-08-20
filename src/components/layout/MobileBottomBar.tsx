@@ -1,7 +1,8 @@
-import { Phone, MessageCircle, ClipboardList } from 'lucide-react'
+import { Phone, ClipboardList } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { BUSINESS } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 
 /**
  * Barre de conversion mobile fixe (brief §41). Masquée sur desktop (lg:hidden) et positionnée
@@ -28,7 +29,7 @@ export function MobileBottomBar() {
         onClick={() => trackEvent('whatsapp_click', { location: 'mobile_bottom_bar' })}
         className="flex flex-col items-center justify-center gap-0.5 border-x border-stone-200 py-2.5 text-forest-700 active:bg-stone-100"
       >
-        <MessageCircle size={20} />
+        <WhatsAppIcon size={20} />
         <span className="text-[11px] font-medium">WhatsApp</span>
       </a>
       <Link

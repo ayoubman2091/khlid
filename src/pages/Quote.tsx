@@ -3,8 +3,9 @@ import { QuoteForm } from '@/components/sections/QuoteForm'
 import { SEO } from '@/seo/SEO'
 import { quoteMeta } from '@/seo/pageMeta'
 import { BUSINESS } from '@/lib/constants'
-import { Phone, MessageCircle } from 'lucide-react'
+import { Phone } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics'
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 
 export default function Quote() {
   const meta = quoteMeta()
@@ -33,7 +34,7 @@ export default function Quote() {
             onClick={() => trackEvent('whatsapp_click', { location: 'quote_page' })}
             className="inline-flex items-center gap-2 font-semibold text-forest-700 hover:text-forest-800"
           >
-            <MessageCircle size={16} /> WhatsApp
+            <WhatsAppIcon size={16} /> WhatsApp
           </a>
         </div>
       </div>
