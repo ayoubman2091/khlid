@@ -49,10 +49,11 @@ export default function Contact() {
           <div className="overflow-hidden rounded-2xl border border-stone-200">
             <iframe
               title="Localisation RK Pyrénées Construction sur Google Maps"
-              src={`https://www.google.com/maps?q=${BUSINESS.latitude},${BUSINESS.longitude}&z=15&output=embed`}
+              src={BUSINESS.mapsEmbedUrl}
               className="h-64 w-full"
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>
         </div>

@@ -56,10 +56,11 @@ export function LocationSection() {
           <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 sm:aspect-video">
             <iframe
               title="Localisation RK Pyrénées Construction sur Google Maps"
-              src={`https://www.google.com/maps?q=${BUSINESS.latitude},${BUSINESS.longitude}&z=15&output=embed`}
+              src={BUSINESS.mapsEmbedUrl}
               className="h-full w-full"
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>
         </div>
