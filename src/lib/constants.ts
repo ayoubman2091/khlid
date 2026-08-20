@@ -69,6 +69,17 @@ export const BUSINESS = {
   siteUrl: (ENV.siteUrl ?? 'https://xn--rkpyrnesconstruction-f2bb.com').replace(/\/$/, ''),
 } as const
 
+/**
+ * Site developer credit — NOT part of RK's own business info (BUSINESS above), so kept
+ * separate. This Facebook profile is the developer's own, requested directly by the client
+ * as a "site by" footer credit — unrelated to (and not a substitute for) BUSINESS.facebookUrl,
+ * which is still null pending confirmation of RK's own official page.
+ */
+export const DEVELOPER = {
+  name: 'Ayoub Touati',
+  facebookUrl: 'https://web.facebook.com/touati.ayoub02',
+} as const
+
 export const MAIN_CITY = 'Toulouse'
 
 /**
