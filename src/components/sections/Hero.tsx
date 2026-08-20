@@ -20,16 +20,29 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8">
-        <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-stone-100 backdrop-blur">
-          {BUSINESS.city}
-        </p>
-        <h1 className="max-w-2xl font-display text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
-          Entreprise de construction et rénovation à Toulouse
-        </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-200">
-          Maçonnerie, rénovation, construction neuve, terrassement et dallage : RK Pyrénées
-          Construction pilote vos travaux du devis à la réception de chantier.
-        </p>
+        {/* Logo shown beside the heading on desktop only ("pour pc") — the header's logo
+            already covers mobile/tablet, so this isn't duplicated on small screens. */}
+        <div className="lg:flex lg:items-center lg:gap-8">
+          <img
+            src="/logo/logo-512.png"
+            alt="Logo RK Pyrénées Construction"
+            width={128}
+            height={128}
+            className="hidden shrink-0 rounded-full shadow-xl ring-4 ring-white/10 lg:block lg:h-28 lg:w-28 xl:h-32 xl:w-32"
+          />
+          <div>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-stone-100 backdrop-blur">
+              {BUSINESS.city}
+            </p>
+            <h1 className="max-w-2xl font-display text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
+              Entreprise de construction et rénovation à Toulouse
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-200">
+              Maçonnerie, rénovation, construction neuve, terrassement et dallage : RK Pyrénées
+              Construction pilote vos travaux du devis à la réception de chantier.
+            </p>
+          </div>
+        </div>
 
         <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button to="/devis" size="lg" icon={<ArrowRight size={18} />}>
