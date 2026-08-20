@@ -6,6 +6,9 @@ import { trackEvent } from '@/lib/analytics'
 import { Button } from '@/components/ui/Button'
 
 const NAV_LINKS = [
+  // `end` so this only reports "active" on the exact homepage — without it every route
+  // (which all start with "/") would highlight Accueil as active.
+  { label: 'Accueil', to: '/', end: true },
   { label: 'Services', to: '/services' },
   { label: 'Réalisations', to: '/realisations' },
   { label: 'Guides', to: '/guides' },
@@ -44,6 +47,7 @@ export function Header() {
             <RouterNavLink
               key={link.to}
               to={link.to}
+              end={link.end}
               className={({ isActive }) =>
                 `text-sm font-medium transition-colors hover:text-brick-500 ${isActive ? 'text-brick-500' : 'text-ink-800'}`
               }
@@ -85,6 +89,7 @@ export function Header() {
               <li key={link.to}>
                 <RouterNavLink
                   to={link.to}
+                  end={link.end}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
                     `block rounded-lg px-3 py-3 text-base font-medium ${isActive ? 'bg-brick-50 text-brick-600' : 'text-ink-800'}`
