@@ -28,9 +28,9 @@ export function Hero() {
           <img
             src="/logo/logo-512.png"
             alt="Logo RK Pyrénées Construction"
-            width={128}
-            height={128}
-            className="mb-4 h-20 w-20 shrink-0 rounded-full shadow-xl ring-4 ring-white/10 sm:h-24 sm:w-24 lg:mb-0 lg:h-28 lg:w-28 xl:h-32 xl:w-32"
+            width={176}
+            height={176}
+            className="mx-auto mb-4 h-24 w-24 shrink-0 rounded-full shadow-xl ring-4 ring-white/10 sm:h-28 sm:w-28 lg:mx-0 lg:mb-0 lg:h-36 lg:w-36 xl:h-44 xl:w-44"
           />
           <div>
             <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-stone-100 backdrop-blur">
