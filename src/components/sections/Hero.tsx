@@ -20,15 +20,16 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8">
-        {/* Logo shown beside the heading on desktop only ("pour pc") — the header's logo
-            already covers mobile/tablet, so this isn't duplicated on small screens. */}
-        <div className="lg:flex lg:items-center lg:gap-8">
+        {/* Mobile: logo stacks above the heading (default block order below lg). Desktop:
+            lg:flex-row-reverse keeps the same DOM order but flips it visually so the logo
+            (first in the DOM) renders on the right, text on the left. */}
+        <div className="lg:flex lg:flex-row-reverse lg:items-center lg:gap-8">
           <img
             src="/logo/logo-512.png"
             alt="Logo RK Pyrénées Construction"
             width={128}
             height={128}
-            className="hidden shrink-0 rounded-full shadow-xl ring-4 ring-white/10 lg:block lg:h-28 lg:w-28 xl:h-32 xl:w-32"
+            className="mb-4 h-20 w-20 shrink-0 rounded-full shadow-xl ring-4 ring-white/10 sm:h-24 sm:w-24 lg:mb-0 lg:h-28 lg:w-28 xl:h-32 xl:w-32"
           />
           <div>
             <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-stone-100 backdrop-blur">
