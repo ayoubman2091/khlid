@@ -22,8 +22,9 @@ export function Hero() {
       <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24 lg:px-8">
         {/* Mobile: logo stacks above the heading (default block order below lg). Desktop:
             lg:flex-row-reverse keeps the same DOM order but flips it visually so the logo
-            (first in the DOM) renders on the right, text on the left. */}
-        <div className="lg:flex lg:flex-row-reverse lg:items-center lg:gap-8">
+            (first in the DOM) renders flush right; lg:justify-between pushes the text back
+            to flush left (its original position) instead of both items packing to the right. */}
+        <div className="lg:flex lg:flex-row-reverse lg:items-center lg:justify-between lg:gap-8">
           <img
             src="/logo/logo-512.png"
             alt="Logo RK Pyrénées Construction"
