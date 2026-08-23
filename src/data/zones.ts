@@ -7,14 +7,13 @@ export interface Zone {
 }
 
 /**
- * Toulouse uniquement au lancement (décision finale du client, 2026-08-20) — voir le
- * commentaire sur SERVICE_AREAS dans lib/constants.ts. Aucune page dédiée par commune n'est
- * créée ; cette liste alimente uniquement /zones-intervention et la section ServiceAreas.
- * D'autres communes pourront être ajoutées ici sans changement de structure une fois
- * confirmées.
+ * Voir le commentaire sur SERVICE_AREAS dans lib/constants.ts pour la décision et sa date.
+ * Aucune page dédiée par commune n'est créée ; cette liste alimente uniquement
+ * /zones-intervention et la section ServiceAreas. D'autres entrées pourront être ajoutées ici
+ * sans changement de structure une fois confirmées.
  */
 export const ZONES: Zone[] = SERVICE_AREAS.map((name) => ({
   name,
-  isMainCity: name === 'Toulouse',
+  isMainCity: name === SERVICE_AREAS[0],
   description: 'Zone d\'intervention confirmée de RK Pyrénées Construction.',
 }))

@@ -3,7 +3,7 @@ import { CTASection } from '@/components/sections/CTASection'
 import { SEO } from '@/seo/SEO'
 import { zonesMeta } from '@/seo/pageMeta'
 import { ZONES } from '@/data/zones'
-import { BUSINESS } from '@/lib/constants'
+import { BUSINESS, SERVICE_AREAS } from '@/lib/constants'
 import { MapPin } from 'lucide-react'
 
 export default function ServiceAreasPage() {
@@ -15,8 +15,8 @@ export default function ServiceAreasPage() {
         <Breadcrumb items={meta.crumbs!} />
         <h1 className="mt-6 font-display text-4xl font-bold text-ink-900 sm:text-5xl">Zone d'intervention</h1>
         <p className="mt-4 text-lg text-ink-600">
-          RK Pyrénées Construction est basée à {BUSINESS.city} et y intervient pour tous vos projets de
-          construction, rénovation et maçonnerie.
+          RK Pyrénées Construction est basée à {BUSINESS.city} et intervient dans toute la zone{' '}
+          {SERVICE_AREAS[0]} pour tous vos projets de construction, rénovation et maçonnerie.
         </p>
       </div>
 
@@ -33,8 +33,8 @@ export default function ServiceAreasPage() {
           ))}
         </ul>
         <p className="mt-8 text-sm text-ink-600">
-          Votre projet est situé en dehors de {BUSINESS.city} ? Contactez-nous : nous étudions chaque demande au cas
-          par cas selon la localisation exacte.
+          Votre projet est situé en dehors de {SERVICE_AREAS[0]} ? Contactez-nous : nous étudions chaque demande au
+          cas par cas selon la localisation exacte.
         </p>
       </div>
 

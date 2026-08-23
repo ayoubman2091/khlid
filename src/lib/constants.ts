@@ -80,14 +80,15 @@ export const DEVELOPER = {
   facebookUrl: 'https://web.facebook.com/touati.ayoub02',
 } as const
 
-export const MAIN_CITY = 'Toulouse'
-
 /**
- * Zone d'intervention confirmée au lancement : Toulouse uniquement (décision finale du
- * client — voir l'échange du 2026-08-20). Une mention antérieure de 8 communes de banlieue
- * "confirmées par le client" dans une session précédente n'a pas pu être vérifiée et a été
- * retirée : ne pas la réintroduire sans une confirmation explicite et traçable. L'architecture
- * (ZONES, /zones-intervention, areaServed) reste prête à accueillir d'autres communes dès
- * qu'elles seront confirmées, sans changement de structure — voir src/data/zones.ts.
+ * Zone d'intervention élargie à "Toulouse et Midi-Pyrénées" (décision client, 2026-08-21 —
+ * remplace la décision "Toulouse uniquement" du 2026-08-20). Ceci décrit où l'entreprise
+ * INTERVIENT (zone de chalandise) et est distinct de BUSINESS.city, qui reste "Toulouse" :
+ * l'adresse légale/postale du siège (SIRET, schema.org PostalAddress, Google Maps) ne change
+ * pas. Une mention antérieure de 8 communes de banlieue "confirmées par le client" dans une
+ * session précédente n'a pas pu être vérifiée et reste retirée : ne pas la réintroduire sans
+ * une confirmation explicite et traçable. L'architecture (ZONES, /zones-intervention,
+ * areaServed) reste prête à accueillir d'autres entrées dès qu'elles seront confirmées, sans
+ * changement de structure — voir src/data/zones.ts et src/seo/schema.ts.
  */
-export const SERVICE_AREAS = ['Toulouse'] as const
+export const SERVICE_AREAS = ['Toulouse et Midi-Pyrénées'] as const
