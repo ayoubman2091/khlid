@@ -16,6 +16,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { loadEnv } from 'vite'
 import { resolveSiteUrl } from './resolveSiteUrl.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -108,7 +109,13 @@ async function main() {
   // Vite's HTML env replacement leaves %VITE_GSC_VERIFICATION% literal when the var is unset
   // (it only warns, doesn't strip) — remove the whole tag rather than ship a placeholder
   // string as a meta tag's content in production HTML. See index.html and DEPLOYMENT.md #7.
-  const gscValue = process.env.VITE_GSC_VERIFICATION
+  // Resolved the same way resolveSiteUrl.ts resolves VITE_SITE_URL: this file runs as a plain
+  // `node` process, which does NOT automatically read .env.production the way Vite-bundled code
+  // does — reading only process.env here would silently stay undefined (and strip the tag this
+  // script is meant to inject) even when VITE_GSC_VERIFICATION is set in the tracked
+  // .env.production file. loadEnv() closes that gap; process.env still wins if a hosting
+  // platform sets the var directly in its build environment instead.
+  const gscValue = process.env.VITE_GSC_VERIFICATION || loadEnv('production', ROOT, 'VITE_').VITE_GSC_VERIFICATION
   template = gscValue
     ? template.replace('%VITE_GSC_VERIFICATION%', gscValue)
     : template.replace(/\s*<meta name="google-site-verification"[^>]*>\n?/, '\n')
