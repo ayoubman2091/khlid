@@ -1,4 +1,5 @@
 import type { FAQItem } from '@/types'
+import { SERVICE_AREAS } from '@/lib/constants'
 
 /**
  * FAQ construite à partir des objections réelles d'un chantier de construction/rénovation,
@@ -14,7 +15,7 @@ export const GENERAL_FAQ: FAQItem[] = [
   {
     question: 'Dans quelles zones intervenez-vous ?',
     answer:
-      "RK Pyrénées Construction intervient à Toulouse. Pour un projet situé en dehors de Toulouse, contactez-nous : nous étudions chaque demande au cas par cas selon la localisation exacte.",
+      `RK Pyrénées Construction intervient dans toute la zone ${SERVICE_AREAS[0]}. Pour un projet situé en dehors de cette zone, contactez-nous : nous étudions chaque demande au cas par cas selon la localisation exacte.`,
   },
   {
     question: 'Le devis est-il vraiment gratuit et sans engagement ?',

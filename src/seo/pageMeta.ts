@@ -1,4 +1,4 @@
-import { BUSINESS } from '@/lib/constants'
+import { BUSINESS, SERVICE_AREAS } from '@/lib/constants'
 import { SERVICES, getServiceBySlug } from '@/data/services'
 import { REALISATIONS, getRealisationBySlug } from '@/data/realisations'
 import { GUIDES, getGuideBySlug } from '@/data/guides'
@@ -131,7 +131,7 @@ export function zonesMeta(): PageMeta {
   const crumbs = [HOME_CRUMB, crumb("Zone d'intervention", '/zones-intervention')]
   return {
     title: `Zone d'intervention — RK Pyrénées Construction à ${BUSINESS.city}`,
-    description: "RK Pyrénées Construction intervient à Toulouse. Un projet situé ailleurs ? Nous étudions chaque demande au cas par cas.",
+    description: `RK Pyrénées Construction intervient dans toute la zone ${SERVICE_AREAS[0]}. Un projet situé ailleurs ? Nous étudions chaque demande au cas par cas.`,
     path: '/zones-intervention',
     schemas: [breadcrumbSchema(crumbs)],
     crumbs,

@@ -56,11 +56,51 @@ function collectReferencedStems(): Set<string> {
   return stems
 }
 
+/**
+ * True when public/images/optimized/ + the manifest already contain a usable build (CASE B
+ * fallback below): the manifest parses, isn't empty, and every file it references actually
+ * exists on disk. A production checkout (e.g. Hostinger deploy) that only has the committed
+ * `public/` output and not the dev-only `assets-source/` tree hits this path — see DEPLOYMENT.md
+ * "Regenerating images" and the build-safety note this fallback exists for.
+ */
+function hasValidOptimizedFallback(): boolean {
+  if (!existsSync(MANIFEST_PATH) || !existsSync(OUT_DIR)) return false
+  let manifest: Record<string, ManifestEntry>
+  try {
+    manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'))
+  } catch {
+    return false
+  }
+  const stems = Object.keys(manifest)
+  if (stems.length === 0) return false
+  return stems.every((stem) =>
+    manifest[stem].variants.every((v) => existsSync(join(OUT_DIR, v.file))),
+  )
+}
+
 async function main() {
   if (!existsSync(SRC_DIR)) {
-    console.error(`[generate-images] Source directory not found: ${SRC_DIR}`)
+    // CASE B: no dev-only source photos in this checkout, but a valid optimized build is
+    // already committed in public/images/optimized/ + src/data/imageManifest.json — skip
+    // regeneration and let the build continue instead of failing it (see build-safety notes).
+    if (hasValidOptimizedFallback()) {
+      console.log(
+        `[generate-images] Source directory not found (${SRC_DIR}) — skipping regeneration and ` +
+          `using the existing optimized images already committed in public/images/optimized/ ` +
+          `and src/data/imageManifest.json.`,
+      )
+      return
+    }
+    // CASE C: neither a source to generate from, nor a valid existing optimized build — this
+    // is a real failure, not something to paper over with empty/fake folders.
+    console.error(
+      `[generate-images] Source directory not found: ${SRC_DIR}\n` +
+        `[generate-images] No valid fallback found either (public/images/optimized/ and/or ` +
+        `src/data/imageManifest.json are missing, empty, or incomplete). Cannot proceed.`,
+    )
     process.exit(1)
   }
+  // CASE A: real source photos are present — generate normally.
   mkdirSync(OUT_DIR, { recursive: true })
 
   const referenced = collectReferencedStems()

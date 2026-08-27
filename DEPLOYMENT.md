@@ -11,11 +11,22 @@ npm install
 npm run build     # generates images, typechecks, builds the SSR bundle, writes
                    # robots.txt/sitemap.xml, builds the client bundle, then prerenders
                    # every route to real per-route HTML in dist/
+npm run seo:audit # optional: verifies the dist/ output (see scripts/seo-audit.ts) — one
+                   # title/description/canonical/H1 per route, valid JSON-LD, sitemap URLs
+                   # all resolve to real files, no pricing/fake-city URLs, no old domain
 npm run preview    # serve dist/ locally to sanity-check the prerendered output
 ```
 
 `dist/` is the deploy artifact. `netlify.toml` and `vercel.json` are both included —
 delete whichever doesn't apply to the actual host.
+
+**Build safety (2026-08-27):** `npm run generate:images` no longer hard-fails when
+`assets-source/images/original/` is missing (e.g. a production checkout that only has the
+committed `public/` output, not the dev-only source tree — this is exactly what happened on
+Hostinger before). It now falls back to the already-committed `public/images/optimized/` +
+`src/data/imageManifest.json` when they're present and valid, and only fails the build if
+neither the source photos nor a valid optimized fallback exist. See
+`scripts/generate-images.ts`.
 
 ## Environment variables
 

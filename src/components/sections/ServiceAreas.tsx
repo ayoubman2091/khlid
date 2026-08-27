@@ -1,13 +1,14 @@
 import { MapPin } from 'lucide-react'
 import { ZONES } from '@/data/zones'
+import { SERVICE_AREAS } from '@/lib/constants'
 
 export function ServiceAreas() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h2 className="font-display text-3xl font-bold text-ink-900 sm:text-4xl">Zone d'intervention</h2>
       <p className="mt-3 max-w-2xl text-ink-600">
-        RK Pyrénées Construction intervient à Toulouse. Votre projet est situé ailleurs ? Contactez-nous, nous
-        étudions chaque demande au cas par cas.
+        RK Pyrénées Construction intervient dans toute la zone {SERVICE_AREAS[0]}. Votre projet est situé
+        ailleurs ? Contactez-nous, nous étudions chaque demande au cas par cas.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         {ZONES.map((zone) => (

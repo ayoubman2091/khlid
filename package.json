@@ -9,6 +9,7 @@
     "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr",
     "generate:seo-files": "node scripts/generate-seo-files.ts",
     "prerender": "node scripts/prerender.ts",
+    "seo:audit": "node scripts/seo-audit.ts",
     "build": "npm run generate:images && tsc -b && npm run build:ssr && npm run generate:seo-files && vite build && npm run prerender",
     "lint": "oxlint",
     "preview": "vite preview"
