@@ -3,8 +3,8 @@ import { BUSINESS } from '@/lib/constants'
 const SITE = BUSINESS.siteUrl
 
 /** Prefixes a site-relative path with the canonical site URL. Use this instead of ever
- *  hardcoding a domain in a component — the domain is centralized in BUSINESS.siteUrl
- *  (itself driven by VITE_SITE_URL, see DEPLOYMENT.md #1). Already-absolute URLs pass through. */
+ * hardcoding a domain in a component — the domain is centralized in BUSINESS.siteUrl
+ * (itself driven by VITE_SITE_URL, see DEPLOYMENT.md #1). Already-absolute URLs pass through. */
 export function absoluteUrl(pathOrUrl: string): string {
   if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl
   return `${SITE}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
@@ -53,12 +53,19 @@ export function localBusinessSchema() {
     },
     url: SITE,
     hasMap: BUSINESS.mapsUrl,
-    // Toulouse only at launch (confirmed 2026-08-20) — see SERVICE_AREAS in lib/constants.ts.
-    // Do not add other communes here without an explicit, traceable client confirmation.
-    areaServed: {
-      '@type': 'City',
-      name: 'Toulouse',
-    },
+
+    // Client-confirmed service area: Toulouse et Midi-Pyrénées.
+    // No individual commune pages are created without verified local activity.
+    areaServed: [
+      {
+        '@type': 'City',
+        name: 'Toulouse',
+      },
+      {
+        '@type': 'Place',
+        name: 'Midi-Pyrénées',
+      },
+    ],
   }
 }
 
@@ -95,7 +102,18 @@ export function serviceSchema(opts: { name: string; description: string; path: s
     description: opts.description,
     url: `${SITE}${opts.path}`,
     provider: { '@id': `${SITE}/#localbusiness` },
-    areaServed: 'Toulouse',
+
+    // Client-confirmed service area: Toulouse et Midi-Pyrénées.
+    areaServed: [
+      {
+        '@type': 'City',
+        name: 'Toulouse',
+      },
+      {
+        '@type': 'Place',
+        name: 'Midi-Pyrénées',
+      },
+    ],
   }
 }
 
@@ -131,7 +149,12 @@ export function articleSchema(opts: { headline: string; description: string; pat
  * assets, see CURRENT_SITE_AUDIT.md §5.1). Used sparingly (one per realisation page, not one
  * per thumbnail) to avoid structured-data spam — see audit §19.
  */
-export function imageObjectSchema(opts: { url: string; alt: string; width?: number; height?: number }) {
+export function imageObjectSchema(opts: {
+  url: string
+  alt: string
+  width?: number
+  height?: number
+}) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ImageObject',
@@ -150,7 +173,7 @@ export function imageObjectSchema(opts: { url: string; alt: string; width?: numb
  * The 15 YouTube videos on this site have unverified ownership (see CURRENT_SITE_AUDIT.md
  * §5.2): we don't know which channel published them, so we cannot honestly assert `creator`,
  * `publisher`, or `uploadDate` without inventing data. Publishing VideoObject with a
- * `publisher`/`creator` pointing at RK Pyrénées when that isn't confirmed would be exactly the
+ * publisher/creator pointing at RK Pyrénées when that isn't confirmed would be exactly the
  * kind of misleading structured data the audit flagged (§18/§27) — so this helper exists ready
  * to use, but stays disconnected from every page until a real channel/ownership confirmation
  * is provided. At that point, wire it into RealisationDetail/VideoSection with the real name,
