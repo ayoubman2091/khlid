@@ -11,3 +11,17 @@
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Legacy URLs from the previous site that Google still has indexed. App.tsx defines no
+# /projets route, so without these the URL falls through to the SPA 404 while still ranking.
+[[redirects]]
+  from = "/projets"
+  to = "/realisations"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/projets/*"
+  to = "/realisations"
+  status = 301
+  force = true
