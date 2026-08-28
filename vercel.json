@@ -3,5 +3,17 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/projets",
+      "destination": "/realisations",
+      "permanent": true
+    },
+    {
+      "source": "/projets/:path*",
+      "destination": "/realisations",
+      "permanent": true
+    }
+  ]
 }
