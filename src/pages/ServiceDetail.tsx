@@ -36,10 +36,10 @@ export default function ServiceDetail() {
             <h1 className="font-display text-4xl font-bold text-ink-900 sm:text-5xl">{service.h1}</h1>
             <p className="mt-5 text-lg leading-relaxed text-ink-600">{service.intro}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button to="/devis" size="lg">
+              <Button to="/devis/" size="lg">
                 Demander un devis gratuit
               </Button>
-              <Button to="/realisations" size="lg" variant="ghost">
+              <Button to="/realisations/" size="lg" variant="ghost">
                 Voir des réalisations
               </Button>
             </div>
@@ -102,7 +102,7 @@ export default function ServiceDetail() {
                 {related.map((r) => (
                   <Link
                     key={r.slug}
-                    to={`/services/${r.slug}`}
+                    to={`/services/${r.slug}/`}
                     className="rounded-full border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-ink-800 hover:border-brick-500 hover:text-brick-500"
                   >
                     {r.name}
@@ -119,7 +119,7 @@ export default function ServiceDetail() {
                 {relatedGuides.map((guide) => (
                   <Link
                     key={guide.slug}
-                    to={`/guides/${guide.slug}`}
+                    to={`/guides/${guide.slug}/`}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-brick-500 hover:underline"
                   >
                     {guide.title} <ArrowRight size={15} />
