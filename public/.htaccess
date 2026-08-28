@@ -1,0 +1,37 @@
+# Apache configuration for the deployed dist/ output on Hostinger (hcdn / hPanel).
+#
+# This file lives in public/ so Vite copies it into dist/ on every build; dist/ is what gets
+# uploaded to the host. Neither vercel.json nor netlify.toml has ANY effect in production —
+# the live server identifies as `platform: hostinger`, `server: hcdn` — so redirects must be
+# declared here, at the only layer that actually runs.
+#
+# Deliberately NOT set: DirectorySlash. Its default (On) is what makes Apache 301
+# /services/dallage -> /services/dallage/ for the prerendered directories, and the trailing
+# slash is this site's canonical form (see src/seo/canonicalPath.ts). Leave it alone.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- Canonical host: www -> non-www -------------------------------------------------
+  # https://www.<domain>/ answered 200 with no redirect (verified 2026-08-28), so the same
+  # pages were reachable under two hostnames. Search Console showed the www sitemap as the
+  # referring URL for /projets, i.e. Google had crawled the www variant too.
+  # %1 is the host minus "www."; REQUEST_URI keeps the path, and mod_rewrite re-appends the
+  # query string automatically because the substitution contains no "?".
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # --- Legacy /projets -> /realisations/ ----------------------------------------------
+  # /projets is a URL from the previous site. Search Console still lists it as "Submitted and
+  # indexed" (last crawl 2026-07-10) while production returns 404 — a ranking URL pointing at
+  # nothing. /realisations/ is its canonical equivalent: it exists in staticRoutes(), in the
+  # sitemap and in the nav. Target is written with the trailing slash so this is a single hop,
+  # not a 301 into another 301.
+  RewriteRule ^projets/?$ /realisations/ [R=301,L]
+  RewriteRule ^projets/.+$ /realisations/ [R=301,L]
+</IfModule>
+
+# scripts/prerender.ts writes dist/404.html (the real NotFound page, rendered and noindex).
+# Netlify and Vercel pick that filename up by convention; Apache does not, so point at it
+# explicitly. Apache still returns a real 404 status with this directive - it is not a rewrite.
+ErrorDocument 404 /404.html
