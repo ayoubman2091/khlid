@@ -31,8 +31,9 @@ async function main() {
     process.exit(1)
   }
 
-  const { staticRoutes } = (await import(pathToFileURL(SSR_ENTRY).href)) as {
+  const { staticRoutes, canonicalPath } = (await import(pathToFileURL(SSR_ENTRY).href)) as {
     staticRoutes: () => { path: string; priority: number; changefreq: string }[]
+    canonicalPath: (path: string) => string
   }
 
   const routes = staticRoutes()
@@ -41,7 +42,8 @@ async function main() {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...routes.map(
-      (r) => `  <url><loc>${SITE_URL}${r.path}</loc><priority>${r.priority.toFixed(1)}</priority><changefreq>${r.changefreq}</changefreq></url>`,
+      // <loc> must be the URL that actually returns 200 — see src/seo/canonicalPath.ts.
+      (r) => `  <url><loc>${SITE_URL}${canonicalPath(r.path)}</loc><priority>${r.priority.toFixed(1)}</priority><changefreq>${r.changefreq}</changefreq></url>`,
     ),
     '</urlset>',
     '',
