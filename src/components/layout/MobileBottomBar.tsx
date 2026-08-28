@@ -33,7 +33,7 @@ export function MobileBottomBar() {
         <span className="text-[11px] font-medium">WhatsApp</span>
       </a>
       <Link
-        to="/devis"
+        to="/devis/"
         className="flex flex-col items-center justify-center gap-0.5 bg-brick-500 py-2.5 text-white active:bg-brick-600"
       >
         <ClipboardList size={20} />
