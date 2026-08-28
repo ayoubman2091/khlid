@@ -12,7 +12,7 @@ export function CTASection() {
           Décrivez votre projet, nous revenons vers vous avec un devis gratuit et sans engagement.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button to="/devis" size="lg">
+          <Button to="/devis/" size="lg">
             Demander un devis gratuit
           </Button>
           <a
