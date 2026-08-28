@@ -9,12 +9,12 @@ const NAV_LINKS = [
   // `end` so this only reports "active" on the exact homepage — without it every route
   // (which all start with "/") would highlight Accueil as active.
   { label: 'Accueil', to: '/', end: true },
-  { label: 'Services', to: '/services' },
-  { label: 'Réalisations', to: '/realisations' },
-  { label: 'Guides', to: '/guides' },
-  { label: 'Zone d\'intervention', to: '/zones-intervention' },
-  { label: 'À propos', to: '/a-propos' },
-  { label: 'Contact', to: '/contact' },
+  { label: 'Services', to: '/services/' },
+  { label: 'Réalisations', to: '/realisations/' },
+  { label: 'Guides', to: '/guides/' },
+  { label: 'Zone d\'intervention', to: '/zones-intervention/' },
+  { label: 'À propos', to: '/a-propos/' },
+  { label: 'Contact', to: '/contact/' },
 ]
 
 export function Header() {
@@ -66,7 +66,7 @@ export function Header() {
             <Phone size={16} />
             {BUSINESS.phone}
           </a>
-          <Button to="/devis" size="md">
+          <Button to="/devis/" size="md">
             Devis gratuit
           </Button>
         </div>
@@ -100,7 +100,7 @@ export function Header() {
               </li>
             ))}
           </ul>
-          <Button to="/devis" size="lg" className="mt-4 w-full" onClick={() => setOpen(false)}>
+          <Button to="/devis/" size="lg" className="mt-4 w-full" onClick={() => setOpen(false)}>
             Demander un devis gratuit
           </Button>
         </nav>
