@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { BUSINESS } from '@/lib/constants'
 import type { PageMeta } from './pageMeta'
+import { canonicalPath } from './canonicalPath'
 
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
@@ -40,11 +41,13 @@ export function SEO({ title, description, path, image, schemas = [], noindex = f
     document.title = title
     setMeta('name', 'description', description)
     setMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow')
-    setLink('canonical', `${BUSINESS.siteUrl}${path}`)
+    // One canonical URL form for the whole site — see seo/canonicalPath.ts.
+    const canonicalUrl = `${BUSINESS.siteUrl}${canonicalPath(path)}`
+    setLink('canonical', canonicalUrl)
 
     setMeta('property', 'og:title', title)
     setMeta('property', 'og:description', description)
-    setMeta('property', 'og:url', `${BUSINESS.siteUrl}${path}`)
+    setMeta('property', 'og:url', canonicalUrl)
     setMeta('property', 'og:type', 'website')
     setMeta('property', 'og:site_name', BUSINESS.brandName)
     setMeta('property', 'og:locale', 'fr_FR')
