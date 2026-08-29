@@ -8,7 +8,7 @@
  * — see that file for why it's a separate eager-import entry rather than App.tsx's lazy one).
  * Writes dist/index.html for `/` and dist/<route>/index.html for every other route, so a
  * static host serving "pretty URLs" (Netlify/Vercel default behavior, matching
- * netlify.toml/vercel.json) resolves each clean URL to real, route-specific HTML — not one
+ * public/.htaccess on Hostinger/Apache) resolves each clean URL to real, route-specific HTML — not one
  * generic shell for every page.
  *
  * Run via `npm run build` (chained after both the client and SSR vite builds).
@@ -144,7 +144,7 @@ async function main() {
     join(DIST_DIR, '404.html'),
     injectMeta(template, notFoundMeta, notFoundHtml, `${SITE_URL}${canonicalPath(notFoundMeta.path)}`),
   )
-  console.log('[prerender] ✓ dist/404.html (real 404 status on Netlify/Vercel — see netlify.toml/vercel.json)')
+  console.log('[prerender] ✓ dist/404.html (served by Apache via ErrorDocument — see public/.htaccess)')
 
   console.log(`[prerender] Done: ${written} route(s) prerendered (site URL: ${SITE_URL}).`)
 }
