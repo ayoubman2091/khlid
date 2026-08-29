@@ -29,7 +29,7 @@ export default function RealisationDetail() {
         <h1 className="mt-2 font-display text-4xl font-bold text-ink-900 sm:text-5xl">{realisation.title}</h1>
         <p className="mt-4 max-w-2xl text-lg text-ink-600">{realisation.description}</p>
         {service && (
-          <Button to={`/services/${service.slug}`} variant="ghost" className="mt-6">
+          <Button to={`/services/${service.slug}/`} variant="ghost" className="mt-6">
             Voir le service {service.shortName}
           </Button>
         )}

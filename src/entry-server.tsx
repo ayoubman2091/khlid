@@ -15,6 +15,11 @@ import GuidesIndex from '@/pages/GuidesIndex'
 import Guide from '@/pages/Guide'
 import NotFound from '@/pages/NotFound'
 export { staticRoutes, getMetaForPath } from '@/seo/pageMeta'
+// Re-exported so the node-side build scripts (scripts/prerender.ts,
+// scripts/generate-seo-files.ts) share the app's one canonical-URL rule instead of
+// reimplementing it — they can only reach src/ through this bundle, because the `@/` alias
+// is resolved by Vite, not by node.
+export { canonicalPath } from '@/seo/canonicalPath'
 
 /**
  * Server/prerender-only mirror of App.tsx's route table (see scripts/prerender.ts).

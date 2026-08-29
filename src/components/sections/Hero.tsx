@@ -47,10 +47,10 @@ export function Hero() {
         </div>
 
         <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Button to="/devis" size="lg" icon={<ArrowRight size={18} />}>
+          <Button to="/devis/" size="lg" icon={<ArrowRight size={18} />}>
             Demander un devis gratuit
           </Button>
-          <Button to="/realisations" size="lg" variant="ghost" className="!bg-white/10 !text-white !border-white/30 hover:!border-white">
+          <Button to="/realisations/" size="lg" variant="ghost" className="!bg-white/10 !text-white !border-white/30 hover:!border-white">
             Voir nos réalisations
           </Button>
         </div>

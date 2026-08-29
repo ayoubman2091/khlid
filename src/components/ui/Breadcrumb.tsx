@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
+import { canonicalPath } from '@/seo/canonicalPath'
 
 export interface Crumb {
   name: string
@@ -20,7 +21,7 @@ export function Breadcrumb({ items }: { items: Crumb[] }) {
                   {item.name}
                 </span>
               ) : (
-                <Link to={item.path} className="hover:text-brick-500 hover:underline">
+                <Link to={canonicalPath(item.path)} className="hover:text-brick-500 hover:underline">
                   {item.name}
                 </Link>
               )}

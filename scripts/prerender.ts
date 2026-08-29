@@ -54,7 +54,7 @@ function stripPreviousInjection(html: string): string {
     .replace(/<div id="root">[\s\S]*?<\/div>\s*(?=<\/body>)/, '<div id="root"></div>')
 }
 
-function injectMeta(template: string, meta: PageMeta, bodyHtml: string): string {
+function injectMeta(template: string, meta: PageMeta, bodyHtml: string, canonicalUrl: string): string {
   let html = stripPreviousInjection(template)
 
   html = html.replace(/<title>.*?<\/title>/s, `<title>${escapeHtml(meta.title)}</title>`)
@@ -63,7 +63,6 @@ function injectMeta(template: string, meta: PageMeta, bodyHtml: string): string 
     `<meta name="description" content="${escapeHtml(meta.description)}" />`,
   )
 
-  const canonicalUrl = `${SITE_URL}${meta.path}`
   const extraTags = [
     `<meta name="robots" content="${meta.noindex ? 'noindex, nofollow' : 'index, follow'}" />`,
     `<link rel="canonical" href="${escapeHtml(canonicalUrl)}" />`,
@@ -99,10 +98,11 @@ async function main() {
   }
 
   const mod = await import(pathToFileURL(SSR_ENTRY).href)
-  const { render, staticRoutes, getMetaForPath } = mod as {
+  const { render, staticRoutes, getMetaForPath, canonicalPath } = mod as {
     render: (url: string) => string
     staticRoutes: () => { path: string }[]
     getMetaForPath: (path: string) => PageMeta
+    canonicalPath: (path: string) => string
   }
 
   let template = readFileSync(join(DIST_DIR, 'index.html'), 'utf8')
@@ -126,7 +126,7 @@ async function main() {
   for (const route of routes) {
     const meta = getMetaForPath(route.path)
     const bodyHtml = render(route.path)
-    const html = injectMeta(template, meta, bodyHtml)
+    const html = injectMeta(template, meta, bodyHtml, `${SITE_URL}${canonicalPath(meta.path)}`)
     const outPath = route.path === '/' ? join(DIST_DIR, 'index.html') : join(DIST_DIR, route.path.replace(/^\//, ''), 'index.html')
     mkdirSync(dirname(outPath), { recursive: true })
     writeFileSync(outPath, html)
@@ -140,7 +140,10 @@ async function main() {
   // Any unmatched path renders NotFound.tsx via App's catch-all `*` route.
   const notFoundMeta = getMetaForPath('/__unknown__')
   const notFoundHtml = render('/__unknown__')
-  writeFileSync(join(DIST_DIR, '404.html'), injectMeta(template, notFoundMeta, notFoundHtml))
+  writeFileSync(
+    join(DIST_DIR, '404.html'),
+    injectMeta(template, notFoundMeta, notFoundHtml, `${SITE_URL}${canonicalPath(notFoundMeta.path)}`),
+  )
   console.log('[prerender] ✓ dist/404.html (real 404 status on Netlify/Vercel — see netlify.toml/vercel.json)')
 
   console.log(`[prerender] Done: ${written} route(s) prerendered (site URL: ${SITE_URL}).`)

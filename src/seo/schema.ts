@@ -1,4 +1,5 @@
 import { BUSINESS } from '@/lib/constants'
+import { canonicalPath } from './canonicalPath'
 
 const SITE = BUSINESS.siteUrl
 
@@ -88,7 +89,7 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
       '@type': 'ListItem',
       position: i + 1,
       name: item.name,
-      item: `${SITE}${item.path}`,
+      item: `${SITE}${canonicalPath(item.path)}`,
     })),
   }
 }
@@ -100,7 +101,7 @@ export function serviceSchema(opts: { name: string; description: string; path: s
     serviceType: opts.name,
     name: opts.name,
     description: opts.description,
-    url: `${SITE}${opts.path}`,
+    url: `${SITE}${canonicalPath(opts.path)}`,
     provider: { '@id': `${SITE}/#localbusiness` },
 
     // Client-confirmed service area: Toulouse et Midi-Pyrénées.
@@ -138,7 +139,7 @@ export function articleSchema(opts: { headline: string; description: string; pat
     '@type': 'Article',
     headline: opts.headline,
     description: opts.description,
-    url: `${SITE}${opts.path}`,
+    url: `${SITE}${canonicalPath(opts.path)}`,
     author: { '@id': `${SITE}/#organization` },
     publisher: { '@id': `${SITE}/#organization` },
   }

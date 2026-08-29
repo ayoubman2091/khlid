@@ -47,11 +47,11 @@ export default function Guide() {
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               {relatedServices.map((s) => (
-                <Button key={s!.slug} to={`/services/${s!.slug}`} variant="ghost">
+                <Button key={s!.slug} to={`/services/${s!.slug}/`} variant="ghost">
                   Voir {s!.shortName}
                 </Button>
               ))}
-              <Button to="/devis">Demander un devis</Button>
+              <Button to="/devis/">Demander un devis</Button>
             </div>
           </div>
         )}

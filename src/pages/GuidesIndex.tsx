@@ -21,7 +21,7 @@ export default function GuidesIndex() {
       </div>
       <div className="mx-auto max-w-3xl divide-y divide-stone-200 px-4 py-10 sm:px-6 lg:px-8">
         {GUIDES.map((guide) => (
-          <Link key={guide.slug} to={`/guides/${guide.slug}`} className="group flex items-center justify-between gap-4 py-5">
+          <Link key={guide.slug} to={`/guides/${guide.slug}/`} className="group flex items-center justify-between gap-4 py-5">
             <div>
               <h2 className="font-display text-lg font-bold text-ink-900 group-hover:text-brick-500">{guide.title}</h2>
               <p className="mt-1 text-sm text-ink-600">{guide.dek}</p>

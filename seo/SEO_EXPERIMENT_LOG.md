@@ -55,12 +55,14 @@ ranks for any commercial term.
 | `/zones-intervention` | Discovered – currently not indexed |
 | `/realisations` | Discovered – currently not indexed |
 
-Investigated per PHASE 7 and **not** a technical fault: `scripts/prerender.ts` emits real
-per-route HTML for all 26 routes from `staticRoutes()`, `robots.txt` is `Allow: /`, the
-sitemap lists all 26 URLs, canonicals resolve from a single source (`getMetaForPath`), and
-the two indexed pages confirm the pipeline works. The remaining cause is site age and
-authority — the domain has ~1 week of history and no measurable backlinks. Treat as a
-crawl-priority problem (internal links, authority, real project content), not a bug.
+**CORRECTED 2026-08-28 (later same day).** This section first concluded the un-indexed
+pages were "not a technical fault" and blamed site age and authority. That was wrong, and it
+was wrong because the conclusion was drawn from the repository alone without ever issuing an
+HTTP request to production. Live testing found a real canonical conflict — see EXP-004. The
+prerender pipeline is indeed sound (26 routes, real HTML, `Allow: /`, single metadata
+source), but every URL it declares 301s on the live server, which is a technical fault and a
+well-known cause of exactly this coverage state. Site age is a contributing factor, not the
+cause.
 
 **Analytics**
 
@@ -166,3 +168,74 @@ date is DATA UNAVAILABLE beyond what GSC reports for Google organic.
    actually enforced in production.
 3. **Portet-sur-Garonne** — `rénovation de maison à portet sur garonne` (6 impr, pos 15.7).
    Confirmed activity in that commune? Without confirmation, no commune page (PHASE 13).
+
+
+---
+
+## EXP-004 — One canonical URL format + Hostinger redirects
+
+- **DATE** 2026-08-28
+- **URL** site-wide
+- **QUERY / CLUSTER** n/a (indexability)
+- **PROBLEM** Three defects, all found only by testing production over HTTP:
+
+  1. **Canonical conflict.** `GET /services/construction` → `301` → `/services/construction/`;
+     that page returns 200 and declares `canonical = /services/construction` — the URL that
+     301s. The sitemap (25 of 26 URLs), every canonical tag, the JSON-LD `url`/breadcrumb
+     items and all 28 homepage internal links used the non-slashed form. URL Inspection
+     confirmed the damage: `/services/extension` **and** `/services/extension/` are both
+     "Submitted and indexed", and for the slashed one Google reports
+     `googleCanonical = /services/extension/` against `userCanonical = /services/extension`.
+     Google is overriding the declared canonical.
+  2. **`/projets` → 404** in production while GSC lists it "Submitted and indexed"
+     (last crawl 2026-07-10, position 2.0).
+  3. **`https://www.<domain>/` → 200**, no redirect. Two hostnames, one site. GSC lists the
+     www sitemap as the referring URL for `/projets`.
+
+  Also established: production is **Hostinger** (`platform: hostinger`, `server: hcdn`,
+  `panel: hpanel`). `vercel.json` and `netlify.toml` have never had any effect, which means
+  EXP-002's redirect was inert from the moment it was committed.
+
+- **CHANGE** (commits `2ad0186`…`399eb89`, 20 files)
+  - **BEFORE** → mixed: sitemap/canonical/JSON-LD/links non-slashed, server slashed.
+  - **AFTER** → one rule in `src/seo/canonicalPath.ts` (trailing slash; `/` unchanged),
+    applied at every emitter: `SEO.tsx` (canonical + og:url), `scripts/prerender.ts`,
+    `scripts/generate-seo-files.ts` (sitemap `<loc>`), `schema.ts` (breadcrumb / Service /
+    Article urls), `Breadcrumb.tsx`, and all internal `<Link>` targets across 12 components
+    and pages. `entry-server.tsx` re-exports the helper so the node build scripts share the
+    same rule rather than reimplementing it.
+  - **WHY the slash and not the bare path** — Apache's `DirectorySlash` is what produces the
+    301, because each prerendered route is a real directory. Removing the slash instead would
+    mean `DirectorySlash Off` plus hand-written rewrites for every clean URL. Following the
+    server is the smaller, safer change, and the slashed form is what already returns 200.
+  - `public/.htaccess` (new) carries the www→non-www 301 and `/projets` → `/realisations/`
+    301 at the layer that actually executes, plus `ErrorDocument 404 /404.html`.
+  - `absoluteUrl()` deliberately untouched: it serves image/asset URLs, which must not gain a
+    trailing slash.
+- **REASON** PHASE 8. Browser URL = canonical = sitemap = internal link = prerendered route.
+- **EXPECTED IMPACT** Removes the contradiction Google is currently resolving against us.
+  Expect the duplicate `/services/extension` pair to consolidate and the "Discovered – not
+  indexed" pages to become eligible. Not a ranking change in itself.
+- **BASELINE** 7 of 9 priority URLs not indexed; 1 duplicate pair indexed; `/projets` 404.
+- **RESULT** **Nothing is fixed in production yet.** These are repository changes only.
+  Hostinger deploys are manual, so live behaviour is unchanged until `dist/` is rebuilt and
+  uploaded. Re-verify then with real HTTP requests, not by reading the repo — the mistake
+  corrected in the baseline section above came from exactly that shortcut.
+- **DECISION** Open. Post-deploy checklist: `/services/<slug>` returns 301 → slashed;
+  slashed returns 200 with matching canonical; sitemap `<loc>` values all slashed;
+  `/projets` returns 301 → `/realisations/` in one hop; `www` 301s to non-www preserving
+  path; GA4 tag present in the served HTML.
+
+### Unverified in EXP-004
+
+`npm install`, `npm run build`, `npm run lint`, `npm audit` and `npm run seo:audit` were
+**not run**. The repository is private and reachable here only through the GitHub API, with
+no checkout to run node against. 20 files changed across the SEO pipeline — **build locally
+before deploying.**
+
+### Correction to EXP-002
+
+`vercel.json` and `netlify.toml` do not apply to this host. The `/projets` redirect now lives
+in `public/.htaccess`. Both host config files should be deleted so they stop implying a
+deployment target that does not exist; left in place for now to avoid mixing an unrelated
+deletion into this fix.

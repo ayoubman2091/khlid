@@ -48,7 +48,7 @@ export function LocationSection() {
             >
               Ouvrir dans Google Maps
             </Button>
-            <Button to="/contact">Nous contacter</Button>
+            <Button to="/contact/">Nous contacter</Button>
           </div>
         </div>
 

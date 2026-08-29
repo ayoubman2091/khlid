@@ -18,7 +18,7 @@ export function ServicesGrid({ title = 'Nos services' }: { title?: string }) {
         {SERVICES.map((service) => (
           <Link
             key={service.slug}
-            to={`/services/${service.slug}`}
+            to={`/services/${service.slug}/`}
             className="group overflow-hidden rounded-2xl border border-stone-200 bg-white transition-shadow hover:shadow-lg"
           >
             <div className="aspect-[4/3] overflow-hidden bg-stone-200">

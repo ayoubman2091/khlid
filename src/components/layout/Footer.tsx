@@ -51,7 +51,7 @@ export function Footer() {
           <ul className="space-y-2.5 text-sm text-stone-300">
             {SERVICES.map((s) => (
               <li key={s.slug}>
-                <Link to={`/services/${s.slug}`} className="hover:text-brick-500">
+                <Link to={`/services/${s.slug}/`} className="hover:text-brick-500">
                   {s.shortName}
                 </Link>
               </li>

@@ -18,7 +18,7 @@ export function ProjectsGrid({ title = 'Nos réalisations', limit }: { title?: s
               </p>
             </div>
             {limit && (
-              <Link to="/realisations" className="text-sm font-semibold text-brick-500 hover:underline">
+              <Link to="/realisations/" className="text-sm font-semibold text-brick-500 hover:underline">
                 Voir toutes les réalisations →
               </Link>
             )}
@@ -29,7 +29,7 @@ export function ProjectsGrid({ title = 'Nos réalisations', limit }: { title?: s
           {items.map((r) => (
             <Link
               key={r.slug}
-              to={`/realisations/${r.slug}`}
+              to={`/realisations/${r.slug}/`}
               onClick={() => trackEvent('project_view', { project: r.slug })}
               className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-lg"
             >
