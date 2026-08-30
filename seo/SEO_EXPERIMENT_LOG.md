@@ -239,3 +239,8 @@ before deploying.**
 in `public/.htaccess`. Both host config files should be deleted so they stop implying a
 deployment target that does not exist; left in place for now to avoid mixing an unrelated
 deletion into this fix.
+
+**Resolved.** Deleted in `a9c5c69`/`0be056c` along with the stray 0-byte `git` file, then
+accidentally re-added (all three files) by an unrelated commit (`4b663e3`, message "p") that
+reverted the deletion without explanation. Re-deleted in the autonomous finalization pass
+(2026-08-30). `public/.htaccess` remains the only host config in the repo.

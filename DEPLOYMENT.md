@@ -17,8 +17,10 @@ npm run seo:audit # optional: verifies the dist/ output (see scripts/seo-audit.t
 npm run preview    # serve dist/ locally to sanity-check the prerendered output
 ```
 
-`dist/` is the deploy artifact. `netlify.toml` and `vercel.json` are both included —
-delete whichever doesn't apply to the actual host.
+`dist/` is the deploy artifact. Production is confirmed Hostinger (Apache) — see `public/.htaccess`,
+which Vite copies into `dist/.htaccess` on every build. It is the only host config that runs; there
+is no `netlify.toml` or `vercel.json` in the repo (removed — see EXP-004's "Correction to EXP-002"
+in `seo/SEO_EXPERIMENT_LOG.md`).
 
 **Build safety (2026-08-27):** `npm run generate:images` no longer hard-fails when
 `assets-source/images/original/` is missing (e.g. a production checkout that only has the
@@ -31,8 +33,10 @@ neither the source photos nor a valid optimized fallback exist. See
 ## Environment variables
 
 All optional. Copy `.env.example` to `.env.local` and fill in only what's actually confirmed
-— never invent a value to fill a gap. Set the same variables in the hosting platform's build
-environment (Netlify/Vercel project settings) for production builds.
+— never invent a value to fill a gap. Hostinger serves the static `dist/` output with no build
+step of its own, so there is no host-side environment to configure: `npm run build` reads
+`.env.production` (committed, non-secret — see below) at build time and bakes the resulting
+values into the generated HTML/JS before it's uploaded.
 
 ### 1. `VITE_SITE_URL` — final production domain — ✅ CONFIRMED
 `https://xn--rkpyrnesconstruction-f2bb.com` (client-confirmed 2026-08-20 — punycode for the
@@ -92,10 +96,12 @@ only once the client provides verified details — see CURRENT_SITE_AUDIT.md / C
 
 ## Hosting
 
-`netlify.toml` and `vercel.json` are both committed — pick one, delete the other. Both rely on
-the prerendered per-route `dist/<route>/index.html` files (no SPA-fallback redirect needed for
-known routes) and `dist/404.html` (both platforms serve this automatically, with a real HTTP
-404 status, for any unmatched path).
+Production is Hostinger (hPanel/hcdn, Apache). Upload the contents of `dist/` to `public_html`.
+`public/.htaccess` (copied to `dist/.htaccess` by Vite) declares the www→non-www redirect, the
+legacy `/projets` → `/realisations/` redirect, and `ErrorDocument 404 /404.html` — it relies on
+the prerendered per-route `dist/<route>/index.html` files (no SPA-fallback rewrite needed for
+known routes) and Apache's default `DirectorySlash On` to 301 a clean path onto its trailing-slash
+canonical form. See `public/.htaccess`'s own comments for the full rationale.
 
 ## Regenerating images
 
