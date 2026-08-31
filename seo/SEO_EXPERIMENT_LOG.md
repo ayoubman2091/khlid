@@ -298,3 +298,39 @@ reverted the deletion without explanation. Re-deleted in the autonomous finaliza
 - **DECISION** Open. Do not add a second FAQ round to any of these 7 pages without new evidence
   (a fresh GSC pull, or a specific competitor gap not already covered here) — avoid content
   bloat for its own sake.
+
+---
+
+## DEPLOYMENT VERIFICATION — 2026-08-31
+
+Not a change — closing the "pending deploy" / "not yet deployed" status every entry above was
+left in, by testing production directly (the same discipline the baseline correction and
+EXP-004 both insisted on: verify with a real HTTP request, never by reading the repo). Someone
+uploaded `dist/` to Hostinger between EXP-005's commit and this check; deploy mechanism and
+timing are unconfirmed (no CI, no access to hPanel from here — see `DEPLOYMENT.md`).
+
+| Item | Expected (per EXP-00x) | Live result | Verified via |
+|---|---|---|---|
+| `www` → non-www | 301, path preserved | `301` → `https://xn--rkpyrnesconstruction-f2bb.com/` | `curl -I` |
+| `/services/construction` → slashed | `301` → `/services/construction/` | Confirmed | `curl -I` |
+| `/services/construction/` canonical | matches its own URL, no conflict | `<link rel="canonical" href=".../services/construction/">` | `curl` |
+| `/projets` legacy redirect | `301` → `/realisations/` | Confirmed, one hop | `curl -I` |
+| Previously "Discovered – not indexed" pages (`construction`, `renovation`, `terrassement`, `dallage`, `amenagement-exterieur`, `zones-intervention`, `realisations`) | return 200 at canonical URL | All 200 | `curl -o /dev/null -w %{http_code}` |
+| EXP-003 title/H1 (`/services/construction/`) | "gros œuvre" wording live | `<title>Entreprise de gros œuvre à Toulouse...</title>`, H1 matches | `curl` |
+| EXP-005 FAQPage schema | present on service pages | `FAQPage` found in `/services/construction/` source | `curl` |
+| `google-site-verification` meta | present, matches `.env.production` | Present, value matches | `curl` |
+| GA4 (`G-N61F984PYV`) | tag fires client-side | `gtag.js` network request fires, `window.gtag` defined, `dataLayer` populated | Playwright (real browser — a plain `curl` of the static HTML will never show this; `initAnalytics()` injects it from JS by design, see `EXP-001`) |
+| Sitemap | 26 URLs | 26 `<loc>` entries | `curl` |
+
+**What this does NOT establish:** actual Google indexation status (only a live URL Inspection
+in GSC confirms that — a 200 response means the page is crawlable, not that it's indexed), and
+no ranking or traffic change — no fresher GSC session was available this cycle than the one
+EXP-003/EXP-005 already cite (still checked again via ToolSearch; still no connector). Re-run
+URL Inspection on the 7 previously-unindexed URLs and re-pull the gros-œuvre cluster no earlier
+than the 14-day windows EXP-003/EXP-004 already set, once a Search Console connection exists
+in-session or the client shares an export.
+
+**Open questions carried forward, unchanged, still not resolved by inference:** démolition
+service scope, Portet-sur-Garonne commune activity — see the "OPEN QUESTIONS FOR THE CLIENT"
+section above. Live host is now resolved (Hostinger, confirmed both by EXP-004's response
+headers and this verification pass).
