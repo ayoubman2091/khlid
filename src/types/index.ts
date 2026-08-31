@@ -22,6 +22,10 @@ export interface Service {
   gallery: ServiceImage[]
   relatedServiceSlugs: string[]
   primaryKeywordCluster: string
+  /** Service-specific questions — distinct from the homepage's GENERAL_FAQ, grounded only in
+   *  facts already present in `includes`/`intro`/`process` above. Optional so a service can
+   *  ship without one rather than force filler content. */
+  faq?: FAQItem[]
 }
 
 export interface Realisation {

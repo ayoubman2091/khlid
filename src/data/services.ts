@@ -43,6 +43,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['maconnerie', 'dallage'],
     primaryKeywordCluster: 'RENOVATION_MAISON_TOULOUSE',
+    faq: [
+      {
+        question: 'Intervenez-vous sur des maisons anciennes en pierre ou brique toulousaine ?',
+        answer:
+          "Oui, la remise en état de bâti ancien (murs en pierre ou en brique toulousaine) fait partie de nos chantiers courants, aussi bien pour la structure que pour les façades.",
+      },
+      {
+        question: 'Peut-on rénover uniquement la façade sans reprendre tout le bâtiment ?',
+        answer:
+          "Oui, la rénovation de façade et la reprise d'enduit peuvent être traitées comme un chantier indépendant, sans reprise complète du bâtiment.",
+      },
+      {
+        question: 'Le remplacement de fenêtres nécessite-t-il de gros travaux de maçonnerie ?',
+        answer:
+          "Le remplacement de menuiseries dans une ouverture existante ne nécessite généralement pas de reprise structurelle lourde ; un agrandissement d'ouverture, en revanche, est étudié au cas par cas.",
+      },
+    ],
   },
   {
     slug: 'construction',
@@ -76,6 +93,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['extension', 'maconnerie', 'terrassement'],
     primaryKeywordCluster: 'CONSTRUCTION_TOULOUSE',
+    faq: [
+      {
+        question: "Qu'est-ce que le gros œuvre exactement ?",
+        answer:
+          "Le gros œuvre regroupe les fondations, les murs porteurs et les structures en béton armé : c'est l'ossature du bâtiment, réalisée avant les travaux de second œuvre (électricité, finitions, etc.).",
+      },
+      {
+        question: 'Intervenez-vous pour des bâtiments professionnels ou uniquement des maisons individuelles ?',
+        answer:
+          'Les deux : nos chantiers de gros œuvre couvrent aussi bien les maisons individuelles que les bâtiments professionnels.',
+      },
+      {
+        question: 'Réalisez-vous uniquement le gros œuvre ou aussi les finitions ?',
+        answer:
+          'Notre intervention porte sur le gros œuvre — la structure. Pour des travaux de rénovation intérieure ou de finitions, voir notre service de rénovation.',
+      },
+    ],
   },
   {
     slug: 'maconnerie',
@@ -108,6 +142,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['construction', 'renovation'],
     primaryKeywordCluster: 'MACONNERIE_TOULOUSE',
+    faq: [
+      {
+        question: 'Peut-on abattre un mur porteur avec vous ?',
+        answer:
+          "Oui, une ouverture dans un mur porteur est possible ; selon la portée, ce type d'intervention est réalisé en lien avec un bureau d'études pour garantir la stabilité de la structure.",
+      },
+      {
+        question: 'Travaillez-vous en rénovation ou uniquement en construction neuve ?',
+        answer:
+          'Les deux : nos travaux de maçonnerie générale interviennent aussi bien en construction neuve qu\'en reprise sur bâti existant.',
+      },
+      {
+        question: 'Un mur fissuré doit-il être reconstruit ou peut-il être réparé ?',
+        answer:
+          "Cela dépend de l'origine et de l'ampleur de la fissure : après diagnostic sur site, une reprise ou un renfort du mur existant suffit souvent, sans reconstruction complète.",
+      },
+    ],
   },
   {
     slug: 'terrassement',
@@ -138,6 +189,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['dallage', 'construction'],
     primaryKeywordCluster: 'TERRASSEMENT_TOULOUSE',
+    faq: [
+      {
+        question: 'Le terrassement est-il obligatoire avant de couler une dalle béton ?',
+        answer:
+          "Oui : un terrain mal préparé ou mal nivelé fragilise la dalle. Le décaissement, la mise à niveau et le ferraillage sont les étapes préalables à un béton durable.",
+      },
+      {
+        question: 'Intervenez-vous aussi pour préparer une allée ou un garage, pas seulement une maison ?',
+        answer:
+          'Oui, la préparation de plateforme concerne aussi bien une terrasse, une allée qu\'un garage — pas uniquement les fondations d\'une maison.',
+      },
+      {
+        question: 'À quoi sert le ferraillage posé avant le béton ?',
+        answer:
+          "Le ferraillage renforce la dalle en résistance à la traction, ce que le béton seul ne peut pas apporter ; il est posé et vérifié avant le coulage.",
+      },
+    ],
   },
   {
     slug: 'dallage',
@@ -173,6 +241,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['terrassement', 'amenagement-exterieur'],
     primaryKeywordCluster: 'DALLAGE_TOULOUSE',
+    faq: [
+      {
+        question: 'Quelle différence entre une dalle béton et un dallage en pierre naturelle ?',
+        answer:
+          'La dalle béton coulée est plus rapide à mettre en œuvre et plus économique ; le dallage en pierre naturelle posée offre un rendu plus haut de gamme, notamment autour d\'une piscine. Les deux sont proposés selon votre projet.',
+      },
+      {
+        question: 'Faites-vous aussi les plages de piscine ?',
+        answer:
+          'Oui, le pavage de plage de piscine en pierre naturelle fait partie de nos chantiers de dallage extérieur.',
+      },
+      {
+        question: 'Le terrassement est-il inclus dans un projet de dallage ?',
+        answer:
+          'La préparation du terrain (terrassement) est une étape nécessaire avant tout coulage ou pose de dallage ; elle est chiffrée avec le reste du projet dans le même devis.',
+      },
+    ],
   },
   {
     slug: 'extension',
@@ -203,6 +288,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['construction', 'maconnerie'],
     primaryKeywordCluster: 'EXTENSION_MAISON_TOULOUSE',
+    faq: [
+      {
+        question: "Les fondations d'une extension sont-elles différentes de celles d'une construction neuve ?",
+        answer:
+          "Elles doivent surtout être adaptées au bâti existant auquel l'extension se raccorde, contrairement à une construction neuve réalisée sur terrain libre.",
+      },
+      {
+        question: 'Comment l\'extension est-elle raccordée à la maison existante ?',
+        answer:
+          "La structure béton armé de l'extension est étudiée pour s'élever en continuité des murs existants, avec un raccordement propre entre l'ancien et le nouveau bâti.",
+      },
+      {
+        question: 'Quelle est la différence entre une extension et une rénovation ?',
+        answer:
+          "Une extension agrandit la surface habitable avec de nouvelles fondations et une nouvelle structure ; une rénovation intervient sur le bâti existant sans en augmenter l'emprise au sol.",
+      },
+    ],
   },
   {
     slug: 'amenagement-exterieur',
@@ -232,6 +334,23 @@ export const SERVICES: Service[] = [
     ],
     relatedServiceSlugs: ['dallage', 'terrassement'],
     primaryKeywordCluster: 'AMENAGEMENT_EXTERIEUR_TOULOUSE',
+    faq: [
+      {
+        question: 'Faites-vous aussi l\'aménagement de jardins et espaces verts ?',
+        answer:
+          "Non : notre intervention porte sur la structure et le dallage extérieur (terrasses, allées, perrons), pas sur la création de jardins ou d'espaces végétalisés.",
+      },
+      {
+        question: 'Quelle différence entre une terrasse en béton et une terrasse en pierre naturelle ?',
+        answer:
+          'Le béton coulé est plus rapide et économique ; la pierre naturelle offre un rendu plus haut de gamme. Le choix dépend du budget et du style recherché pour vos abords.',
+      },
+      {
+        question: 'Peut-on ajouter un perron ou des marches à une maison existante ?',
+        answer:
+          'Oui, les perrons et marches extérieures peuvent être ajoutés ou repris sur une maison déjà construite, en cohérence avec l\'accès existant.',
+      },
+    ],
   },
 ]
 

@@ -79,6 +79,7 @@ export function serviceDetailMeta(slug: string): PageMeta | null {
     schemas: [
       breadcrumbSchema(crumbs),
       serviceSchema({ name: service.name, description: service.metaDescription, path: `/services/${service.slug}` }),
+      ...(service.faq && service.faq.length > 0 ? [faqPageSchema(service.faq)] : []),
     ],
     crumbs,
   }

@@ -6,6 +6,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { OptimizedImage } from '@/components/ui/OptimizedImage'
 import { Process } from '@/components/sections/Process'
 import { ServiceAreas } from '@/components/sections/ServiceAreas'
+import { FAQSection } from '@/components/sections/FAQSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { Button } from '@/components/ui/Button'
 import { SEO } from '@/seo/SEO'
@@ -129,6 +130,10 @@ export default function ServiceDetail() {
             </div>
           )}
         </section>
+      )}
+
+      {service.faq && service.faq.length > 0 && (
+        <FAQSection items={service.faq} title={`Questions fréquentes — ${service.shortName}`} />
       )}
 
       <CTASection />

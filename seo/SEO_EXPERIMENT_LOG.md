@@ -244,3 +244,57 @@ deletion into this fix.
 accidentally re-added (all three files) by an unrelated commit (`4b663e3`, message "p") that
 reverted the deletion without explanation. Re-deleted in the autonomous finalization pass
 (2026-08-30). `public/.htaccess` remains the only host config in the repo.
+
+---
+
+## EXP-005 — Per-service FAQ (visible + FAQPage schema)
+
+- **DATE** 2026-08-31
+- **URL** all 7 `/services/<slug>/` pages
+- **QUERY / CLUSTER** all P1 clusters (`KEYWORD_CLUSTERING.md`) — GEO/answer-oriented intent
+  specifically (PHASE 10 of the brief)
+- **PROBLEM** `GENERAL_FAQ` (7 questions) and its `FAQPage` schema exist only on the homepage
+  (`src/pages/Home.tsx` / `homeMeta()`). Every `/services/<slug>/` page — the pages meant to
+  own each commercial cluster per `EXP-003`/`EXP-004` — carries no FAQ content and no
+  `FAQPage` schema at all. `COMPETITOR_ANALYSIS.md` §3–4 independently flagged "FAQ construite
+  sur les vraies objections clients — absent chez RK" as a real, evidenced gap against Bâti
+  HALLI (8 questions) with no fabricated data involved. No fresh GSC session was available this
+  cycle (checked again via ToolSearch — still no connector) to re-derive a numeric baseline, so
+  this experiment is driven by the existing competitor-gap evidence and the already-logged
+  gros-œuvre cluster problem (`EXP-003`), not by new query data.
+- **CHANGE** Added an optional `faq?: FAQItem[]` field to the `Service` type
+  (`src/types/index.ts`) and 3 service-specific questions to each of the 7 services in
+  `src/data/services.ts` — 21 total, zero overlap with each other or with `GENERAL_FAQ`.
+  Wired into `serviceDetailMeta()` (`src/seo/pageMeta.ts`) as an additional `FAQPage` schema
+  entry, and into `ServiceDetail.tsx` as a visible `<FAQSection>` (reusing the same component
+  and `Accordion` already used on the homepage — no new UI pattern introduced). Every question
+  and answer is grounded only in facts already present in that service's own `intro`/`includes`/
+  `process` — nothing new was invented (no prices, no certifications, no service scope not
+  already listed). Two picks worth naming: `construction`'s first question directly defines
+  "gros œuvre" in the page's own words (the exact term `EXP-003` is targeting), and
+  `amenagement-exterieur`'s first question ("Faites-vous aussi l'aménagement de jardins et
+  espaces verts ?" → No) directly implements `KEYWORD_CLUSTERING.md` cluster 7's own
+  differentiation note ("RK doit rester positionné sur la structure/maçonnerie extérieure, pas
+  se présenter comme paysagiste").
+- **REASON** PHASE 9/10/12 of this cycle's brief — strengthen existing pages before creating
+  new ones, and make each service page directly answer the questions its own cluster implies,
+  in a form both users and AI/answer engines can extract (structured `FAQPage` + visible
+  question text in the prerendered HTML, verified in `dist/services/*/index.html`).
+- **EXPECTED IMPACT** No ranking claim — this cycle's own rule (PHASE 15: "Do not claim success
+  until GSC confirms it"). Two honest mechanisms only: (1) more genuine, differentiated on-page
+  content depth on pages `EXP-004` only just made indexable, and (2) `FAQPage` structured data
+  eligible for rich results / AI-answer extraction on a term-by-term basis matching each page's
+  actual cluster.
+- **BASELINE** Pre-change: 0 of 7 service pages carried any FAQ content or `FAQPage` schema;
+  only the homepage did. Cluster-level query baseline is the one already logged in `EXP-003`
+  (gros œuvre: 44 impressions, 0 clicks, positions 14.0–18.1, all on `/`) — unchanged since no
+  fresher GSC data was available this cycle.
+- **RESULT** Pending. Verified only what's verifiable pre-deploy: `npm run build` (26/26
+  routes), `oxlint` (0 errors), `npm audit` (0 vulnerabilities), `npm run seo:audit` (26/26, no
+  issues), and a direct JSON-LD parse of all 7 built pages (7/7 valid `FAQPage`, 21/21 unique
+  questions, no duplicates). Not yet deployed to Hostinger as of this commit — re-verify live
+  after upload (`HOSTINGER_DEPLOYMENT_MANIFEST.md`), then re-measure GSC no earlier than
+  `EXP-003`'s own 14/28-day window once a Search Console connection exists in-session.
+- **DECISION** Open. Do not add a second FAQ round to any of these 7 pages without new evidence
+  (a fresh GSC pull, or a specific competitor gap not already covered here) — avoid content
+  bloat for its own sake.
