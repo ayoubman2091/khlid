@@ -334,3 +334,48 @@ in-session or the client shares an export.
 service scope, Portet-sur-Garonne commune activity — see the "OPEN QUESTIONS FOR THE CLIENT"
 section above. Live host is now resolved (Hostinger, confirmed both by EXP-004's response
 headers and this verification pass).
+
+---
+
+## CYCLE — 2026-08-31 (growth cycle following EXP-005)
+
+Research/audit pass. **No code change** — every area checked came back either already sound or
+blocked on data this session doesn't have, and this log's own discipline (`EXP-005`'s decision
+note) is not to add content or touch pages without new evidence. Recorded here so the next
+cycle doesn't re-audit the same ground from zero.
+
+- **GSC** — checked again via ToolSearch for a connector: still none. No number in this cycle
+  is fresher than `EXP-003`'s 2026-08-28 capture.
+- **Production** — re-confirmed live and unchanged from the "DEPLOYMENT VERIFICATION" entry
+  above (spot-check only: `/`, www redirect, `/projets` redirect, `/services/construction/`
+  200 + `FAQPage` present, sitemap 26 URLs).
+- **Internal link graph (PHASE 13)** — audited programmatically against the built `dist/`
+  output: every one of the 7 service pages, `/zones-intervention/`, `/services/`,
+  `/realisations/` and `/guides/` is linked from **all 26** pages (site-wide header nav +
+  footer service list — `src/components/layout/Header.tsx`'s `NAV_LINKS`,
+  `src/components/layout/Footer.tsx`'s `SERVICES.map`). Individual guide and realisation pages
+  sit lower (2–3 inbound links each) but that's the intended contextual pattern
+  (`getGuidesForService` on each service page, hub pages listing all entries) — not orphaned,
+  not a defect. **No orphan pages found. No change made** — the graph already matches
+  `SEO_TRAFFIC_MODEL.md`'s described architecture.
+- **Realisations / E-E-A-T (PHASE 14)** — re-read `src/data/realisations.ts` and
+  `RealisationDetail.tsx`. Confirmed still honest (photo-grouped by work type, no invented
+  project names/dates/addresses) and already links back to its parent service page. The file's
+  own comment already records the client-data requirement (real project city/client
+  type/date) needed to turn these into full project profiles — nothing new to add without
+  inventing details, so nothing changed.
+- **Conversion tracking (PHASE 15)** — grepped all 8 `trackEvent()` call sites across `src/`.
+  All 8 events (`quote_submit`, `form_start`, `phone_click`, `email_click`, `whatsapp_click`,
+  `maps_click`, `project_view`, `video_play`) are wired with a `location` param, present on
+  every page via the persistent header/footer/mobile bottom bar plus the dedicated Contact and
+  Quote pages. No gap found.
+- **Fresh competitor/SERP check (PHASE 5)** — re-ran the two exact `EXP-003` queries through
+  WebSearch. Six competitors not previously documented turned up (SLB, EMA Construction, PNR
+  Construction, Parres Travaux Publics, Cabe-Sail, plus Socorebat confirmed also active on this
+  term) — logged with sources in `COMPETITOR_ANALYSIS.md` §6, not acted on (no page changed).
+  RK did not appear in either result set — logged as a **weak, heavily-caveated** signal only
+  (WebSearch is US-region-biased and not a rank tracker), consistent with but not a replacement
+  for `EXP-003`'s real GSC position (14.0–18.1).
+- **DECISION** No experiment opened this cycle. Next code change on any of these pages needs
+  either a real GSC pull (once a connector exists) or a specific new competitor gap — not
+  research for its own sake.

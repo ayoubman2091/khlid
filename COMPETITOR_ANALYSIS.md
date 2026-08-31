@@ -79,3 +79,32 @@ RK Pyrénées est une petite structure artisanale toulousaine. Les deux concurre
 - Pas d'outil de mesure de trafic/backlinks (Ahrefs, SEMrush, Similarweb) disponible → colonnes autorité/trafic = N/A partout.
 - Analyse de positions SERP faite via WebSearch (résultats de recherche), pas via un rank tracker positionné sur Toulouse précisément — les positions exactes (1er, 2e, 3e...) ne sont pas garanties identiques à celles vues par un internaute réel à Toulouse.
 - Seuls 2 concurrents ont été audités en profondeur (contenu complet du site) faute de temps ; le tableau §1 reste au niveau "qui apparaît en SERP", pas "audit complet page par page" pour tous.
+
+---
+
+## 6. MISE À JOUR — 2026-08-31 (cluster gros œuvre, requêtes exactes d'EXP-003)
+
+Deux recherches réelles refaites sur les requêtes exactes qu'`EXP-003` cible ("entreprise gros
+oeuvre toulouse", "gros oeuvre toulouse entreprise devis"), via l'outil WebSearch disponible
+dans cette session.
+
+**Concurrents apparus, non encore documentés ci-dessus :** [SOCOREBAT](https://www.socorebat-france.fr/midi-pyrenees/haute-garonne/toulouse/entreprise-gros-oeuvre) (déjà connu pour terrassement/dallage — confirmé aussi actif sur le terme gros œuvre), [SLB — Société Lauragaise du Bâtiment](https://www.slbbatiment.fr/slb-construction) (+25 ans, marchés logement/collectivités/tertiaire/industriel), [EMA Construction](https://www.emaconstruction.fr/), [PNR Construction](https://www.pnrconstruction.fr/), [Parres Travaux Publics](https://www.parrestp.com/) (BTP, particuliers/pros/collectivités depuis 2006), [Cabe-Sail](https://www.cabesail.com/details-entreprise+de+construction+gros+oeuvre+a+toulouse-98.html). [PagesJaunes](https://www.pagesjaunes.fr/annuaire/toulouse-31/entreprise-de-gros-oeuvre) occupe toujours la première position sur les deux requêtes — cohérent avec le constat transversal du §1.
+
+**RK Pyrénées Construction n'apparaît dans aucun des deux jeux de résultats.** À interpréter
+avec prudence, pas comme une preuve de non-classement réel : l'outil WebSearch de cette session
+est documenté "US-only" (biais géographique probable pour une requête hyper-locale toulousaine)
+et n'est pas un rank tracker positionné sur Toulouse — il ne retourne ni position ni la même
+liste qu'un vrai SERP Google.fr consulté depuis la France. C'est un signal faible, cohérent avec
+le baseline GSC déjà logué (`EXP-003` : positions 14,0–18,1, hors top 10) mais qui ne le remplace
+pas et ne permet aucune conclusion chiffrée nouvelle.
+
+**Non exploité :** un chiffre de prix (gros œuvre ~800 €/m², 500–1 500 €/m²) est apparu dans ces
+résultats. Non retenu, non publié nulle part sur le site — `CONTENT_STRATEGY_NO_PRICING.md`
+(décision client du 2026-08-20) l'interdit explicitement, et ce chiffre n'est de toute façon pas
+une donnée RK vérifiée.
+
+**Action prise ce cycle :** documentation uniquement — aucune page modifiée à partir de cette
+mise à jour (aucune preuve suffisante pour justifier un changement de contenu au-delà de ce
+qu'`EXP-005` a déjà fait). Revoir la position réelle de `/services/construction/` via Search
+Console (URL Inspection + Performance) dès qu'une connexion GSC existe dans une session, plutôt
+que via de nouvelles recherches WebSearch.
