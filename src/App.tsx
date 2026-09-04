@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 
 // Route-level code splitting (audit item #12): the homepage no longer pulls in every guide,
@@ -28,6 +28,7 @@ export default function App() {
           <Route path="services/:slug" element={<ServiceDetail />} />
           <Route path="realisations" element={<Realisations />} />
           <Route path="realisations/:slug" element={<RealisationDetail />} />
+          <Route path="projets" element={<Navigate to="/realisations/" replace />} />
           <Route path="a-propos" element={<About />} />
           <Route path="zones-intervention" element={<ServiceAreasPage />} />
           <Route path="contact" element={<Contact />} />
