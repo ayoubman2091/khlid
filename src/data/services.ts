@@ -95,9 +95,33 @@ export const SERVICES: Service[] = [
     primaryKeywordCluster: 'CONSTRUCTION_TOULOUSE',
     faq: [
       {
+        // "gros oeuvre définition" is a top related query on Google Trends both nationally (12)
+        // and in Midi-Pyrénées, where it scores HIGHER (20) — definitional intent is stronger in
+        // this region than across France. It is also the first Google autocomplete completion for
+        // "gros oeuvre". The answer below is written to stand alone as an extractable definition:
+        // one sentence that defines the term, then the scope. Grounded entirely in `includes`.
         question: "Qu'est-ce que le gros œuvre exactement ?",
         answer:
-          "Le gros œuvre regroupe les fondations, les murs porteurs et les structures en béton armé : c'est l'ossature du bâtiment, réalisée avant les travaux de second œuvre (électricité, finitions, etc.).",
+          "Le gros œuvre désigne l'ensemble des éléments qui assurent la solidité et la stabilité d'un bâtiment : les fondations, les murs porteurs, les planchers et les structures en béton armé. C'est l'ossature du bâtiment — ce qui la constitue ne peut pas être modifié sans toucher à sa structure. Le gros œuvre est réalisé en premier, avant les travaux de second œuvre.",
+      },
+      {
+        // "gros oeuvre et second oeuvre" is a top-10 Google autocomplete completion for
+        // "gros oeuvre". The distinction was previously only implied, in a half-sentence at the
+        // end of another answer. It is also commercially useful: it tells a visitor precisely
+        // where RK's intervention stops, which prevents unqualified enquiries.
+        question: 'Quelle est la différence entre le gros œuvre et le second œuvre ?',
+        answer:
+          "Le gros œuvre correspond à la structure porteuse : fondations, murs porteurs, planchers, béton armé. Le second œuvre regroupe tout ce qui vient ensuite pour rendre le bâtiment habitable, sans rôle structurel : cloisons, isolation, électricité, plomberie, menuiseries et finitions. RK Pyrénées Construction intervient sur le gros œuvre ; nos chantiers de rénovation couvrent par ailleurs des travaux de reprise sur bâti existant.",
+      },
+      {
+        // Cost intent dominates this cluster: "devis construction maison" is a RISING query in
+        // Midi-Pyrénées (+110), alongside "budget construction maison" (+60) and "tarif
+        // construction maison" (+60). The client's no-pricing decision stands, so this answers
+        // the intent WITHOUT any figure — it explains what drives a quote and how one is
+        // produced. No price, no range, no average is stated or implied anywhere.
+        question: "Qu'est-ce qui fait varier le coût d'un chantier de gros œuvre ?",
+        answer:
+          "Principalement la nature du terrain et le type de fondations qu'il impose, la surface et la hauteur à construire, le matériau d'élévation retenu, la complexité de la structure béton armé et l'accessibilité du chantier pour les engins et les livraisons. Ces éléments ne peuvent être évalués qu'après une visite sur site : c'est pourquoi nous chiffrons chaque chantier dans un devis détaillé plutôt que sur la base d'un prix au mètre carré.",
       },
       {
         question: 'Intervenez-vous pour des bâtiments professionnels ou uniquement des maisons individuelles ?',
@@ -264,10 +288,16 @@ export const SERVICES: Service[] = [
     name: 'Extension de maison',
     shortName: 'Extension',
     tagline: 'Agrandir une maison existante',
-    metaTitle: 'Extension de maison à Toulouse — Devis | RK Pyrénées Construction',
+    // "agrandissement" is a parallel consumer vocabulary for the same service, not a different
+    // service. Google Trends (FR, 12m) shows a full cluster around it — "prix agrandissement
+    // maison" (100), "agrandissement maison bois" (72), "plan agrandissement maison" (29),
+    // "cout agrandissement maison" (26) — while the word appeared only twice on this whole site
+    // and never in the title or H1. Adding it here cannot cannibalize anything: it is the same
+    // page, the same service, addressed by its autre common name.
+    metaTitle: 'Extension et agrandissement de maison à Toulouse | RK Pyrénées Construction',
     metaDescription:
       'Extension et agrandissement de maison à Toulouse : gros œuvre, fondations et structure. Devis gratuit avec RK Pyrénées Construction.',
-    h1: 'Extension de maison à Toulouse',
+    h1: 'Extension et agrandissement de maison à Toulouse',
     intro:
       "Agrandir une maison existante demande la même rigueur qu'une construction neuve : fondations adaptées à l'existant, structure béton armé et raccordement propre au bâti d'origine. RK Pyrénées Construction prend en charge le gros œuvre de votre extension.",
     includes: [
@@ -298,6 +328,14 @@ export const SERVICES: Service[] = [
         question: 'Comment l\'extension est-elle raccordée à la maison existante ?',
         answer:
           "La structure béton armé de l'extension est étudiée pour s'élever en continuité des murs existants, avec un raccordement propre entre l'ancien et le nouveau bâti.",
+      },
+      {
+        // Direct consequence of the vocabulary split above: people search both words and some
+        // genuinely wonder whether they name different works. They do not. Stating that plainly
+        // is useful to a visitor and makes the synonym explicit pour retrieval systems.
+        question: 'Extension ou agrandissement : y a-t-il une différence ?',
+        answer:
+          "Non, les deux mots désignent la même opération : augmenter la surface d'une maison existante en y ajoutant une construction neuve. « Agrandissement » est le terme courant, « extension » le terme employé sur les plans et les devis. Dans les deux cas, le gros œuvre consiste à créer des fondations adaptées au bâti existant puis à élever une structure raccordée à la maison d'origine.",
       },
       {
         question: 'Quelle est la différence entre une extension et une rénovation ?',
