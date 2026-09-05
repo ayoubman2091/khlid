@@ -293,7 +293,7 @@ export const SERVICES: Service[] = [
     // maison" (100), "agrandissement maison bois" (72), "plan agrandissement maison" (29),
     // "cout agrandissement maison" (26) — while the word appeared only twice on this whole site
     // and never in the title or H1. Adding it here cannot cannibalize anything: it is the same
-    // page, the same service, addressed by its autre common name.
+    // page, the same service, addressed by its other common name.
     metaTitle: 'Extension et agrandissement de maison à Toulouse | RK Pyrénées Construction',
     metaDescription:
       'Extension et agrandissement de maison à Toulouse : gros œuvre, fondations et structure. Devis gratuit avec RK Pyrénées Construction.',
@@ -332,7 +332,7 @@ export const SERVICES: Service[] = [
       {
         // Direct consequence of the vocabulary split above: people search both words and some
         // genuinely wonder whether they name different works. They do not. Stating that plainly
-        // is useful to a visitor and makes the synonym explicit pour retrieval systems.
+        // is useful to a visitor and makes the synonym explicit for retrieval systems.
         question: 'Extension ou agrandissement : y a-t-il une différence ?',
         answer:
           "Non, les deux mots désignent la même opération : augmenter la surface d'une maison existante en y ajoutant une construction neuve. « Agrandissement » est le terme courant, « extension » le terme employé sur les plans et les devis. Dans les deux cas, le gros œuvre consiste à créer des fondations adaptées au bâti existant puis à élever une structure raccordée à la maison d'origine.",
