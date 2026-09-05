@@ -8,6 +8,17 @@ import { SERVICE_AREAS } from '@/lib/constants'
  */
 export const GENERAL_FAQ: FAQItem[] = [
   {
+    // Placed first deliberately. This FAQ feeds the homepage's FAQPage schema, and the homepage
+    // is the page Google serves for "gros oeuvre toulouse" / "entreprise gros oeuvre toulouse"
+    // (the two highest-impression non-brand queries in GSC). Both the visible answer and the
+    // extracted schema now address that question directly instead of leaving it implicit.
+    // Every fact below is already stated on /services/construction/ (its `intro` and
+    // `includes`) — this restates it, it does not claim anything new.
+    question: 'Réalisez-vous le gros œuvre à Toulouse ?',
+    answer:
+      "Oui. Le gros œuvre — fondations, murs de soubassement, élévation en parpaing ou en brique, dalles et structures en béton armé — fait partie de nos chantiers courants à Toulouse et en Midi-Pyrénées, en construction neuve comme en extension, en résidentiel comme en professionnel. C'est la structure porteuse du bâtiment, réalisée avant les travaux de second œuvre.",
+  },
+  {
     question: 'Comment se déroule une demande de devis avec RK Pyrénées Construction ?',
     answer:
       "Vous décrivez votre projet via le formulaire de devis ou par téléphone. Nous convenons d'une visite sur site si nécessaire, puis vous recevez un devis détaillé avant tout engagement. Le devis est gratuit et sans obligation.",

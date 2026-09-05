@@ -36,12 +36,18 @@ export function Hero() {
             <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-stone-100 backdrop-blur">
               {BUSINESS.city}
             </p>
+            {/* "gros œuvre" added 2026-09-05 — see the note in seo/pageMeta.ts homeMeta(): this
+                page already receives the gros-œuvre queries, it just never used the words.
+                "construction" and "rénovation" both stay in the H1 on purpose, because the same
+                window also shows this page ranking for "construction toulouse" (pos. 9.6) and
+                "entreprise construction toulouse" — the fix is additive, not a swap. */}
             <h1 className="max-w-2xl font-display text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
-              Entreprise de construction et rénovation à Toulouse
+              Entreprise de gros œuvre, construction et rénovation à Toulouse
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-200">
-              Maçonnerie, rénovation, construction neuve, terrassement et dallage : RK Pyrénées
-              Construction pilote vos travaux du devis à la réception de chantier.
+              Gros œuvre, maçonnerie, rénovation, terrassement et dallage : RK Pyrénées
+              Construction pilote vos travaux du devis à la réception de chantier, à Toulouse
+              et en Midi-Pyrénées.
             </p>
           </div>
         </div>

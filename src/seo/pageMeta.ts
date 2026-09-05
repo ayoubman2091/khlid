@@ -46,9 +46,18 @@ const HOME_CRUMB = crumb('Accueil', '/')
 
 export function homeMeta(): PageMeta {
   return {
-    title: `RK Pyrénées Construction — Maçonnerie, rénovation et construction à ${BUSINESS.city}`,
+    // Retargeted 2026-09-05 on GSC evidence, not on preference. Over the property's only data
+    // window (2026-08-22 → 09-02) the three highest-impression non-brand queries were
+    // "gros oeuvre toulouse" (45 impr., pos. 19.4), "entreprise gros oeuvre toulouse" (43,
+    // pos. 14.4) and "entreprise batiment gros oeuvre toulouse" (5, pos. 14.2) — 93 impressions
+    // that Google served with THIS page, whose title and H1 did not contain "gros œuvre" at all.
+    // /services/construction/ carries that exact phrase, is indexed and correctly canonical, yet
+    // recorded zero impressions: Google has picked the homepage as the entity page for the
+    // query and the homepage was not answering it. So the term goes here, front-loaded, while
+    // /services/construction/ keeps its own title untouched and stays the deep technical page.
+    title: `Entreprise de bâtiment et gros œuvre à ${BUSINESS.city} | RK Pyrénées Construction`,
     description:
-      'RK Pyrénées Construction : maçonnerie, rénovation, construction, terrassement, dallage et extension de maison à Toulouse. Devis gratuit.',
+      "Entreprise de bâtiment à Toulouse depuis 2023 : gros œuvre, maçonnerie, rénovation, terrassement, dallage et extension de maison. Devis gratuit et détaillé.",
     path: '/',
     image: `${BUSINESS.siteUrl}/logo/logo-512.png`,
     schemas: [organizationSchema(), localBusinessSchema(), websiteSchema(), faqPageSchema(GENERAL_FAQ)],

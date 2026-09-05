@@ -1,4 +1,5 @@
-import { BUSINESS } from '@/lib/constants'
+import { BUSINESS, SERVICE_AREAS } from '@/lib/constants'
+import { SERVICES } from '@/data/services'
 import { canonicalPath } from './canonicalPath'
 
 const SITE = BUSINESS.siteUrl
@@ -22,6 +23,29 @@ export function organizationSchema() {
     logo: `${SITE}/logo/logo-512.png`,
     telephone: BUSINESS.phoneE164,
     email: BUSINESS.email,
+
+    // Entity-disambiguation signals. Every value here already lives in BUSINESS and comes from
+    // the same sourced record as the rest of the NAP block (public registry, SIREN 951 243 591
+    // — see lib/constants.ts). Nothing is inferred or rounded. The point is that "RK Pyrénées
+    // Construction" is a common-sounding name in a crowded local market: a SIREN/SIRET pair, a
+    // founding year and a postal address let Google and AI answer engines bind the brand string
+    // to one specific legal entity instead of guessing between similarly-named contractors.
+    foundingDate: String(BUSINESS.foundedYear),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: BUSINESS.addressLine,
+      addressLocality: BUSINESS.city,
+      postalCode: BUSINESS.postalCode,
+      addressRegion: BUSINESS.region,
+      addressCountry: 'FR',
+    },
+    // Spaces stripped so the values are machine-comparable against registry data; the
+    // human-readable spacing in BUSINESS.siren/siret is what the UI displays, untouched.
+    identifier: [
+      { '@type': 'PropertyValue', name: 'SIREN', value: BUSINESS.siren.replace(/\s/g, '') },
+      { '@type': 'PropertyValue', name: 'SIRET', value: BUSINESS.siret.replace(/\s/g, '') },
+    ],
+
     // Only real, confirmed profiles belong here — never publish an unverified link.
     ...(BUSINESS.facebookUrl ? { sameAs: [BUSINESS.facebookUrl] } : {}),
   }
@@ -54,6 +78,32 @@ export function localBusinessSchema() {
     },
     url: SITE,
     hasMap: BUSINESS.mapsUrl,
+
+    // Plain-language statement of who this is, what it does and where. Written as one factual
+    // sentence because that is the shape AI answer engines actually quote — and derived from
+    // SERVICES/BUSINESS/SERVICE_AREAS rather than typed out, so it can never drift from the
+    // seven services the site really publishes.
+    description: `${BUSINESS.brandName} est une entreprise de bâtiment (${BUSINESS.legalForm}) basée à ${BUSINESS.city}, créée en ${BUSINESS.foundedYear}. Elle intervient dans toute la zone ${SERVICE_AREAS[0]} sur ${SERVICES.length} métiers : ${SERVICES.map((s) => s.shortName.toLowerCase()).join(', ')}.`,
+
+    // Before this, nothing in the structured data told a machine WHICH services exist — a
+    // reader had to crawl and parse seven separate HTML pages to find out. Each Service page
+    // emits its own Service node, but there was no catalogue binding them to the business.
+    // Deliberately Offers WITHOUT `price`/`priceSpecification`: the client's no-pricing-anywhere
+    // decision (2026-08-20) applies to structured data too, and an Offer is valid without one.
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `Services de ${BUSINESS.brandName}`,
+      itemListElement: SERVICES.map((s) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: s.name,
+          description: s.tagline,
+          url: `${SITE}${canonicalPath(`/services/${s.slug}`)}`,
+        },
+      })),
+    },
+    knowsAbout: SERVICES.map((s) => s.name),
 
     // Client-confirmed service area: Toulouse et Midi-Pyrénées.
     // No individual commune pages are created without verified local activity.
