@@ -1,0 +1,97 @@
+# Build the site and publish dist/ to Hostinger on every push to main.
+#
+# Why this exists: Hostinger shared hosting serves the static dist/ output and runs no build
+# step of its own (see DEPLOYMENT.md). Before this workflow, `git push` changed nothing in
+# production — someone had to run `npm run build` locally and upload dist/ by hand, so the
+# repo and the live site drifted apart silently. This closes that gap.
+#
+# SECRETS REQUIRED (Settings -> Secrets and variables -> Actions):
+#   FTP_SERVER    e.g. ftp.your-domain.com  (hPanel -> Files -> FTP Accounts)
+#   FTP_USERNAME
+#   FTP_PASSWORD
+# Until all three exist the deploy step fails; build + checks still run, so the workflow is
+# safe to merge before the secrets are added.
+
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      # Documentation-only commits don't change a single byte of dist/, so they don't need a
+      # deploy. This repo carries a lot of them (audits, experiment log, manifests).
+      - '**.md'
+      - 'seo/**'
+  workflow_dispatch:
+    inputs:
+      clean_slate:
+        description: 'Wipe public_html before uploading (use once, for the first run)'
+        type: boolean
+        default: false
+
+# Never let two deploys write to public_html at the same time. Queue instead of cancelling:
+# a half-uploaded site is worse than a slightly delayed one.
+concurrency:
+  group: hostinger-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22 specifically: package.json runs `node scripts/*.ts` with no loader, which
+      # relies on native TypeScript type-stripping. That is unflagged from 22.18 onward.
+      # Anything older fails on the first build script.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # generate:images -> tsc -b -> SSR bundle -> robots.txt/sitemap.xml -> client bundle
+      # -> prerender every route to real HTML. Reads .env.production (committed, non-secret).
+      - name: Build
+        run: npm run build
+
+      - name: SEO audit
+        run: npm run seo:audit
+
+      # Belt and braces. The audit checks the HTML; these check the things that would silently
+      # break the server config or ship a broken artifact.
+      - name: Verify deploy artifact
+        run: |
+          set -euo pipefail
+          test -f dist/index.html          || { echo "::error::dist/index.html missing"; exit 1; }
+          # .htaccess is a dotfile and the single most fragile part of this deploy. If it does
+          # not reach the server we lose www->non-www, the /projets 301 and ErrorDocument 404.
+          test -f dist/.htaccess           || { echo "::error::dist/.htaccess missing"; exit 1; }
+          test -f dist/sitemap.xml         || { echo "::error::dist/sitemap.xml missing"; exit 1; }
+          test -f dist/robots.txt          || { echo "::error::dist/robots.txt missing"; exit 1; }
+          # Google Search Console verification files live in public/ and must survive the build.
+          ls dist/google*.html >/dev/null   || { echo "::error::GSC verification file missing"; exit 1; }
+          routes=$(find dist -name index.html | wc -l)
+          echo "prerendered routes: $routes"
+          [ "$routes" -ge 26 ] || { echo "::error::expected >=26 prerendered routes, got $routes"; exit 1; }
+          echo "artifact OK"
+
+      - name: Deploy to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: public_html/
+          # Incremental by default: the action keeps a state file on the server and uploads
+          # only what changed. The one-shot clean slate is exposed as a manual input so the
+          # first run can clear whatever the old hand-uploads left behind.
+          dangerous-clean-slate: ${{ inputs.clean_slate == true }}
+          # Defaults already skip .git*/node_modules. .htaccess does NOT match .git* and is
+          # uploaded normally — do not add a broader dotfile exclusion here.
+          log-level: minimal
