@@ -63,8 +63,18 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'construction',
-    name: 'Construction neuve',
-    shortName: 'Construction',
+    /**
+     * `name` est l'ancre du seul lien interne qui pointe vers cette page (ServicesGrid,
+     * <h3> dans le <Link>) ET le serviceType du JSON-LD. Il disait « Construction neuve »
+     * alors que la page cible « gros œuvre » dans son title et son h1 — donc aucun lien
+     * interne du site ne portait jamais l'expression. Search Console (2026-08-22 → 09-05)
+     * montre le résultat : « gros oeuvre toulouse » et « entreprise gros oeuvre toulouse »
+     * cumulent 104 impressions servies par la PAGE D'ACCUEIL en position ~15-19, pendant que
+     * cette page-ci, la seule optimisée pour ça, plafonne à 6 impressions en position 41.
+     * L'ancre est alignée sur le h1. Ne pas revenir à « Construction neuve » seul.
+     */
+    name: 'Gros œuvre & construction neuve',
+    shortName: 'Gros œuvre',
     tagline: "Gros œuvre, fondations et structures béton armé pour maisons, extensions et bâtiments professionnels",
     metaTitle: 'Entreprise de gros œuvre à Toulouse | RK Pyrénées Construction',
     metaDescription:
