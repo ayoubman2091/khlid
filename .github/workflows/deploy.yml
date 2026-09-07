@@ -35,9 +35,16 @@ concurrency:
   group: hostinger-deploy
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Exposed as env so the FTP step can test for it. The `secrets` context is not available
+    # in a step-level `if:`, but `env` is — this is the standard workaround.
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
     steps:
       - uses: actions/checkout@v4
 
@@ -80,7 +87,37 @@ jobs:
           [ "$routes" -ge 26 ] || { echo "::error::expected >=26 prerendered routes, got $routes"; exit 1; }
           echo "artifact OK"
 
-      - name: Deploy to Hostinger
+      # Publishes the built output to a `production` branch containing dist/ at its root.
+      # This is the zero-credential deploy path: point hPanel -> Git at the `production`
+      # branch instead of `main` and Hostinger pulls a ready-built site, with no Node build
+      # on the server and no FTP password stored in this repo. `main` must NOT be used as
+      # the Hostinger source — dist/ is gitignored there, so a pull of main deploys raw
+      # source and the site breaks.
+      #
+      # A fresh `git init` each run keeps the branch at exactly one commit, so the repo does
+      # not grow with every build. The force-push is intentional and only ever targets
+      # `production` — never main.
+      - name: Publish built output to the production branch
+        run: |
+          set -euo pipefail
+          cd dist
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b production
+          git add -A
+          git ls-files --error-unmatch .htaccess >/dev/null \
+            || { echo "::error::.htaccess not staged for the production branch"; exit 1; }
+          git commit -q -m "build from ${GITHUB_SHA}"
+          git push -q --force \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            production
+          echo "published $(git ls-files | wc -l) files to the production branch"
+
+      # Optional second path. Skipped entirely unless an FTP_SERVER secret exists, so the
+      # workflow stays green for whoever uses the production-branch route instead.
+      - name: Deploy to Hostinger over FTP
+        if: env.FTP_SERVER != ''
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
