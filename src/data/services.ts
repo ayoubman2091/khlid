@@ -77,8 +77,19 @@ export const SERVICES: Service[] = [
     shortName: 'Gros œuvre',
     tagline: "Gros œuvre, fondations et structures béton armé pour maisons, extensions et bâtiments professionnels",
     metaTitle: 'Entreprise de gros œuvre à Toulouse | RK Pyrénées Construction',
+    /**
+     * metaDescription élargie au bâtiment professionnel le 2026-09-07 sur signal GSC réel :
+     * « constructeur bâtiments commerciaux toulouse » est apparu dans la fenêtre 22/08→07/09
+     * (6 impressions, position 9,7) — la meilleure position du cluster construction, et elle
+     * est servie par la page d'accueil, pas par cette page. La capacité est déjà déclarée et
+     * sourcée : `includes` mentionne « bâtiments résidentiels et professionnels », la FAQ y
+     * répond, et la galerie contient un coulage de dalle au tapis pompe sur chantier
+     * professionnel (photo réelle, audit §5.1). Rien n'est ajouté au périmètre de
+     * l'entreprise : on rend visible dans le snippet une compétence déjà prouvée, sur la
+     * requête la mieux positionnée du site.
+     */
     metaDescription:
-      "Entreprise de gros œuvre à Toulouse : fondations, élévation de murs, structures en béton armé pour construction neuve et extension. Devis gratuit.",
+      "Entreprise de gros œuvre à Toulouse : fondations, élévation de murs, structures béton armé. Construction neuve, extension, bâtiments professionnels. Devis gratuit.",
     h1: 'Entreprise de gros œuvre et construction neuve à Toulouse',
     intro:
       "RK Pyrénées Construction réalise les travaux de gros œuvre à Toulouse et en Midi-Pyrénées : fondations, murs de soubassement, élévation en parpaing ou en brique, dalles et structures en béton armé. Le gros œuvre constitue la structure porteuse du bâtiment, sur des chantiers de construction neuve comme d'extension, en résidentiel comme en professionnel. Chaque chantier est chiffré par un devis détaillé avant le démarrage des travaux.",
