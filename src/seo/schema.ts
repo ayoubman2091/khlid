@@ -46,8 +46,20 @@ export function organizationSchema() {
       { '@type': 'PropertyValue', name: 'SIRET', value: BUSINESS.siret.replace(/\s/g, '') },
     ],
 
+    // Le président déclaré au RNE (Pappers, SIREN 951 243 591). Une personne nommée et
+    // vérifiable rattache l'entité à un dirigeant réel — signal que très peu de concurrents
+    // locaux émettent.
+    founder: {
+      '@type': 'Person',
+      name: BUSINESS.founderName,
+    },
+
     // Only real, confirmed profiles belong here — never publish an unverified link.
-    ...(BUSINESS.facebookUrl ? { sameAs: [BUSINESS.facebookUrl] } : {}),
+    // La fiche Google Business Profile est vérifiée par correspondance NAP stricte
+    // (constants.ts) : c'est le lien qui relie explicitement le domaine à l'entité locale
+    // que Google connaît déjà. Sans lui, rien sur le site ne dit à Google que ce domaine et
+    // cette fiche (5,0 / 21 avis) sont la même entreprise.
+    sameAs: [BUSINESS.googleBusinessUrl, ...(BUSINESS.facebookUrl ? [BUSINESS.facebookUrl] : [])],
   }
 }
 
@@ -78,6 +90,18 @@ export function localBusinessSchema() {
     },
     url: SITE,
     hasMap: BUSINESS.mapsUrl,
+    sameAs: [BUSINESS.googleBusinessUrl, ...(BUSINESS.facebookUrl ? [BUSINESS.facebookUrl] : [])],
+
+    // Horaires réels publiés par le client sur sa propre fiche Google (constants.ts).
+    // Volontairement PAS d'aggregateRating malgré les 21 avis 5,0 : Google interdit de
+    // baliser sur son propre site une note agrégée issue d'une plateforme tierce. La note
+    // est affichée en clair côté UI (TrustSignals) et reste hors du JSON-LD.
+    openingHoursSpecification: BUSINESS.openingHours.map((slot) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: slot.days,
+      opens: slot.opens,
+      closes: slot.closes,
+    })),
 
     // Plain-language statement of who this is, what it does and where. Written as one factual
     // sentence because that is the shape AI answer engines actually quote — and derived from
