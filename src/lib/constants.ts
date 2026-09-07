@@ -33,18 +33,51 @@ export const BUSINESS = {
   email: 'rk.pyrenees.construction@gmail.com',
   whatsappNumber: '33666827802',
   /**
-   * NEEDS CLIENT CONFIRMATION — horaires. Aucune source vérifiée pour l'instant
-   * (voir CURRENT_SITE_AUDIT.md §8). Laisser `null` tant que ce n'est pas confirmé :
-   * les composants qui l'utilisent (Footer, Contact) n'affichent rien si la valeur est vide,
-   * plutôt que de publier une information non vérifiée.
+   * SOURCÉ 2026-09-07 — fiche Google Business Profile publiée par l'entreprise elle-même
+   * (place_id ChIJEc-FiFu7rhIRngCJK5mUsuk, « rk pyrenees construction », 22 All. de
+   * Bellefontaine 31100 Toulouse, tél. +33 6 66 82 78 02 — identique à BUSINESS.phone).
+   * C'est la source la plus autoritaire possible : elle est publiée et contrôlée par le
+   * client. Le §8 de CURRENT_SITE_AUDIT.md est donc levé pour les horaires.
+   * `openingHours` alimente openingHoursSpecification dans schema.ts ; `hoursLabel` reste
+   * la version lisible affichée par Footer/Contact.
    */
-  hoursLabel: null as string | null,
+  hoursLabel: 'Lun–Jeu 8h–17h · Ven 8h–16h · Fermé samedi et dimanche' as string | null,
+  openingHours: [
+    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '08:00', closes: '17:00' },
+    { days: ['Friday'], opens: '08:00', closes: '16:00' },
+  ] as const,
   /**
    * NEEDS CLIENT CONFIRMATION — l'URL Facebook n'a pas été vérifiée comme étant la page
    * officielle de l'entreprise (voir CURRENT_SITE_AUDIT.md §8). Laisser `null` tant que ce
    * n'est pas confirmé plutôt que de publier un lien non vérifié dans le footer ou en `sameAs`.
    */
   facebookUrl: null as string | null,
+  /**
+   * SOURCÉ 2026-09-07 — fiche Google Business Profile de l'entreprise, vérifiée par
+   * correspondance NAP stricte : même raison sociale, même adresse (22 All. de Bellefontaine,
+   * 31100 Toulouse) et même téléphone (+33 6 66 82 78 02) que BUSINESS ci-dessus.
+   * Catégorie Google : general_contractor. C'est la seule propriété tierce confirmée à ce
+   * jour, donc la seule entrée légitime de `sameAs` — voir schema.ts.
+   * Elle porte aujourd'hui 21 avis pour une note de 5,0 : le principal actif de réputation
+   * de l'entreprise, et il n'était référencé nulle part sur le site avant cette entrée.
+   */
+  googleBusinessUrl: 'https://www.google.com/maps/place/?q=place_id:ChIJEc-FiFu7rhIRngCJK5mUsuk',
+  googlePlaceId: 'ChIJEc-FiFu7rhIRngCJK5mUsuk',
+  /**
+   * Note et nombre d'avis Google relevés le 2026-09-07. Affichés en clair comme fait
+   * vérifiable (TrustSignals) et JAMAIS émis en `aggregateRating` : Google interdit de
+   * baliser sur son propre site une note agrégée provenant d'une plateforme tierce, et le
+   * faire expose à une action manuelle « avis frauduleux ». Le chiffre bouge — le
+   * revérifier sur la fiche avant toute republication.
+   */
+  googleRating: 5.0,
+  googleReviewCount: 21,
+  /**
+   * SOURCÉ — président déclaré au RNE (Pappers, SIREN 951 243 591) : Khalid Regad,
+   * depuis le 13/04/2023. Sert `founder` dans le schema Organization : une personne
+   * nommée et vérifiable est un signal d'entité que les concurrents locaux n'émettent pas.
+   */
+  founderName: 'Khalid Regad',
   mapsUrl:
     'https://www.google.com/maps/place/22+All.+de+Bellefontaine,+31100+Toulouse,+France/@43.5636312,1.4052552,788m/',
   /**
