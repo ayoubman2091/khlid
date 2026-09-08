@@ -33,12 +33,35 @@ export const BUSINESS = {
   email: 'rk.pyrenees.construction@gmail.com',
   whatsappNumber: '33666827802',
   /**
-   * NEEDS CLIENT CONFIRMATION — horaires. Aucune source vérifiée pour l'instant
-   * (voir CURRENT_SITE_AUDIT.md §8). Laisser `null` tant que ce n'est pas confirmé :
-   * les composants qui l'utilisent (Footer, Contact) n'affichent rien si la valeur est vide,
-   * plutôt que de publier une information non vérifiée.
+   * RÉSOLU 2026-09-08 — la source manquante existait : la fiche Google Business Profile de
+   * l'entreprise, publiée par le client lui-même (place ID ChIJEc-FiFu7rhIRngCJK5mUsuk,
+   * relevée le 2026-09-08). Ce n'est pas une supposition : c'est l'horaire que le client
+   * publie déjà publiquement, et le site affichait jusqu'ici MOINS d'informations que sa
+   * propre fiche. Toute modification doit être répercutée sur la fiche Google et ici en même
+   * temps — la cohérence NAP+H entre les deux est précisément ce qui est exploité en local.
    */
-  hoursLabel: null as string | null,
+  hoursLabel:
+    'Lundi au jeudi : 8h00 – 17h00 · Vendredi : 8h00 – 16h00 · Samedi et dimanche : fermé',
+  /**
+   * Même source que hoursLabel, sous forme structurée pour openingHoursSpecification
+   * (schema.ts). Les deux DOIVENT rester synchronisés : le texte affiché et le JSON-LD ne
+   * peuvent pas se contredire.
+   */
+  openingHours: [
+    { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '08:00', closes: '17:00' },
+    { days: ['Friday'], opens: '08:00', closes: '16:00' },
+  ] as ReadonlyArray<{ days: readonly string[]; opens: string; closes: string }>,
+
+  /**
+   * Fiche Google Business Profile de l'entreprise — l'actif le plus fort du dossier
+   * (5,0/5 sur 21 avis au 2026-09-08) et, jusqu'à ce commit, totalement invisible pour une
+   * machine lisant le site : aucun lien, aucun `sameAs`, et un `hasMap` qui pointait vers une
+   * simple épingle d'adresse (mapsUrl ci-dessous) et non vers la fiche.
+   * L'URL est construite à partir du place ID, format canonique de Google — elle ne dépend
+   * d'aucun slug d'affichage et ne casse pas si le nom de la fiche change.
+   */
+  googlePlaceId: 'ChIJEc-FiFu7rhIRngCJK5mUsuk',
+  googleBusinessUrl: 'https://www.google.com/maps/place/?q=place_id:ChIJEc-FiFu7rhIRngCJK5mUsuk',
   /**
    * NEEDS CLIENT CONFIRMATION — l'URL Facebook n'a pas été vérifiée comme étant la page
    * officielle de l'entreprise (voir CURRENT_SITE_AUDIT.md §8). Laisser `null` tant que ce
