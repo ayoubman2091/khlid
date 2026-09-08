@@ -47,7 +47,11 @@ export function organizationSchema() {
     ],
 
     // Only real, confirmed profiles belong here — never publish an unverified link.
-    ...(BUSINESS.facebookUrl ? { sameAs: [BUSINESS.facebookUrl] } : {}),
+    // The Google Business Profile qualifies on both counts: it is the client's own published
+    // listing and it was verified against the live record (place ID, 2026-09-08). It is also
+    // the single most valuable entity signal available here — 21 reviews at 5.0 — and it was
+    // absent from the structured data entirely, so nothing connected the website to it.
+    sameAs: [BUSINESS.googleBusinessUrl, ...(BUSINESS.facebookUrl ? [BUSINESS.facebookUrl] : [])],
   }
 }
 
@@ -77,7 +81,24 @@ export function localBusinessSchema() {
       longitude: BUSINESS.longitude,
     },
     url: SITE,
-    hasMap: BUSINESS.mapsUrl,
+    // Was BUSINESS.mapsUrl — a /maps/place/<address>/@lat,lng URL, i.e. an address pin. It
+    // resolved to a spot on a map, not to this business. The place-ID form resolves to the
+    // listing itself, which is what binds this markup to the reviewed entity.
+    hasMap: BUSINESS.googleBusinessUrl,
+    sameAs: [BUSINESS.googleBusinessUrl, ...(BUSINESS.facebookUrl ? [BUSINESS.facebookUrl] : [])],
+
+    // Opening hours, from the client's own Google listing (see lib/constants.ts). Absent until
+    // now because no source had been verified; the source existed all along on the client's
+    // own profile. Deliberately NO aggregateRating alongside it: the 5.0/21 rating lives on
+    // Google, not on this site, and self-declaring someone else's rating as first-party
+    // structured data is the exact pattern Google treats as self-serving review markup.
+    // sameAs above is the legitimate way to claim that listing.
+    openingHoursSpecification: BUSINESS.openingHours.map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [...h.days],
+      opens: h.opens,
+      closes: h.closes,
+    })),
 
     // Plain-language statement of who this is, what it does and where. Written as one factual
     // sentence because that is the shape AI answer engines actually quote — and derived from
