@@ -70,6 +70,17 @@ export default function ServiceDetail() {
         </ul>
       </section>
 
+      {service.sections && service.sections.length > 0 && (
+        <div className="mx-auto mt-14 max-w-3xl px-4 sm:px-6 lg:px-8">
+          {service.sections.map((section) => (
+            <section key={section.heading} className="mt-10 first:mt-0">
+              <h2 className="font-display text-2xl font-bold text-ink-900">{section.heading}</h2>
+              <p className="mt-3 text-ink-600">{section.body}</p>
+            </section>
+          ))}
+        </div>
+      )}
+
       <Process steps={service.process} title="Comment se déroule ce chantier" />
 
       {service.gallery.length > 0 && (
