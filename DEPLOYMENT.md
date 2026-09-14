@@ -112,34 +112,35 @@ Add a new source photo to `assets-source/images/original/` and reference its fil
 somewhere in `src/` before regenerating — unreferenced source files are skipped, not shipped.
 
 
-## Le déploiement n'atteint pas le site (constaté le 2026-09-14)
+## Le déploiement n'atteignait pas le site — résolu le 2026-09-14
 
-**Symptôme.** Le workflow est vert de bout en bout, la branche `production` contient le bon
-build, et le site en ligne ne change pas.
+**Symptôme.** Workflow vert de bout en bout, branche `production` correcte, site en ligne figé.
 
-**Mesures qui l'établissent**, prises après une exécution `clean_slate` complète :
+**Première hypothèse, fausse.** On avait conclu à un domaine addon servi depuis
+`domains/<domaine>/public_html/`. Un listing FTP en lecture seule l'a réfutée.
+
+**Cause réelle.** Le compte FTP arrive **directement dans la racine documentaire** : son
+répertoire de connexion contenait déjà `index.html`, `.htaccess`, `sitemap.xml`, `services/`,
+`realisations/`. En envoyant vers `server-dir: public_html/`, l'action créait un sous-dossier
+*à l'intérieur* de la racine et publiait une **copie complète du site** à
+`https://<domaine>/public_html/` — vérifiée joignable (HTTP 200, 1 236 mots sur
+`/public_html/services/construction/index.html`, sitemap à 4 `lastmod` distincts) pendant que la
+vraie racine continuait à servir le build du 20:15. Un segment de chemin de trop, rien d'autre.
+
+**Correctif.** `server-dir: ./`, plus un `clean_slate` unique qui a supprimé le duplicata et
+republié les 118 fichiers au bon endroit. `continue-on-error` retiré de l'étape FTP : la cible
+étant juste, un échec FTP redevient un vrai échec.
+
+**Vérifié après correction** :
 
 | Contrôle | Résultat |
 |---|---|
-| Fichiers envoyés par l'étape FTP | 118, `.htaccess` et `sitemap.xml` compris |
-| Conclusion de l'étape FTP | `success` |
-| `GET /assets/<asset-de-ce-build>.js` sur le domaine | **404** |
-| `GET /assets/<asset-du-build-précédent>.js` | **200** |
-| `GET /.ftp-deploy-sync-state.json` | **404** |
-| Sitemap servi | 26 `lastmod` identiques (build du 14/09 20:15) |
-| Sitemap sur la branche `production` | 4 `lastmod` distincts |
+| Empreinte du build servie à la racine | identique au build (4 assets hachés) |
+| `/public_html/index.html` | **404** (duplicata supprimé) |
+| Sitemap servi | 26 URLs, **4 `lastmod` distincts**, XML valide |
+| `/services/construction/` en ligne | **1 236 mots** |
+| Étape « Verify production serves this build » | **success** |
 
-**Conclusion.** L'upload réussit, mais `public_html/` n'est pas la racine documentaire qui sert
-`xn--rkpyrnesconstruction-f2bb.com`. Sur Hostinger, c'est la signature d'un domaine addon :
-sa racine est `domains/<domaine>/public_html/`, alors que `public_html/` appartient au domaine
-principal du compte. Un envoi FTP dans le mauvais répertoire réussit à chaque fois.
-
-**Ce qu'il faut faire** (nécessite un accès hPanel, impossible depuis le dépôt) :
-
-1. hPanel → Fichiers → Gestionnaire de fichiers, relever le chemin réel de la racine du domaine.
-2. Soit reporter ce chemin dans `server-dir` de l'étape FTP de `.github/workflows/deploy.yml` ;
-   soit brancher hPanel → Git sur la branche `production` et supprimer complètement l'étape FTP.
-3. Relancer le workflow. L'étape « Verify production serves this build » passe au vert
-   d'elle-même une fois la cible correcte — c'est elle qui fait foi, pas le code de sortie FTP.
-
-Ne pas deviner le chemin dans `server-dir` : `dangerous-clean-slate` efface ce qu'il vise.
+**Règle.** `server-dir` pointe désormais la racine documentaire elle-même, et
+`dangerous-clean-slate` efface ce que `server-dir` vise. Ne jamais modifier cette valeur sans
+lister l'arborescence distante d'abord.
