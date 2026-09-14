@@ -35,7 +35,34 @@ export default function RealisationDetail() {
         )}
       </div>
 
+      {realisation.techniques && realisation.techniques.length > 0 && (
+        <div className="mx-auto mt-8 max-w-5xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-500">
+            Techniques et matériaux mis en œuvre
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {realisation.techniques.map((t) => (
+              <li key={t} className="rounded-full bg-stone-100 px-3 py-1 text-sm text-ink-700">
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {realisation.sections && realisation.sections.length > 0 && (
+        <div className="mx-auto mt-12 max-w-3xl px-4 sm:px-6 lg:px-8">
+          {realisation.sections.map((section) => (
+            <section key={section.heading} className="mt-8 first:mt-0">
+              <h2 className="font-display text-2xl font-bold text-ink-900">{section.heading}</h2>
+              <p className="mt-3 text-ink-600">{section.body}</p>
+            </section>
+          ))}
+        </div>
+      )}
+
       <div className="mx-auto mt-10 max-w-5xl px-4 pb-16 sm:px-6 lg:px-8">
+        <h2 className="sr-only">Photos du chantier</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {realisation.images.map((img) => (
             <div key={img.stem} className="overflow-hidden rounded-2xl bg-stone-200">
