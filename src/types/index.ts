@@ -37,6 +37,17 @@ export interface Realisation {
   description: string
   images: ServiceImage[]
   videoIds?: string[]
+  /**
+   * Case-study body. Every claim here must be readable off the photos in `images` (their alt
+   * text was written against the real files) or be standard trade practice for the technique
+   * those photos show. Never a client name, address, date, duration, budget or guarantee:
+   * none of that is known for these chantiers, and the brief says omit what is unknown rather
+   * than invent it. Optional so a realisation can ship as a gallery if nothing can be said
+   * honestly about it.
+   */
+  sections?: { heading: string; body: string }[]
+  /** Techniques and materials actually visible in the photos — rendered as a short list. */
+  techniques?: string[]
 }
 
 export interface FAQItem {
