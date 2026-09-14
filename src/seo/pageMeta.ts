@@ -119,6 +119,12 @@ export function realisationDetailMeta(slug: string): PageMeta | null {
     image: absoluteUrl(largestSrc(coverImage.stem)),
     schemas: [
       breadcrumbSchema(crumbs),
+      // Added once these pages carried a real body (see Realisation.sections). Before that they
+      // were a title, one sentence and a photo grid — 76 to 83 words — and marking that up as an
+      // Article would have been a claim the page could not back. Now it can.
+      ...(realisation.sections && realisation.sections.length > 0
+        ? [articleSchema({ headline: realisation.title, description: realisation.description, path: `/realisations/${realisation.slug}` })]
+        : []),
       imageObjectSchema({ url: largestSrc(coverImage.stem), alt: coverImage.alt }),
     ],
     crumbs,
