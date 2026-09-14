@@ -130,26 +130,20 @@ jobs:
 
       # Optional second path. Skipped entirely unless an FTP_SERVER secret exists, so the
       # workflow stays green for whoever uses the production-branch route instead.
-      # KNOWN BROKEN TARGET - server-dir is wrong, and the step cannot tell.
+      # server-dir is `./` and must stay that way.
       #
-      # 2026-09-14, measured end to end: a clean-slate run uploaded all 118 files into
-      # public_html/ and reported success, yet every asset filename from that build returned 404
-      # on the live domain while the previous build's assets still returned 200, and
-      # /.ftp-deploy-sync-state.json - written by this action at the top of the upload target -
-      # is not reachable either. public_html/ is therefore NOT the document root serving this
-      # domain. On Hostinger that is the signature of an addon/secondary domain, whose root is
-      # domains/<domain>/public_html/ while public_html/ belongs to the account's primary
-      # domain. Uploading into the wrong directory succeeds at the FTP level every time.
+      # It was `public_html/` and every upload succeeded while the live domain served none of it.
+      # A read-only FTP listing (see the ftp-inspect workflow) settled it: this FTP account logs
+      # straight INTO the document root - its login directory already holds index.html,
+      # .htaccess, sitemap.xml, services/, realisations/. Uploading to `public_html/` therefore
+      # created a NEW subdirectory inside the docroot and published a second, complete copy of
+      # the site at https://<domain>/public_html/, which was verifiably reachable (200, 1236
+      # words on /public_html/services/construction/index.html) while the real root kept serving
+      # the old build. Not an addon-domain path problem - one path segment too deep.
       #
-      # Fix: read the real document root in hPanel -> Files -> File Manager and set server-dir
-      # to it. Do not guess the path here: dangerous-clean-slate wipes whatever it points at.
-      #
-      # continue-on-error stays until then, because the production-branch publish above is the
-      # path that works and a permanently red job hides real build failures. The honest verdict
-      # now comes from the production check below, which tests the live site instead of trusting
-      # this step's exit code.
+      # Before changing this value again, list the tree first. `dangerous-clean-slate` deletes
+      # whatever server-dir points at, and it now points at the document root itself.
       - name: Deploy to Hostinger over FTP
-        continue-on-error: true
         if: env.FTP_SERVER != ''
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -157,7 +151,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: public_html/
+          server-dir: ./
           # Incremental by default: the action keeps a state file on the server and uploads
           # only what changed. The one-shot clean slate is exposed as a manual input so the
           # first run can clear whatever the old hand-uploads left behind.
