@@ -53,6 +53,14 @@ jobs:
           # shallow checkout git returns the HEAD commit for every path, so all 26 dates come out
           # identical and the generator now fails the build on purpose. Verified locally.
           fetch-depth: 0
+          # Build the CURRENT tip of main, not the SHA that triggered this run. The concurrency
+          # group below keeps one run in flight and cancels the queued middles, so a burst of
+          # pushes leaves the LAST-QUEUED run to deploy - and that run's own SHA can already be
+          # several commits behind. Not hypothetical: on 2026-09-14 eight commits were pushed in
+          # thirteen seconds, six runs were cancelled, and production was built from d784176
+          # while main had moved on to c2714d4. The live sitemap therefore still carried the old
+          # generator's 26 identical lastmod values and the case-study content never shipped.
+          ref: main
 
       # Node 22 specifically: package.json runs `node scripts/*.ts` with no loader, which
       # relies on native TypeScript type-stripping. That is unflagged from 22.18 onward.
@@ -122,7 +130,18 @@ jobs:
 
       # Optional second path. Skipped entirely unless an FTP_SERVER secret exists, so the
       # workflow stays green for whoever uses the production-branch route instead.
+      # This step has failed on every run since 2026-09-08 (verified via the Actions API: runs
+      # e240521, ace06bb, 0bcb103, d784176 - all green through "Publish built output to the
+      # production branch", all red on this step alone). FTP_SERVER is set, so the step is not
+      # skipped; the credentials or host are wrong.
+      #
+      # The consequence was worse than the broken step: the whole workflow showed red while the
+      # deploy production actually uses - the `production` branch pulled by hPanel - had
+      # succeeded. A permanently red workflow is a dead signal; nobody can tell a real build
+      # failure from this one. So the primary path decides the job's verdict and FTP reports as
+      # a warning until the credentials are fixed.
       - name: Deploy to Hostinger over FTP
+        continue-on-error: true
         if: env.FTP_SERVER != ''
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
