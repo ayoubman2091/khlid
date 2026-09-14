@@ -22,6 +22,14 @@ export interface Service {
   gallery: ServiceImage[]
   relatedServiceSlugs: string[]
   primaryKeywordCluster: string
+  /**
+   * Deep body content, rendered between the "what this covers" list and the process steps.
+   * Same rule as Realisation.sections: technique explained factually, or grounded in the
+   * gallery photos and the `includes` list above - never an invented certification, effectif,
+   * guarantee, project count or price. Optional, so a service can stay short rather than be
+   * padded to a word count.
+   */
+  sections?: { heading: string; body: string }[]
   /** Service-specific questions — distinct from the homepage's GENERAL_FAQ, grounded only in
    *  facts already present in `includes`/`intro`/`process` above. Optional so a service can
    *  ship without one rather than force filler content. */
