@@ -11,6 +11,11 @@
  *  - no reference to an old/wrong domain
  *
  * Site-wide checks:
+ *  - no <title> or meta description reused across two routes
+ *  - no sitemap URL shipping a noindex robots meta
+ *  - <lastmod> values are not all identical and never in the future
+ *  - every prerendered route appears in the sitemap (and vice versa)
+ *  - no route is orphaned (reachable only via the sitemap)
  *  - every sitemap.xml URL uses the configured production domain and has a matching
  *    dist/<route>/index.html (or dist/index.html for "/")
  *  - no pricing route ("prix-", "/tarif", "combien-coute") in the sitemap — client decision,
@@ -40,6 +45,9 @@ const PRICING_URL_PATTERNS = [/\/prix-/, /\/tarif/, /combien-coute/]
 // No fake per-commune landing pages without explicit, verified client confirmation — see
 // KEYWORD_CLUSTERING.md §"SUBURBS_CANDIDATE" and CONTENT_STRATEGY rules in the task brief §1.
 const FAKE_CITY_SLUGS = ['blagnac', 'colomiers', 'balma', 'tournefeuille', 'muret', 'cugnaux', 'l-union', 'castanet']
+
+const titlesSeen = new Map<string, string[]>()
+const descsSeen = new Map<string, string[]>()
 
 const failures: string[] = []
 const fail = (msg: string) => failures.push(msg)
@@ -89,6 +97,78 @@ function auditSitemap() {
   return urls
 }
 
+/**
+ * <lastmod> must be a real per-page date. Two regressions this catches, both of which have
+ * actually shipped to production on this project:
+ *   - every URL carrying the same timestamp (a site-wide file counted as page content, or a
+ *     shallow CI checkout where `git log -1` returns HEAD for every path);
+ *   - a date in the future, which is what a fabricated "now" looks like when clocks disagree.
+ * Missing lastmod is NOT a failure: generate-seo-files.ts omits it on purpose when git cannot
+ * answer, and an absent signal beats a wrong one.
+ */
+function auditLastmod() {
+  const path = join(ROOT, 'public/sitemap.xml')
+  if (!existsSync(path)) return
+  const xml = readFileSync(path, 'utf8')
+  const dates = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1])
+  if (dates.length === 0) return
+  const distinct = new Set(dates)
+  if (dates.length >= 5 && distinct.size === 1) {
+    fail(`sitemap: all ${dates.length} <lastmod> values are identical (${dates[0]}) — a site-wide file is being counted as page content, or the checkout is shallow (CI needs fetch-depth: 0)`)
+  }
+  const now = Date.now()
+  for (const d of distinct) {
+    const t = Date.parse(d)
+    if (Number.isNaN(t)) fail(`sitemap: <lastmod> is not a parsable date: ${d}`)
+    else if (t > now + 24 * 60 * 60 * 1000) fail(`sitemap: <lastmod> is in the future (${d}) — dates must come from real commit history, never a fabricated "now"`)
+  }
+}
+
+/**
+ * Every prerendered route must be in the sitemap, and vice versa. auditSitemap() already covers
+ * sitemap -> dist; this covers dist -> sitemap, which is how a new page ends up shipped but
+ * undeclared. 404.html is excluded: it is noindex and deliberately absent from the sitemap.
+ */
+function auditSitemapCoverage(urls: string[]) {
+  const declared = new Set(urls.map((u) => (u.startsWith(SITE_URL) ? u.slice(SITE_URL.length) || '/' : u)))
+  const walk = (dir: string, prefix: string) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue
+      if (entry.name === 'assets' || entry.name === 'images' || entry.name === 'logo') continue
+      const routePath = `${prefix}${entry.name}/`
+      if (existsSync(join(dir, entry.name, 'index.html')) && !declared.has(routePath)) {
+        fail(`prerendered route is missing from sitemap.xml: ${routePath}`)
+      }
+      walk(join(dir, entry.name), routePath)
+    }
+  }
+  walk(DIST_DIR, '/')
+}
+
+/**
+ * An important route nobody links to is discoverable only through the sitemap, which is exactly
+ * the state /services/dallage/ was in when Google reported it as an unknown URL on 2026-09-08.
+ * Counts real <a href> occurrences across the other prerendered pages, ignoring self-links.
+ */
+function auditOrphanRoutes(urls: string[]) {
+  const routes = urls.map((u) => (u.startsWith(SITE_URL) ? u.slice(SITE_URL.length) || '/' : u)).filter((r) => r !== '/')
+  const htmlByRoute = new Map<string, string>()
+  for (const r of routes) {
+    const f = routePathToDistFile(r)
+    if (existsSync(f)) htmlByRoute.set(r, readFileSync(f, 'utf8'))
+  }
+  const home = routePathToDistFile('/')
+  if (existsSync(home)) htmlByRoute.set('/', readFileSync(home, 'utf8'))
+  for (const target of routes) {
+    let inbound = 0
+    for (const [source, html] of htmlByRoute) {
+      if (source === target) continue
+      if (html.includes(`href="${target}"`)) inbound++
+    }
+    if (inbound === 0) fail(`orphan route — no other prerendered page links to it: ${target}`)
+  }
+}
+
 function auditRobots() {
   const path = join(ROOT, 'public/robots.txt')
   if (!existsSync(path)) {
@@ -110,10 +190,18 @@ function auditPrerenderedPage(routePath: string) {
   const titles = [...html.matchAll(/<title>([\s\S]*?)<\/title>/g)]
   if (titles.length !== 1) fail(`${label} expected exactly 1 <title>, found ${titles.length}`)
   else if (!titles[0][1].trim()) fail(`${label} <title> is empty`)
+  else titlesSeen.set(titles[0][1].trim(), [...(titlesSeen.get(titles[0][1].trim()) ?? []), routePath])
 
   const descs = [...html.matchAll(/<meta name="description" content="([^"]*)"/g)]
   if (descs.length !== 1) fail(`${label} expected exactly 1 meta description, found ${descs.length}`)
   else if (!descs[0][1].trim()) fail(`${label} meta description is empty`)
+  else descsSeen.set(descs[0][1].trim(), [...(descsSeen.get(descs[0][1].trim()) ?? []), routePath])
+
+  // A sitemap URL that ships with noindex is a contradiction: we are asking Google to crawl a
+  // page we are simultaneously telling it not to keep.
+  if (/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(html)) {
+    fail(`${label} is in the sitemap but ships a noindex robots meta`)
+  }
 
   const canonicals = [...html.matchAll(/<link rel="canonical" href="([^"]*)"/g)]
   if (canonicals.length !== 1) fail(`${label} expected exactly 1 canonical link, found ${canonicals.length}`)
@@ -165,10 +253,19 @@ async function main() {
   }
 
   auditRobots()
+  auditLastmod()
   const urls = auditSitemap()
+  auditSitemapCoverage(urls)
+  auditOrphanRoutes(urls)
   for (const url of urls) {
     const routePath = url.startsWith(SITE_URL) ? url.slice(SITE_URL.length) || '/' : null
     if (routePath) auditPrerenderedPage(routePath)
+  }
+  for (const [title, routes] of titlesSeen) {
+    if (routes.length > 1) fail(`duplicate <title> across ${routes.length} routes (${routes.join(', ')}): "${title}"`)
+  }
+  for (const [desc, routes] of descsSeen) {
+    if (routes.length > 1) fail(`duplicate meta description across ${routes.length} routes (${routes.join(', ')}): "${desc.slice(0, 60)}…"`)
   }
   auditOptimizedImages()
 
