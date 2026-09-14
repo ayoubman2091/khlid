@@ -91,6 +91,28 @@ export const SERVICES: Service[] = [
       { stem: '1000048191-mePxr1wGNNi5jB29', alt: 'Ferraillage et coulage de dalle béton devant un bâtiment vitré' },
       { stem: '1000048230-AGB2J3pZ7QfLrWjp', alt: 'Coffrage bois et ferraillage d\'un escalier en béton armé en cours de construction' },
     ],
+    sections: [
+      { heading: 'Notre rôle sur un projet de construction', body:
+        "Le gros œuvre, c'est tout ce qui porte : les fondations, la structure, les murs, les planchers. C'est la partie du chantier qu'on ne revoit jamais une fois le bâtiment fini, et la seule qu'on ne peut pas corriger après coup sans tout reprendre. RK Pyrénées Construction intervient sur cette phase-là, de l'implantation à la structure hors d'eau, pour des maisons individuelles comme pour des bâtiments collectifs ou professionnels." },
+      { heading: 'Fondations', body:
+        "La fondation transmet au sol le poids du bâtiment. Sa profondeur et sa géométrie dépendent de ce que le sol peut réellement encaisser, ce que seule une étude géotechnique établit avec certitude. Sur une grande partie de l'agglomération toulousaine, les sols argileux se rétractent en été et gonflent en hiver : c'est le phénomène de retrait-gonflement, et une fondation trop superficielle sur ce type de terrain travaille avec le sol jusqu'à fissurer la structure. Descendre sous la zone soumise à ces variations n'est pas une précaution de confort, c'est ce qui fait tenir le reste." },
+      { heading: 'Soubassement et élévation des murs', body:
+        "Le soubassement relie la fondation au premier niveau et fixe la géométrie définitive du bâtiment : une implantation fausse de quelques centimètres à ce stade se répercute sur les murs, puis la charpente, puis les menuiseries, sans plus jamais pouvoir être rattrapée. L'élévation se fait ensuite en parpaing ou en brique selon le projet, avec un appareillage régulier et des joints maîtrisés — nos chantiers documentent les deux, dont un immeuble en brique monté sous échafaudage de façade." },
+      { heading: 'Béton armé, chaînages et éléments structurels', body:
+        "Le béton résiste très bien à la compression et très mal à la traction ; l'acier fait l'inverse. Le béton armé est le mariage des deux, et tout se joue sur la position exacte des armatures dans l'épaisseur coulée — un ferraillage posé au fond du coffrage, au contact du support, ne renforce rien et rouille. Les chaînages verticaux et horizontaux ceinturent ensuite la maçonnerie : ce réseau, invisible dans le mur fini, est ce qui tient le bâtiment ensemble sous les efforts de vent et les mouvements du sol. Nous réalisons également les escaliers en béton coulés en place, coffrage et ferraillage compris." },
+      { heading: 'Dalles et planchers', body:
+        "Une dalle portée se coule d'un seul tenant chaque fois que c'est possible : un coulage interrompu crée une reprise, c'est-à-dire un plan de faiblesse dans l'ouvrage qui est justement là pour porter. C'est la raison pour laquelle l'accès au chantier compte autant que le béton lui-même — sur une de nos opérations, le béton a été acheminé au tapis pompe depuis la voirie parce que la toupie ne pouvait pas approcher du bâtiment." },
+      { heading: 'Construction de maison à Toulouse', body:
+        "Sur une maison individuelle, le gros œuvre commence après le terrassement et s'arrête à la structure prête à recevoir la charpente et les menuiseries. Nous intervenons sur cette séquence complète, ou sur un lot précis si les autres corps d'état sont déjà engagés. Un projet de construction neuve suppose un permis de construire accordé et une implantation conforme à ce qui a été déposé : ce sont des préalables au chantier, pas des étapes qu'on rattrape en cours de route." },
+      { heading: 'Gros œuvre pour une extension', body:
+        "Une extension pose un problème que la construction neuve ignore : il faut raccorder une structure neuve à un bâti existant qui a déjà pris ses tassements. Les deux ouvrages ne bougent pas de la même façon, ce qui impose de traiter la jonction plutôt que de la subir. S'y ajoute la création de l'ouverture de liaison dans le mur existant, qui relève de la reprise structurelle — voir notre service de maçonnerie." },
+      { heading: 'Gros œuvre en rénovation', body:
+        "En rénovation, l'intervention structurelle est souvent la première du chantier et la plus contraignante : reprise en sous-œuvre, création d'un poteau béton contre un mur ancien, ouverture dans un mur porteur. Cela se mène sous étaiement, étape par étape, en ne déchargeant jamais plus de maçonnerie que ce que la structure provisoire peut tenir. Nos chantiers de bâti ancien documentent ce type de reprise sur des murs mixtes pierre et brique." },
+      { heading: "Contraintes d'un chantier à Toulouse", body:
+        "Trois facteurs reviennent sur les chantiers de l'agglomération. Les sols argileux, d'abord, qui conditionnent la profondeur des fondations et la préparation des dallages. L'accès, ensuite : en zone dense, l'approvisionnement en béton et le stationnement des engins déterminent le phasage autant que la technique. Le bâti existant enfin, où la brique foraine et la pierre se mêlent dans des maçonneries qu'aucun plan ne documente — on ne déduit pas d'une façade ce qu'un mur porte réellement, il faut ouvrir pour le savoir." },
+      { heading: 'Pourquoi demander un devis détaillé', body:
+        "Un devis de gros œuvre qui tient en une ligne et un total ne vous permet de comparer rien du tout. Un devis exploitable détaille les postes : terrassement, fondations, élévation, dalles, ouvrages particuliers, avec les quantités correspondantes. C'est ce niveau de détail qui vous permet de confronter deux entreprises sur la même base, et de voir ce que chacune a prévu — ou omis. Notre devis est gratuit et construit sur ce principe." },
+    ],
     relatedServiceSlugs: ['extension', 'maconnerie', 'terrassement'],
     primaryKeywordCluster: 'CONSTRUCTION_TOULOUSE',
     faq: [
@@ -164,6 +186,20 @@ export const SERVICES: Service[] = [
       { stem: '1000048237-YBg7z8JKoVSWg59E', alt: 'Reprise de maçonnerie autour d\'une ouverture de fenêtre dans un mur en pierre' },
       { stem: '1000047990-mk3vP0QrzBHp2jJO', alt: 'Murs de fondation en parpaings montés pour une construction neuve' },
     ],
+    sections: [
+      { heading: 'Ouverture dans un mur porteur', body:
+        "L'ordre des opérations n'est pas négociable : étaiement d'abord, pose du linteau ensuite, et seulement après démolition sous le linteau. Inverser ces étapes, c'est décharger un mur avant d'avoir installé ce qui reprendra sa charge. Sur un mur ancien, l'épaisseur impose en plus un traitement du tableau et de l'appui, et la menuiserie neuve doit être posée sans créer de pont d'humidité entre l'extérieur et l'intérieur. Nos chantiers de bâti ancien documentent ce type d'ouverture, jusqu'à la pose de la fenêtre." },
+      { heading: 'Étaiement et reprise en sous-œuvre', body:
+        "Reprendre une descente de charge que la maçonnerie existante n'assure plus — parce qu'un mur a été percé, s'est dégradé ou n'a jamais été dimensionné pour ce qu'il porte aujourd'hui — se fait sous étaiement, étape par étape, en ne déchargeant jamais plus de mur que ce que la structure provisoire peut tenir. Le poteau béton coffré en bois visible sur nos photos de rénovation est exactement cela : un ouvrage définitif monté dans un coffrage temporaire, contre un mur qu'on soutient pendant l'opération." },
+      { heading: 'Linteaux, chaînages et béton armé', body:
+        "Un linteau reprend la charge au-dessus d'une ouverture et la reporte de part et d'autre sur les appuis : sa portée, sa section et ses appuis se calculent, ils ne s'estiment pas. Les chaînages verticaux et horizontaux ceinturent la maçonnerie et lui donnent sa cohésion d'ensemble. Dans les deux cas c'est du béton armé, et tout dépend de la position des armatures dans l'épaisseur coulée — l'acier doit être enrobé, pas plaqué contre le coffrage." },
+      { heading: 'Maçonnerie de bâti ancien à Toulouse', body:
+        "Le bâti ancien toulousain mêle la pierre et la brique foraine, souvent hourdées à la terre ou à la chaux maigre, avec des reprises successives qu'aucun plan ne documente. Ce que le mur porte réellement, et par où, détermine la méthode — et cela ne se déduit pas d'une façade : il faut ouvrir pour le savoir. Le choix du mortier compte aussi : un liant trop rigide sur une maçonnerie ancienne conçue pour bouger et respirer crée plus de désordres qu'il n'en règle." },
+      { heading: 'Reprises, réparations et murs neufs', body:
+        "Au-delà des interventions structurelles, la maçonnerie générale couvre la reprise de maçonnerie dégradée, la fermeture d'ouvertures devenues inutiles, les murs de clôture et de soutènement, et les ouvrages annexes. Un mur de soutènement, en particulier, ne se juge pas sur sa hauteur visible : il est dimensionné par la poussée des terres derrière lui et par le drainage prévu à l'arrière — un mur correctement monté mais mal drainé finit par basculer." },
+      { heading: "Quand faire appel à un maçon plutôt qu'à un autre corps d'état", body:
+        "Dès qu'une intervention touche à ce qui porte — un mur porteur, une fondation, un plancher, un linteau — elle relève de la maçonnerie et de la structure, quelle que soit la finition qui suivra. Une fissure qui progresse, une porte qui ne ferme plus, un plancher qui fléchit sont des symptômes structurels : les traiter par le revêtement revient à masquer un problème qui continue." },
+    ],
     relatedServiceSlugs: ['construction', 'renovation'],
     primaryKeywordCluster: 'MACONNERIE_TOULOUSE',
     faq: [
@@ -210,6 +246,20 @@ export const SERVICES: Service[] = [
     gallery: [
       { stem: '47122-Bsv7dob9NkU8wk9R', alt: 'Ferraillage préparé pour une dalle béton, coffrage bois en périphérie' },
       { stem: '1000048035-AR0LR7pqw7sx9Oye', alt: 'Dalle béton fraîchement coulée dans un quartier résidentiel, clôture de chantier' },
+    ],
+    sections: [
+      { heading: 'Ce que le terrassement détermine', body:
+        "Le terrassement est la première phase d'un chantier et celle qui conditionne tout ce qui vient après. Une fondation, une dalle ou une extension reposent sur le fond de forme préparé à cette étape : si le support bouge, l'ouvrage bouge avec lui. C'est aussi la phase la moins visible du résultat final, ce qui explique qu'elle soit la plus souvent sous-estimée dans les projets." },
+      { heading: 'Décaissement et fond de forme', body:
+        "On retire d'abord la terre végétale, qui se tasse et se rétracte et n'a aucune capacité portante, jusqu'à retrouver un sol sain. Le fond de forme est ensuite mis à niveau et compacté. Sur les terrains argileux fréquents autour de Toulouse, cette préparation prend une importance particulière : l'argile se rétracte en période sèche et gonfle quand elle se recharge en eau, et un ouvrage posé sur un fond de forme mal préparé suit ces mouvements saisonniers." },
+      { heading: 'Terrassement pour fondations', body:
+        "Creuser des fouilles de fondation, c'est descendre jusqu'à un niveau d'assise capable de reprendre les charges du bâtiment, sous la zone du sol soumise aux variations saisonnières. Ce niveau se détermine par l'étude géotechnique du terrain, pas par habitude. Les fouilles doivent ensuite rester propres et à leur cote jusqu'au coulage : une fouille laissée ouverte sous la pluie perd une partie de ce qui vient d'être gagné." },
+      { heading: 'Préparation de plateforme et mise à niveau', body:
+        "Avant un dallage ou une construction, la plateforme doit être plane, stable et pentée là où l'eau doit partir. Une plateforme horizontale parfaite n'est pas toujours l'objectif : sur une terrasse ou une allée, une pente de l'ordre de 1 à 1,5 % est ce qui évite que l'eau stagne contre le bâti. Le ferraillage et la mise à niveau avant coulage de dalle font partie de cette même séquence." },
+      { heading: 'Terrassement pour une extension', body:
+        "Terrasser au contact d'un bâtiment existant demande plus de précaution qu'en terrain libre : décaisser près d'une fondation en place peut la déchausser. Il faut travailler en préservant l'assise de l'existant, tenir compte des réseaux enterrés, et anticiper le fait que la structure neuve et l'ancienne ne tasseront pas de la même façon. C'est le point où le terrassement d'une extension se distingue vraiment de celui d'une construction neuve." },
+      { heading: "L'accès, contrainte décisive en zone urbaine", body:
+        "La technique de terrassement varie peu ; l'accès au terrain, lui, change tout. La taille des engins qui peuvent atteindre la zone de travaux, l'évacuation des terres, le stationnement des camions et la proximité des voisins déterminent le phasage et la durée du chantier. En parcelle dense, ce sont ces contraintes-là, plus que la nature du sol, qui structurent l'organisation — elles se repèrent sur place, lors de la visite préalable au devis." },
     ],
     relatedServiceSlugs: ['dallage', 'construction'],
     primaryKeywordCluster: 'TERRASSEMENT_TOULOUSE',
@@ -262,6 +312,22 @@ export const SERVICES: Service[] = [
       { stem: '1000048182-A0xl8rQ1lxF56lR2', alt: 'Escalier extérieur en pierre reconstituée menant à une maison ancienne' },
       { stem: '47114-G3SfzQkdwWnt55Ee', alt: 'Terrasse béton fraîchement coulée dans un jardin clôturé' },
       { stem: '1000048041-Yan1kzGqXBIjy3Ka', alt: 'Allée en béton le long d\'un garage, finition talochée' },
+    ],
+    sections: [
+      { heading: 'Dalle béton ou dallage en pierre : ce qui change vraiment', body:
+        "Les deux aboutissent à une surface extérieure praticable, mais ce sont deux chantiers différents. La dalle béton est coulée en place : elle se met en œuvre plus vite, accepte les grandes surfaces d'un seul tenant et supporte facilement une charge roulante. Le dallage en pierre naturelle est posé élément par élément sur un support déjà réalisé : le rendu est plus qualitatif, notamment autour d'un bassin, et la mise en œuvre plus longue. Le choix se fait sur l'usage de la surface, pas sur le catalogue." },
+      { heading: 'Le support décide de tout', body:
+        "Un dallage extérieur commence par un décaissement : on retire la terre végétale, qui se tasse et se rétracte, jusqu'à retrouver un fond de forme portant. Sauter cette étape revient à couler un beau béton sur un sol qui bougera sous lui. Sur les terrains argileux qui dominent une bonne partie de l'agglomération toulousaine, le retrait-gonflement saisonnier rend cette préparation d'autant moins négociable — une dalle posée sur une argile mal préparée fissure au premier été sec. Le terrassement fait donc partie du projet de dallage, et il est chiffré avec lui." },
+      { heading: 'Ferraillage et coulage', body:
+        "Le treillis soudé doit se trouver dans l'épaisseur du béton, relevé sur distanciers, et non posé au fond du coffrage : c'est en partie basse de la dalle qu'il reprend les efforts de traction. Un treillis laissé au contact du sol ne renforce rien et rouille. C'est l'étape où tout se vérifie, parce qu'après coulage plus rien n'est visible — plusieurs de nos photos de chantier montrent précisément ce moment, ferraillage en place et béton pas encore livré." },
+      { heading: 'Finitions et adhérence', body:
+        "La finition talochée laisse un grain antidérapant, ce qu'une finition lissée à l'hélicoptère ne fait pas. Sur une terrasse, une allée ou un accès de garage — des surfaces mouillées par la pluie et empruntées à pied — c'est un choix technique avant d'être esthétique. Autour d'une piscine, la pierre naturelle apporte la même propriété différemment : elle reste tempérée sous le soleil là où un béton foncé brûle, et son grain conserve de l'adhérence pieds nus." },
+      { heading: 'Pentes, joints et raccord au bâti', body:
+        "Une surface extérieure plate retient l'eau. Une pente de l'ordre de 1 à 1,5 % suffit à l'évacuer, à condition qu'elle soit dirigée à l'opposé du bâtiment ou du bassin. Le béton se dilate par ailleurs : une terrasse coulée contre une maison doit être désolidarisée du mur par un joint souple, faute de quoi elle pousse sur le bâti ou fissure au raccord. Les grandes surfaces se fractionnent en panneaux — mieux vaut une fissure provoquée dans un joint droit qu'une fissure subie en travers de la terrasse." },
+      { heading: 'Plages de piscine et pavage en pierre naturelle', body:
+        "La pierre naturelle n'a pas la régularité d'un carreau industriel : les épaisseurs varient d'une dalle à l'autre, ce qui impose de rattraper chaque niveau au mortier plutôt que de poser au cordeau sur une épaisseur constante. Le jointoiement décide ensuite de la durée de vie de l'ouvrage — un joint trop maigre laisse l'eau atteindre le mortier de pose, un joint trop dur fissure au premier cycle de dilatation. Autour d'un bassin, il travaille en plus avec les projections d'eau traitée, qui attaquent un mortier inadapté bien plus vite que la pluie." },
+      { heading: 'Allées carrossables et accès de garage', body:
+        "Une voiture ne charge pas un sol comme une table de jardin. Une allée ou un accès de garage se traite avec une épaisseur et un ferraillage renforcés par rapport à une terrasse piétonne, et une attention particulière au raccord avec la voirie et au seuil du garage, qui encaissent le passage répété des roues. Les marches et perrons extérieurs relèvent de la même logique — fondation, appui, écoulement de l'eau — avec le nez de marche comme point faible à protéger." },
     ],
     relatedServiceSlugs: ['terrassement', 'amenagement-exterieur'],
     primaryKeywordCluster: 'DALLAGE_TOULOUSE',
