@@ -41,6 +41,24 @@ export const SERVICES: Service[] = [
       { stem: '47086-IXEN9YGacJ9S3ExD', alt: 'Façade fraîchement enduite d\'un bâtiment annexe avec toiture en tuiles' },
       { stem: '47105-9zbaZCYWPP8pQKUC', alt: 'Bâtiment annexe rénové avec enduit neuf et toiture tuile, cour en gravier' },
     ],
+    sections: [
+      { heading: "Rénover, ce n'est pas construire en plus petit", body:
+        "Sur une construction neuve, tout part d'un plan et d'un terrain connu. En rénovation, on hérite d'un bâtiment dont personne ne sait exactement comment il a été fait ni ce qu'il a subi depuis. C'est ce qui rend le diagnostic déterminant : ce qu'on découvre en ouvrant un mur ou en déposant un sol change souvent l'ordre des travaux, parfois leur nature. Un devis de rénovation sérieux commence donc par une visite sur place, jamais par un catalogue." },
+      { heading: 'Rénovation de maison ancienne à Toulouse', body:
+        "Le bâti ancien toulousain mêle la pierre et la brique foraine, souvent hourdées à la terre ou à la chaux maigre, avec des reprises successives qu'aucun plan ne documente. Ces maçonneries ont été conçues pour bouger et pour laisser passer la vapeur d'eau. Les traiter comme un mur moderne — enduit ciment étanche, doublage collé sans lame d'air — enferme l'humidité dans le mur et la fait ressortir ailleurs, en général en pied de mur. La règle n'est pas décorative : sur un support ancien, on choisit des matériaux qui respirent." },
+      { heading: 'Reprises structurelles et ouvertures', body:
+        "C'est la première phase d'un chantier de rénovation et la plus contraignante. Créer une ouverture dans un mur porteur suit un ordre non négociable : étaiement, pose du linteau, puis seulement démolition sous le linteau. Reprendre une descente de charge que la maçonnerie n'assure plus se fait sous étaiement, étape par étape — nos photos de chantier documentent un poteau béton coffré en bois monté contre un mur ancien, exactement cette opération. Ces travaux relèvent de notre service de maçonnerie et sont menés par la même équipe." },
+      { heading: "Sols, niveaux et remontées d'humidité", body:
+        "Dans l'ancien, plus rien n'est horizontal nulle part. Un sol neuf sert autant à rattraper des niveaux qu'à refaire une surface, et c'est le moment où l'on peut traiter les remontées capillaires par le sol — invisibles, mais responsables d'une bonne partie des désordres qu'on attribue aux murs. Le béton lissé visible sur nos chantiers de bâti ancien est l'aboutissement de cette phase." },
+      { heading: 'Menuiseries en mur épais', body:
+        "Poser une fenêtre dans un mur ancien ne se limite pas à la menuiserie. L'épaisseur impose un traitement du tableau et de l'appui, et la pose doit éviter de créer un pont d'humidité entre l'extérieur et l'intérieur du mur. Une menuiserie neuve parfaitement étanche posée dans un mur qui respire mal déplace le problème au lieu de le régler." },
+      { heading: 'Façades et extérieurs', body:
+        "La reprise d'enduit de façade fait partie de nos chantiers de rénovation : nos photos montrent une façade en zone urbaine à Toulouse et un bâtiment annexe repris en enduit neuf. Le choix de l'enduit engage le bâtiment pour des décennies, et sur un support ancien il obéit à la même logique que le reste — laisser sortir la vapeur d'eau. Les abords relèvent ensuite du dallage et de l'aménagement extérieur." },
+      { heading: 'Rénovation intérieure et rénovation extérieure', body:
+        "Les deux se rejoignent plus souvent qu'on ne le croit. Une pièce humide en rez-de-chaussée se règle rarement à l'intérieur seul : elle tient au pied de façade, au drainage ou au niveau du terrain contre le mur. Nous intervenons sur le gros œuvre et l'enveloppe — structure, maçonnerie, sols, façade, ouvertures — et non sur les lots de finition, ce qui vous permet de savoir précisément où s'arrête notre responsabilité." },
+      { heading: 'Comment se prépare un projet de rénovation', body:
+        "Visite sur place, relevé de l'existant, identification de ce qui est structurel et de ce qui ne l'est pas, puis devis détaillé poste par poste. Ce découpage compte : c'est lui qui vous permet de comparer deux entreprises sur la même base et de voir ce que chacune a prévu, ou omis. Un total unique sans détail ne vous apprend rien. Notre devis est gratuit et sans engagement." },
+    ],
     relatedServiceSlugs: ['maconnerie', 'dallage'],
     primaryKeywordCluster: 'RENOVATION_MAISON_TOULOUSE',
     faq: [
