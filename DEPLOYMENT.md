@@ -110,3 +110,36 @@ Source photos live in `assets-source/images/original/` (NOT in `public/` — see
 responsive WebP tiers in `public/images/optimized/`, and writes `src/data/imageManifest.json`.
 Add a new source photo to `assets-source/images/original/` and reference its filename stem
 somewhere in `src/` before regenerating — unreferenced source files are skipped, not shipped.
+
+
+## Le déploiement n'atteint pas le site (constaté le 2026-09-14)
+
+**Symptôme.** Le workflow est vert de bout en bout, la branche `production` contient le bon
+build, et le site en ligne ne change pas.
+
+**Mesures qui l'établissent**, prises après une exécution `clean_slate` complète :
+
+| Contrôle | Résultat |
+|---|---|
+| Fichiers envoyés par l'étape FTP | 118, `.htaccess` et `sitemap.xml` compris |
+| Conclusion de l'étape FTP | `success` |
+| `GET /assets/<asset-de-ce-build>.js` sur le domaine | **404** |
+| `GET /assets/<asset-du-build-précédent>.js` | **200** |
+| `GET /.ftp-deploy-sync-state.json` | **404** |
+| Sitemap servi | 26 `lastmod` identiques (build du 14/09 20:15) |
+| Sitemap sur la branche `production` | 4 `lastmod` distincts |
+
+**Conclusion.** L'upload réussit, mais `public_html/` n'est pas la racine documentaire qui sert
+`xn--rkpyrnesconstruction-f2bb.com`. Sur Hostinger, c'est la signature d'un domaine addon :
+sa racine est `domains/<domaine>/public_html/`, alors que `public_html/` appartient au domaine
+principal du compte. Un envoi FTP dans le mauvais répertoire réussit à chaque fois.
+
+**Ce qu'il faut faire** (nécessite un accès hPanel, impossible depuis le dépôt) :
+
+1. hPanel → Fichiers → Gestionnaire de fichiers, relever le chemin réel de la racine du domaine.
+2. Soit reporter ce chemin dans `server-dir` de l'étape FTP de `.github/workflows/deploy.yml` ;
+   soit brancher hPanel → Git sur la branche `production` et supprimer complètement l'étape FTP.
+3. Relancer le workflow. L'étape « Verify production serves this build » passe au vert
+   d'elle-même une fois la cible correcte — c'est elle qui fait foi, pas le code de sortie FTP.
+
+Ne pas deviner le chemin dans `server-dir` : `dangerous-clean-slate` efface ce qu'il vise.
