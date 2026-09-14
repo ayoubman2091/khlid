@@ -1,0 +1,43 @@
+# READ-ONLY FTP reconnaissance. Temporary, manual-trigger only.
+#
+# Why this exists: the deploy uploads into public_html/ and every file lands successfully, yet
+# the live domain serves none of them (a fingerprinted asset from the uploaded build returns 404
+# while the previous build's asset returns 200). So public_html/ is not the document root for
+# this domain - but guessing the real one is not acceptable, because dangerous-clean-slate
+# deletes whatever server-dir points at. This job only LISTS directories so the correct path can
+# be read rather than assumed. No upload, no delete, no state file written.
+#
+# Delete this workflow once server-dir is fixed.
+name: Inspect FTP tree (read-only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List remote directories
+        env:
+          FTP_HOST: ${{ secrets.FTP_SERVER }}
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -u
+          list () {
+            echo "===== /$1 ====="
+            curl -s --max-time 40 --connect-timeout 20 -u "$FTP_USER:$FTP_PASS" "ftp://$FTP_HOST/$1" \
+              || echo "(not listable)"
+            echo
+          }
+          list ""
+          list "domains/"
+          list "public_html/"
+          # Walk one level into every directory found under domains/, which is where Hostinger
+          # puts an addon domain's own root.
+          subs=$(curl -s --max-time 40 -u "$FTP_USER:$FTP_PASS" "ftp://$FTP_HOST/domains/" \
+                 | awk '{print $NF}' | grep -v '^\.' || true)
+          for d in $subs; do
+            list "domains/$d/"
+            list "domains/$d/public_html/"
+          done
