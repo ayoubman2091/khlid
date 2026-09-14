@@ -47,6 +47,12 @@ jobs:
       FTP_SERVER: ${{ secrets.FTP_SERVER }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history, not the default depth-1 shallow clone. scripts/generate-seo-files.ts
+          # derives each sitemap <lastmod> from `git log` on the files behind that route; with a
+          # shallow checkout git returns the HEAD commit for every path, so all 26 dates come out
+          # identical and the generator now fails the build on purpose. Verified locally.
+          fetch-depth: 0
 
       # Node 22 specifically: package.json runs `node scripts/*.ts` with no loader, which
       # relies on native TypeScript type-stripping. That is unflagged from 22.18 onward.
