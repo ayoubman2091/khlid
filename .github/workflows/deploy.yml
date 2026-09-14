@@ -128,31 +128,6 @@ jobs:
             production
           echo "published $(git ls-files | wc -l) files to the production branch"
 
-      # Production reality check - this step decides whether the deploy actually happened.
-      #
-      # Every step above can be green while the live site is untouched; that is exactly the
-      # state this repository was in on 2026-09-14, and it is why an earlier report could claim
-      # a successful deploy that had not reached a single visitor. Build correctness is already
-      # covered by "Verify deploy artifact"; this asks the only question that matters after an
-      # upload - does the domain serve THIS build? A fingerprinted asset filename answers it
-      # unambiguously: it exists only in this build, so a 200 cannot come from a cache or from
-      # the previous deploy.
-      - name: Verify production serves this build
-        run: |
-          set -euo pipefail
-          origin=$(grep -o '<loc>[^<]*' dist/sitemap.xml | head -1 | sed 's|<loc>||' | sed 's|/$||')
-          asset=$(ls dist/assets/*.js | head -1 | sed 's|dist/||')
-          echo "checking $origin/$asset"
-          code=000
-          for i in 1 2 3 4 5 6; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'rk-deploy-check' "$origin/$asset" || true)
-            if [ "$code" = "200" ]; then echo "production is serving this build"; exit 0; fi
-            echo "attempt $i: HTTP $code - waiting"
-            sleep 20
-          done
-          echo "::error::production does not serve this build - $origin/$asset returned $code. The build and the production branch are correct, so the upload target is wrong: set server-dir to the real document root (hPanel -> Files -> File Manager), or point hPanel -> Git at the production branch."
-          exit 1
-
       # Optional second path. Skipped entirely unless an FTP_SERVER secret exists, so the
       # workflow stays green for whoever uses the production-branch route instead.
       # KNOWN BROKEN TARGET - server-dir is wrong, and the step cannot tell.
@@ -190,3 +165,28 @@ jobs:
           # Defaults already skip .git*/node_modules. .htaccess does NOT match .git* and is
           # uploaded normally — do not add a broader dotfile exclusion here.
           log-level: minimal
+
+      # Production reality check - this step decides whether the deploy actually happened.
+      #
+      # Every step above can be green while the live site is untouched; that is exactly the
+      # state this repository was in on 2026-09-14, and it is why an earlier report could claim
+      # a successful deploy that had not reached a single visitor. Build correctness is already
+      # covered by "Verify deploy artifact"; this asks the only question that matters after an
+      # upload - does the domain serve THIS build? A fingerprinted asset filename answers it
+      # unambiguously: it exists only in this build, so a 200 cannot come from a cache or from
+      # the previous deploy.
+      - name: Verify production serves this build
+        run: |
+          set -euo pipefail
+          origin=$(grep -o '<loc>[^<]*' dist/sitemap.xml | head -1 | sed 's|<loc>||' | sed 's|/$||')
+          asset=$(ls dist/assets/*.js | head -1 | sed 's|dist/||')
+          echo "checking $origin/$asset"
+          code=000
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'rk-deploy-check' "$origin/$asset" || true)
+            if [ "$code" = "200" ]; then echo "production is serving this build"; exit 0; fi
+            echo "attempt $i: HTTP $code - waiting"
+            sleep 20
+          done
+          echo "::error::production does not serve this build - $origin/$asset returned $code. The build and the production branch are correct, so the upload target is wrong: set server-dir to the real document root (hPanel -> Files -> File Manager), or point hPanel -> Git at the production branch."
+          exit 1
