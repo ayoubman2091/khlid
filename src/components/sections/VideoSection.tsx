@@ -37,6 +37,12 @@ function VideoThumb({ videoId }: { videoId: string }) {
         src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
         alt="Miniature d'une vidéo de chantier RK Pyrénées Construction"
         loading="lazy"
+        // hqdefault.jpg is always 480x360. The wrapper already reserves the box via aspect-video,
+        // so this changes no layout today - but these were the only three <img> on the homepage
+        // shipping without intrinsic dimensions, leaving the browser nothing to reserve if that
+        // aspect class is ever refactored away.
+        width={480}
+        height={360}
         className="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-60"
       />
       <span className="absolute inset-0 flex items-center justify-center">
