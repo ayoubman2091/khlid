@@ -43,9 +43,22 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const SSR_ENTRY = join(ROOT, 'dist-ssr/entry-server.js')
 const SITE_URL = resolveSiteUrl(ROOT)
 
-/** Metadata (titles, descriptions, JSON-LD wiring) for every route lives here, so a change to
- *  it is a real change to every page it describes. */
-const META_SOURCES = ['src/seo/pageMeta.ts', 'src/seo/schema.ts']
+/**
+ * Routes whose visible copy (title, description, headings) is written inline in pageMeta.ts
+ * rather than pulled from a data file. Only these may take pageMeta.ts as a lastmod source —
+ * for /services/<slug>, /guides/<slug> and /realisations/<slug> the copy lives in
+ * data/services.ts, data/guides.ts and data/realisations.ts, which are listed per route below.
+ *
+ * src/seo/schema.ts is deliberately NOT a source for anything. It wires JSON-LD site-wide, so
+ * counting it would stamp every one of the 26 URLs with the same date the moment it is touched
+ * — precisely the "everything changed today" signal audit item #15 rejected. Verified the hard
+ * way: the first version of this file included it, and the very commit that shipped it flattened
+ * all 26 lastmod values to one identical timestamp. Structured-data plumbing is not page
+ * content; do not add it back.
+ */
+const META_INLINE_ROUTES = new Set([
+  '/', '/services', '/realisations', '/guides', '/a-propos', '/zones-intervention', '/contact', '/devis',
+])
 
 /**
  * The files whose content actually renders each route. Anything not listed for a route cannot
@@ -66,7 +79,8 @@ function sourcesForRoute(path: string): string[] {
     if (path.startsWith('/guides/')) return ['src/data/guides.ts', 'src/pages/Guide.tsx']
     return []
   })()
-  return [...own, ...META_SOURCES].filter((f) => existsSync(join(ROOT, f)))
+  const meta = META_INLINE_ROUTES.has(path) ? ['src/seo/pageMeta.ts'] : []
+  return [...own, ...meta].filter((f) => existsSync(join(ROOT, f)))
 }
 
 let gitUsable = true
@@ -102,6 +116,7 @@ async function main() {
 
   const routes = staticRoutes()
   let withLastmod = 0
+  const seenDates = new Set<string>()
 
   const sitemap = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -110,7 +125,10 @@ async function main() {
       // <loc> must be the URL that actually returns 200 — see src/seo/canonicalPath.ts.
       const loc = `${SITE_URL}${canonicalPath(r.path)}`
       const date = lastCommitDate(sourcesForRoute(r.path))
-      if (date) withLastmod++
+      if (date) {
+        withLastmod++
+        seenDates.add(date)
+      }
       // Order is fixed by the sitemap schema: loc, lastmod, changefreq, priority.
       return [
         '  <url>',
@@ -133,6 +151,15 @@ async function main() {
   console.log(`[generate-seo-files] Wrote public/sitemap.xml (${routes.length} URLs, ${withLastmod} with a real lastmod) and public/robots.txt for ${SITE_URL}`)
   if (withLastmod < routes.length) {
     console.warn(`[generate-seo-files] ${routes.length - withLastmod} URL(s) have no lastmod — git history unavailable for their sources. Emitting none is intentional; do not substitute a build date.`)
+  }
+  // A real per-page date varies per page. One date shared by nearly every URL means some
+  // site-wide file has crept into sourcesForRoute(), or the checkout is shallow — either way the
+  // signal has degenerated into "everything changed today", the exact thing this avoids.
+  if (withLastmod >= 5 && seenDates.size === 1) {
+    console.error(`[generate-seo-files] All ${withLastmod} lastmod values are identical (${[...seenDates][0]}).`)
+    console.error('[generate-seo-files] Two known causes: (1) a site-wide file has been added to sourcesForRoute(); (2) the checkout is shallow, so `git log -1` returns the HEAD commit for every path — CI needs `fetch-depth: 0` on actions/checkout.')
+    console.error('[generate-seo-files] Failing the build on purpose: a sitemap claiming all 26 pages changed at the same instant is a worse signal than no sitemap dates at all.')
+    process.exit(1)
   }
 }
 
