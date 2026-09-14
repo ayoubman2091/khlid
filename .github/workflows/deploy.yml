@@ -128,18 +128,51 @@ jobs:
             production
           echo "published $(git ls-files | wc -l) files to the production branch"
 
+      # Production reality check - this step decides whether the deploy actually happened.
+      #
+      # Every step above can be green while the live site is untouched; that is exactly the
+      # state this repository was in on 2026-09-14, and it is why an earlier report could claim
+      # a successful deploy that had not reached a single visitor. Build correctness is already
+      # covered by "Verify deploy artifact"; this asks the only question that matters after an
+      # upload - does the domain serve THIS build? A fingerprinted asset filename answers it
+      # unambiguously: it exists only in this build, so a 200 cannot come from a cache or from
+      # the previous deploy.
+      - name: Verify production serves this build
+        run: |
+          set -euo pipefail
+          origin=$(grep -o '<loc>[^<]*' dist/sitemap.xml | head -1 | sed 's|<loc>||' | sed 's|/$||')
+          asset=$(ls dist/assets/*.js | head -1 | sed 's|dist/||')
+          echo "checking $origin/$asset"
+          code=000
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -A 'rk-deploy-check' "$origin/$asset" || true)
+            if [ "$code" = "200" ]; then echo "production is serving this build"; exit 0; fi
+            echo "attempt $i: HTTP $code - waiting"
+            sleep 20
+          done
+          echo "::error::production does not serve this build - $origin/$asset returned $code. The build and the production branch are correct, so the upload target is wrong: set server-dir to the real document root (hPanel -> Files -> File Manager), or point hPanel -> Git at the production branch."
+          exit 1
+
       # Optional second path. Skipped entirely unless an FTP_SERVER secret exists, so the
       # workflow stays green for whoever uses the production-branch route instead.
-      # This step has failed on every run since 2026-09-08 (verified via the Actions API: runs
-      # e240521, ace06bb, 0bcb103, d784176 - all green through "Publish built output to the
-      # production branch", all red on this step alone). FTP_SERVER is set, so the step is not
-      # skipped; the credentials or host are wrong.
+      # KNOWN BROKEN TARGET - server-dir is wrong, and the step cannot tell.
       #
-      # The consequence was worse than the broken step: the whole workflow showed red while the
-      # deploy production actually uses - the `production` branch pulled by hPanel - had
-      # succeeded. A permanently red workflow is a dead signal; nobody can tell a real build
-      # failure from this one. So the primary path decides the job's verdict and FTP reports as
-      # a warning until the credentials are fixed.
+      # 2026-09-14, measured end to end: a clean-slate run uploaded all 118 files into
+      # public_html/ and reported success, yet every asset filename from that build returned 404
+      # on the live domain while the previous build's assets still returned 200, and
+      # /.ftp-deploy-sync-state.json - written by this action at the top of the upload target -
+      # is not reachable either. public_html/ is therefore NOT the document root serving this
+      # domain. On Hostinger that is the signature of an addon/secondary domain, whose root is
+      # domains/<domain>/public_html/ while public_html/ belongs to the account's primary
+      # domain. Uploading into the wrong directory succeeds at the FTP level every time.
+      #
+      # Fix: read the real document root in hPanel -> Files -> File Manager and set server-dir
+      # to it. Do not guess the path here: dangerous-clean-slate wipes whatever it points at.
+      #
+      # continue-on-error stays until then, because the production-branch publish above is the
+      # path that works and a permanently red job hides real build failures. The honest verdict
+      # now comes from the production check below, which tests the live site instead of trusting
+      # this step's exit code.
       - name: Deploy to Hostinger over FTP
         continue-on-error: true
         if: env.FTP_SERVER != ''
