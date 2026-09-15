@@ -56,6 +56,13 @@ export interface Realisation {
   sections?: { heading: string; body: string }[]
   /** Techniques and materials actually visible in the photos — rendered as a short list. */
   techniques?: string[]
+  /**
+   * Other services this same chantier genuinely demonstrates, beyond `serviceSlug`.
+   * Not a tagging free-for-all: only where the photos in this entry actually show that trade.
+   * Used so a case study is reachable from every service page it really illustrates, which is
+   * how it gets discovered when its primary service page is not itself indexed.
+   */
+  alsoIllustrates?: string[]
 }
 
 export interface FAQItem {
