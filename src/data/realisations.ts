@@ -55,6 +55,10 @@ export const REALISATIONS: Realisation[] = [
     title: 'Dalles béton et terrasses extérieures',
     category: 'Dallage / Terrassement',
     serviceSlug: 'dallage',
+    // Deux des huit photos de cette série montrent le ferraillage seul, posé avant coulage, et
+    // la description mentionne le terrassement en premier poste : ce chantier illustre
+    // réellement les deux métiers, il n'est pas rattaché ici pour gagner un lien.
+    alsoIllustrates: ['terrassement'],
     description: 'Terrassement, ferraillage et coulage de dalles béton pour terrasses, allées et accès de garage.',
     techniques: [
       'Décaissement et terrassement',
@@ -201,6 +205,21 @@ export const REALISATIONS: Realisation[] = [
     ],
   },
 ]
+
+/**
+ * Les fiches chantier qui illustrent un service donné.
+ *
+ * Ajouté le 2026-09-15 pour combler un trou de découverte mesuré, pas supposé : à cette date
+ * chaque fiche chantier n'avait que DEUX liens entrants — l'accueil et le hub /realisations/ —
+ * et le hub lui-même était « Détectée, actuellement non indexée » dans la Search Console.
+ * Toute la découverte des chantiers passait donc par une page que Google refusait d'indexer,
+ * et deux des quatre fiches étaient purement et simplement inconnues de Google. Le
+ * rattachement service -> chantier existait déjà dans les données (`serviceSlug`) ; il
+ * n'était simplement rendu nulle part.
+ */
+export function getRealisationsForService(serviceSlug: string): Realisation[] {
+  return REALISATIONS.filter((r) => r.serviceSlug === serviceSlug || r.alsoIllustrates?.includes(serviceSlug))
+}
 
 export function getRealisationBySlug(slug: string): Realisation | undefined {
   return REALISATIONS.find((r) => r.slug === slug)
