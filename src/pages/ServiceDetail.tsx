@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { CheckCircle2, ArrowRight } from 'lucide-react'
 import { getServiceBySlug, SERVICES } from '@/data/services'
+import { getRealisationsForService } from '@/data/realisations'
 import { getGuidesForService } from '@/data/guides'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { OptimizedImage } from '@/components/ui/OptimizedImage'
@@ -22,6 +23,7 @@ export default function ServiceDetail() {
 
   const related = SERVICES.filter((s) => service.relatedServiceSlugs.includes(s.slug))
   const relatedGuides = getGuidesForService(service.slug)
+  const caseStudies = getRealisationsForService(service.slug)
 
   return (
     <>
@@ -87,6 +89,20 @@ export default function ServiceDetail() {
         <section className="bg-stone-100 py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 className="font-display text-3xl font-bold text-ink-900">Chantiers réels</h2>
+            {caseStudies.length > 0 && (
+              <p className="mt-3 max-w-2xl text-ink-600">
+                Le détail de {caseStudies.length === 1 ? 'ce chantier' : 'ces chantiers'} — méthode, contraintes et étapes — est décrit dans{' '}
+                {caseStudies.map((r, i) => (
+                  <span key={r.slug}>
+                    {i > 0 && (i === caseStudies.length - 1 ? ' et ' : ', ')}
+                    <Link to={`/realisations/${r.slug}/`} className="font-medium text-brick-600 hover:underline">
+                      {r.title.toLowerCase()}
+                    </Link>
+                  </span>
+                ))}
+                .
+              </p>
+            )}
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {service.gallery.map((img) => (
                 <div key={img.stem} className="aspect-square overflow-hidden rounded-xl bg-stone-200">
