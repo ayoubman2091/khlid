@@ -31,11 +31,15 @@ export function Accordion({ items }: { items: FAQItem[] }) {
                 />
               </button>
             </h3>
-            {isOpen && (
-              <div id={panelId} role="region" aria-labelledby={buttonId} className="pb-5 pr-8 text-ink-700 leading-relaxed">
-                {item.answer}
-              </div>
-            )}
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              hidden={!isOpen}
+              className="pb-5 pr-8 text-ink-700 leading-relaxed"
+            >
+              {item.answer}
+            </div>
           </div>
         )
       })}
