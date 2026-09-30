@@ -379,3 +379,90 @@ cycle doesn't re-audit the same ground from zero.
 - **DECISION** No experiment opened this cycle. Next code change on any of these pages needs
   either a real GSC pull (once a connector exists) or a specific new competitor gap — not
   research for its own sake.
+
+---
+
+## CYCLE — 2026-09-30 (first real GSC pull since EXP-003)
+
+Search Console was queried directly this cycle (Composio connector, property
+`https://xn--rkpyrnesconstruction-f2bb.com/`, `data_state: final`). Current window
+2026-08-31 → 2026-09-27 (28 days). The "previous 28 days" window contains only 9 days of data:
+GSC has nothing before 2026-08-22. Totals, current window: **17 clicks, 1 251 impressions,
+CTR 1.36 %, position 12.47**. 13 of the 17 clicks and 701 of the 1 251 impressions are on
+anonymized queries, so query-level conclusions below rest on 44 % of impressions.
+
+### EXP-003 — interim result (decision stays OPEN, no change made)
+
+| Query | Page | Impr. | Pos. (28 d to 09-27) | Baseline (EXP-003) |
+|---|---|---|---|---|
+| gros oeuvre toulouse | `/` | 83 | 12.5 | 18.1 |
+| gros oeuvre toulouse | `/services/construction/` | 3 | 50.3 | — |
+| entreprise gros oeuvre toulouse | `/` | 50 | 16.4 | 15.9 |
+| entreprise gros oeuvre toulouse | `/services/construction/` | 1 | 95.0 | — |
+| entreprise batiment gros oeuvre toulouse | `/` | 7 | 24.6 | 14.0 |
+
+Neither success criterion is met: the ranking URL has not moved to `/services/construction/`,
+and `/` is not below position 10. `/services/construction/` is now indexed (URL Inspection
+PASS) but appears for the cluster only at positions 50–95 on 1–3 impressions. That is too
+little to call cannibalization and not enough evidence to reverse EXP-003. The homepage keeps
+its title/H1/description untouched. Re-measure at the next pull.
+
+### Link-graph audit against the built `dist/` (before any change)
+
+Already correct on `main` — **no change needed**:
+- `/services/dallage/`, `/realisations/`, `/devis/`, `/contact/`, `/services/`,
+  `/services/renovation/`: linked from 25 of 26 pages, including `/`.
+- All four `/realisations/<slug>/` pages are linked from `/`.
+- Zero internal `href` without trailing slash, zero `/projets` href. `.htaccess` 301s
+  `/projets` → `/realisations/`; DirectorySlash handles the rest.
+
+So the 10 URLs GSC reports « Détectée, actuellement non indexée » and the 2 « URL inconnue de
+Google » (`/services/`, `/services/dallage/`) are **not** a missing-link problem on the current
+build. They are crawl scheduling on a young, low-authority site. The one real gap: **no guide
+was linked from the homepage.**
+
+## EXP-006 — Homepage links every guide
+
+- **DATE** 2026-09-30
+- **URL** `/` → the 7 `/guides/<slug>/`
+- **PROBLEM** URL Inspection 2026-09-30: `/guides/comment-choisir-entreprise-maconnerie-toulouse/`,
+  `/guides/comment-preparer-chantier-terrassement/`,
+  `/guides/comment-choisir-professionnel-dallage-exterieur/` are « Détectée, actuellement non
+  indexée » (never crawled). Each had 2–3 inbound links (`/guides/` + service pages); none from
+  `/`, which Google crawls most often (last crawl 2026-09-29).
+- **CHANGE** New `src/components/sections/GuidesTeaser.tsx`, rendered on `Home` before the FAQ.
+  Seven links using the guides' own titles plus a link to `/guides/`. Homepage title, H1, meta
+  description, canonical and JSON-LD verified byte-identical before/after.
+- **EXPECTED IMPACT** Crawl priority only. Not a ranking promise.
+- **BASELINE** 3 guides never crawled. Guide impressions (current window): renovation-maison-
+  ancienne-etapes 14 (split across slash/no-slash), comment-choisir-son-entreprise-de-renovation 9,
+  etapes-renovation-maison 5, etapes-projet-construction 2, the other three 0.
+- **RESULT** Pending deploy. Re-inspect the three URLs ~14 days after deploy.
+
+## EXP-007 — `/services/extension/` gets the same depth as the other service pages
+
+- **DATE** 2026-09-30
+- **URL** `/services/extension/`
+- **PROBLEM** Only service entry without `sections` (385 rendered words vs 845–1 350). GSC: the
+  right page for its intent, but deep — « extension maison toulouse » 13 impr. pos. 61.5,
+  « agrandissement maison toulouse » 5 impr. pos. 45.0, « extension de maison sur toulouse »
+  2 impr. pos. 49.5.
+- **CHANGE** Five `sections` in `src/data/services.ts`, every sentence re-expressed from claims
+  already published on the construction, terrassement and maçonnerie pages or from this
+  entry's own `includes`/`process`. `terrassement` added to `relatedServiceSlugs` (that page
+  already has a « Terrassement pour une extension » section). Title/H1/meta unchanged.
+  Deliberately **not** done: linking `gros-oeuvre-construction-neuve` via `alsoIllustrates`.
+  That chantier is a new build, and the « Chantiers réels » sentence would present it as the
+  detail of an extension.
+- **RESULT** Pending deploy. Re-measure the three queries above.
+
+### Inspected, deliberately unchanged
+- **`/zones-intervention/`** — `SERVICE_AREAS` holds a single confirmed entry (« Toulouse et
+  Midi-Pyrénées »). GSC shows Portet-sur-Garonne (31 impr., pos. 14.8, on `/`), Vieille-Toulouse
+  (10 impr.) and Haute-Garonne (9 impr., pos. 10.9), but none is a confirmed service area in the
+  repository. Open question 3 stands; no commune is added or linked.
+- **Démolition** — « démolition maison toulouse » 20 impr., pos. 16.1 on `/`. Open question 1
+  stands; nothing added.
+- **« entreprise batiment pyrénées » / « entreprise de gros œuvre pyrénées »** — 108 impr. at
+  pos. ~1.8, **0 clicks** in both windows. Possibly a regional-intent mismatch (searchers
+  wanting a firm in the Pyrénées). Needs a manual SERP check before any snippet change.

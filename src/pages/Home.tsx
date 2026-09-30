@@ -6,6 +6,7 @@ import { WhyUs } from '@/components/sections/WhyUs'
 import { ServiceAreas } from '@/components/sections/ServiceAreas'
 import { LocationSection } from '@/components/sections/LocationSection'
 import { FAQSection } from '@/components/sections/FAQSection'
+import { GuidesTeaser } from '@/components/sections/GuidesTeaser'
 import { CTASection } from '@/components/sections/CTASection'
 import { VideoSection } from '@/components/sections/VideoSection'
 import { SEO } from '@/seo/SEO'
@@ -25,6 +26,7 @@ export default function Home() {
       <WhyUs />
       <ServiceAreas />
       <LocationSection />
+      <GuidesTeaser />
       <FAQSection items={GENERAL_FAQ} />
       <CTASection />
     </>

@@ -400,7 +400,28 @@ export const SERVICES: Service[] = [
       { stem: '1000048230-AGB2J3pZ7QfLrWjp', alt: 'Coffrage et ferraillage d\'une structure béton armé, exemple de gros œuvre' },
       { stem: '1000048017-YNqB4pkJVqUB6ajv', alt: 'Ferraillage posé avant coulage de dalle, préparation de fondation' },
     ],
-    relatedServiceSlugs: ['construction', 'maconnerie'],
+    // Added 2026-09-30 (SEO_EXPERIMENT_LOG.md EXP-007). This was the only service entry without
+    // `sections` (385 words rendered vs 845–1 350 on the other service pages), and GSC showed it
+    // as the right page for its intent but ranking deep (« extension maison toulouse » pos. 61,5,
+    // « agrandissement maison toulouse » pos. 45). Every statement below is re-expressed from a
+    // claim ALREADY published on this site — construction (« Gros œuvre pour une extension »,
+    // « Fondations », FAQ gros/second œuvre, « Pourquoi demander un devis détaillé »),
+    // terrassement (« Terrassement pour une extension »), maçonnerie/rénovation (ouverture dans
+    // un mur porteur) — and this entry's own `includes`/`process`. No new service, figure,
+    // regulation, guarantee or project is introduced.
+    sections: [
+      { heading: 'Raccorder le neuf à une maison existante', body:
+        "C'est ce qui distingue une extension d'une construction neuve. La maison d'origine a déjà pris ses tassements ; la structure neuve va prendre les siens. Les deux ouvrages ne bougeront donc jamais exactement de la même façon, et la jonction entre l'ancien et le nouveau doit être traitée dès l'étude plutôt que subie une fois les murs montés. C'est pour cette raison que notre intervention commence par une visite du site et une analyse de la structure existante, avant tout chiffrage." },
+      { heading: "Terrasser au pied d'un bâtiment en place", body:
+        "Le terrassement d'une extension se fait au contact d'une fondation existante. Décaisser près d'une fondation en place peut la déchausser : il faut préserver l'assise de la maison, tenir compte des réseaux enterrés et préparer un fond de forme sur lequel la nouvelle fondation reposera sans bouger. Cette phase relève de notre service de terrassement et précède directement les fondations de l'extension." },
+      { heading: 'Des fondations adaptées aux sols toulousains', body:
+        "Sur une grande partie de l'agglomération toulousaine, les sols argileux se rétractent en été et gonflent en hiver. Une fondation trop superficielle sur ce type de terrain travaille avec le sol jusqu'à fissurer la structure — et sur une extension, ce mouvement s'ajoute à la différence de tassement avec la maison existante. La profondeur et la géométrie des fondations dépendent de ce que le sol peut réellement encaisser, ce que seule une étude géotechnique établit avec certitude." },
+      { heading: "L'ouverture entre la maison et l'extension", body:
+        "La liaison entre l'extension et la maison passe par la création d'une ouverture dans le mur existant. Lorsque ce mur est porteur, l'opération suit un ordre non négociable : étaiement, pose du linteau, puis seulement démolition sous le linteau. Elle relève de la reprise structurelle, traitée par notre service de maçonnerie." },
+      { heading: "Où s'arrête notre intervention", body:
+        "Sur une extension, notre intervention porte sur le gros œuvre, c'est-à-dire la structure : fondations adaptées au bâti existant, structure béton armé et élévation des murs en continuité de la maison. Les travaux de second œuvre qui rendent ensuite la pièce habitable — cloisons, isolation, électricité, plomberie, finitions — ne font pas partie de ce lot. Le devis détaille le gros œuvre poste par poste : c'est ce qui vous permet de savoir précisément ce qui est prévu et de comparer deux entreprises sur la même base." },
+    ],
+    relatedServiceSlugs: ['construction', 'maconnerie', 'terrassement'],
     primaryKeywordCluster: 'EXTENSION_MAISON_TOULOUSE',
     faq: [
       {
