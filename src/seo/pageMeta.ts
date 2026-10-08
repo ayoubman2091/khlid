@@ -55,9 +55,9 @@ export function homeMeta(): PageMeta {
     // recorded zero impressions: Google has picked the homepage as the entity page for the
     // query and the homepage was not answering it. So the term goes here, front-loaded, while
     // /services/construction/ keeps its own title untouched and stays the deep technical page.
-    title: `Entreprise de bâtiment et gros œuvre à ${BUSINESS.city} | RK Pyrénées Construction`,
+    title: `Entreprise de gros œuvre à Toulouse | Devis gratuit | RK Pyrénées`,
     description:
-      "Entreprise de bâtiment à Toulouse depuis 2023 : gros œuvre, maçonnerie, rénovation, terrassement, dallage et extension de maison. Devis gratuit et détaillé.",
+      "Gros œuvre à Toulouse : fondations, murs, béton armé et construction neuve. Devis gratuit et détaillé. Appelez RK Pyrénées Construction pour votre projet.",
     path: '/',
     image: `${BUSINESS.siteUrl}/logo/logo-512.png`,
     schemas: [organizationSchema(), localBusinessSchema(), websiteSchema(), faqPageSchema(GENERAL_FAQ)],

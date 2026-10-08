@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Phone } from 'lucide-react'
 import { getServiceBySlug, SERVICES } from '@/data/services'
 import { getRealisationsForService } from '@/data/realisations'
 import { getGuidesForService } from '@/data/guides'
@@ -10,6 +10,8 @@ import { ServiceAreas } from '@/components/sections/ServiceAreas'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { Button } from '@/components/ui/Button'
+import { BUSINESS } from '@/lib/constants'
+import { trackEvent } from '@/lib/analytics'
 import { SEO } from '@/seo/SEO'
 import { serviceDetailMeta } from '@/seo/pageMeta'
 import NotFound from './NotFound'
@@ -38,7 +40,15 @@ export default function ServiceDetail() {
           <div>
             <h1 className="font-display text-4xl font-bold text-ink-900 sm:text-5xl">{service.h1}</h1>
             <p className="mt-5 text-lg leading-relaxed text-ink-600">{service.intro}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <a
+                href={`tel:${BUSINESS.phoneE164}`}
+                onClick={() => trackEvent('phone_click', { location: `service_${service.slug}_hero` })}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-brick-500 px-6 py-3 text-base font-bold text-white shadow-lg transition hover:bg-brick-600 focus:outline-none focus:ring-2 focus:ring-brick-500/50"
+              >
+                <Phone size={19} />
+                Appeler maintenant
+              </a>
               <Button to="/devis/" size="lg">
                 Demander un devis gratuit
               </Button>
@@ -46,6 +56,9 @@ export default function ServiceDetail() {
                 Voir des réalisations
               </Button>
             </div>
+            <p className="mt-4 text-sm font-medium text-ink-500">
+              {BUSINESS.phone} · Devis gratuit · Toulouse et Midi-Pyrénées
+            </p>
           </div>
           <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-stone-200">
             <OptimizedImage

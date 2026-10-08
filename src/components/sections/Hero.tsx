@@ -53,6 +53,14 @@ export function Hero() {
         </div>
 
         <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href={`tel:${BUSINESS.phoneE164}`}
+            onClick={() => trackEvent('phone_click', { location: 'hero_primary' })}
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-brick-500 px-6 py-3 text-base font-bold text-white shadow-lg transition hover:bg-brick-600 focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-2 focus:ring-offset-ink-950"
+          >
+            <Phone size={19} />
+            Appeler maintenant
+          </a>
           <Button to="/devis/" size="lg" icon={<ArrowRight size={18} />}>
             Demander un devis gratuit
           </Button>
@@ -61,14 +69,9 @@ export function Hero() {
           </Button>
         </div>
 
-        <a
-          href={`tel:${BUSINESS.phoneE164}`}
-          onClick={() => trackEvent('phone_click', { location: 'hero' })}
-          className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-stone-100 hover:text-white"
-        >
-          <Phone size={16} />
-          Ou appelez directement le {BUSINESS.phone}
-        </a>
+        <p className="mt-4 text-sm font-medium text-stone-200">
+          <span className="font-semibold text-white">{BUSINESS.phone}</span> · Devis gratuit · Toulouse et Midi-Pyrénées
+        </p>
       </div>
     </section>
   )
