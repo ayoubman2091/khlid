@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xn--rkpyrnesconstruction-f2bb.com/sitemap.xml
