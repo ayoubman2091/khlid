@@ -84,9 +84,9 @@ export const SERVICES: Service[] = [
     name: 'Construction neuve',
     shortName: 'Construction',
     tagline: "Gros œuvre, fondations et structures béton armé pour maisons, extensions et bâtiments professionnels",
-    metaTitle: 'Entreprise de gros œuvre à Toulouse | RK Pyrénées Construction',
+    metaTitle: 'Construction neuve à Toulouse | Fondations & béton armé | RK Pyrénées',
     metaDescription:
-      "Entreprise de gros œuvre à Toulouse : fondations, élévation de murs, structures en béton armé pour construction neuve et extension. Devis gratuit.",
+      "Construction neuve à Toulouse : fondations, murs porteurs, dalles et structures en béton armé pour maisons et bâtiments professionnels. Devis gratuit.",
     h1: 'Entreprise de gros œuvre et construction neuve à Toulouse',
     intro:
       "RK Pyrénées Construction réalise les travaux de gros œuvre à Toulouse et en Midi-Pyrénées : fondations, murs de soubassement, élévation en parpaing ou en brique, dalles et structures en béton armé. Le gros œuvre constitue la structure porteuse du bâtiment, sur des chantiers de construction neuve comme d'extension, en résidentiel comme en professionnel. Chaque chantier est chiffré par un devis détaillé avant le démarrage des travaux.",
